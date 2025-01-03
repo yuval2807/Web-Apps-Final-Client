@@ -1,6 +1,8 @@
+import { BrowserRouter } from "react-router-dom";
 import "./App.css";
-import LoginForm from "./views/LoginForm";
-import RegistrationForm from "./views/Registration";
+import LoginForm from "./views/LoginPage";
+import Registration from "./views/Registration";
+import Router from "./Router";
 const handleRegister = async (data: any) => {
   // Add registration logic here
   console.log(data);
@@ -9,10 +11,9 @@ const handleRegister = async (data: any) => {
 function App() {
   return (
     <div className='App'>
-      {" "}
-      first page
-      <LoginForm onSubmit={() => console.log("yy")}></LoginForm>
-      <RegistrationForm onSubmit={handleRegister} />{" "}
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
     </div>
   );
 }

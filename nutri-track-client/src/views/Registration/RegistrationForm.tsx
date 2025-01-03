@@ -7,24 +7,12 @@ import {
   Button,
   Alert,
   Box,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
 } from "@mui/material";
 import RadioGroupButtons, {
   Option,
 } from "../../components/RadioGroup/RadioGroup";
 import ToggleButton from "../../components/ToggleButtons";
-
-interface RegistrationData {
-  email: string;
-  name: string;
-  password: string;
-  gender: string;
-  fitLevel: string;
-}
+import { RegistrationData } from "./types";
 
 interface RegistrationFormProps {
   onSubmit: (data: RegistrationData) => Promise<void>;

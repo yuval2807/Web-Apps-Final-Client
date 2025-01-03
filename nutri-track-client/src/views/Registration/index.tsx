@@ -1,3 +1,3 @@
-import RegistrationForm from "./RegistrationForm";
+import { Registration } from "./Registration";
 
-export default RegistrationForm;
+export default Registration;
