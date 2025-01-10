@@ -212,7 +212,6 @@ router.get("/refresh", async (req: Request, res: Response) => {
  */
 router.post("/register", async (req: Request, res: Response) => {
   const user = req.body;
-  console.log(user);
 
   try {
     res.status(200).send(await addNewUser(user));
