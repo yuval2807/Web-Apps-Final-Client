@@ -7,6 +7,8 @@ import {
   Button,
   Alert,
   Box,
+  Grid2 as Grid,
+  InputAdornment,
 } from "@mui/material";
 import RadioGroupButtons, {
   Option,
@@ -25,6 +27,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
     password: "",
     gender: "",
     fitLevel: "",
+    height: 0,
+    weight: 0,
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -33,7 +37,6 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
     e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>
   ) => {
     const { name, value } = e.target;
-    console.log(name, value);
     setFormData((prev) => ({
       ...prev,
       [name as string]: value,
@@ -112,6 +115,36 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
             value={formData.gender}
             required
           />
+          <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid size={6}>
+              <TextField
+                label='Height'
+                name='height'
+                value={formData.height}
+                onChange={handleChange}
+                required
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>cm</InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+            <Grid size={6}>
+              <TextField
+                label='Weight'
+                name='weight'
+                value={formData.weight}
+                onChange={handleChange}
+                required
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>kg</InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+          </Grid>
           <ToggleButton
             label='fitLevel'
             onChange={(newValue) =>

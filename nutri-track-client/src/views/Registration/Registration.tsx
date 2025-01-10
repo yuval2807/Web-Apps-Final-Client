@@ -2,14 +2,20 @@ import { Button } from "@mui/material";
 import RegistrationForm from "./RegistrationForm";
 import { useNavigate } from "react-router-dom";
 import { RegistrationData } from "./types";
+import { register } from "../../queries/auth";
 
 export const Registration: React.FC = () => {
   const navigate = useNavigate();
 
   const handleRegister = async (data: RegistrationData) => {
     // Add registration logic here
-    console.log(data);
-    navigate("/home");
+    try {
+      const response = await register(data);
+      console.log("Registered:", response);
+      navigate("/home");
+    } catch (err: any) {
+      console.error(err.message);
+    }
   };
 
   return (
