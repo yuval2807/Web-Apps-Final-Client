@@ -10,45 +10,40 @@ import {
   ListItemText,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
-interface MenuItem {
-    title: string;
-    icon: string;
-    navigate: string;
-}
+import { logout } from "../../queries/auth";
+import { mainMenu, secondaryMenu } from "./menuData";
 
 interface DrawerListProps {
     navWidth: string;
 }
 
-const mainMenu: MenuItem[] = [{
-    title: "Home",
-    icon: "Home",
-    navigate: "/home"
-},
-{
-    title: "Forum",
-    icon: "Forum",
-    navigate: "/register" //TODO: change to real page
-},
-{
-    title: "Create post",
-    icon: "plus",
-    navigate: "/post/create"
-},
-]
-
-const secondaryMenu = [{
-    title: "Logout",
-    icon: "Logout",
-    navigate: "/logout"
-},
-]
-
 const DrawerList = () => {
     const navigate = useNavigate();
+
+    const logoutUser = async () => {
+      try {
+        const refreshToken = localStorage.getItem("refreshToken");
+
+        if (!refreshToken) {
+          console.log("No refresh token found");
+          return;
+        }
+
+        const response = await logout(refreshToken);
+
+        if (response.status === 200) {
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+          console.log("Logged out");
+          navigate("/login");
+        }
+      } catch (error) {
+        console.log("error: ", error);
+      }
+    }
+
  return (
-    <Box role="presentation" onClick={() => console.log("ggg")}>
+    <Box role="presentation">
       <List>
         {mainMenu.map((menuItem, index) => (
           <ListItem key={menuItem.title} disablePadding>
@@ -65,7 +60,7 @@ const DrawerList = () => {
       <List>
         {secondaryMenu.map((menuItem, index) => (
           <ListItem key={menuItem.title} disablePadding>
-            <ListItemButton onClick={() => navigate(menuItem.navigate)}>
+            <ListItemButton onClick={logoutUser}>
               <ListItemIcon>
                {/* TODO: add icon */}
                </ListItemIcon>
@@ -81,7 +76,7 @@ const DrawerList = () => {
 
 const NavbarDrawer: React.FC<DrawerListProps> = ({navWidth}) => {
   return (
-    <Drawer open={true} onClose={()=> console.log("hhh")} variant="persistent" PaperProps={{sx: { width: navWidth}}}>
+    <Drawer open={true} variant="persistent" PaperProps={{sx: { width: navWidth}}}>
         <div style={{backgroundColor: "#113537", height: "100%"}}>
             <DrawerList />
         </div>

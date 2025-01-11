@@ -151,6 +151,11 @@ router.get("/logout", async (req: Request, res: Response) => {
   const authHeader = req.headers["authorization"];
   const refreshToken = authHeader && authHeader.split(" ")[1]; // פורמט: "Bearer <token>"
 
+  if (!refreshToken || refreshToken === "null") {
+    res.status(401).send("Refresh token missing");
+    return;
+  }
+
   try {
     res.status(200).send(await logout(refreshToken));
   } catch (err) {
