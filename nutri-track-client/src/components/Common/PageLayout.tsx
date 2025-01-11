@@ -9,9 +9,11 @@ const PageLayout: React.FC<PageLayoutProps> = ({children}) => {
   const navWidth = 10;
 
   return (
-  <div className='layout' style={{ width:`${100-navWidth}%`}}>
+  <div className='layout' style={{display: "flex", flexDirection: "row-reverse"}}>
     <NavbarDrawer navWidth={`${navWidth}%`} />
-    {children}
+    <div style={{ width:`${100-navWidth}%`}}>
+        {children}
+    </div>
   </div>);
 };
 

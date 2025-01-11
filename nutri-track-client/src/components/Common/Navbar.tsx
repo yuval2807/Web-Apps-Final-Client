@@ -48,22 +48,22 @@ const DrawerList = () => {
         {mainMenu.map((menuItem, index) => (
           <ListItem key={menuItem.title} disablePadding>
             <ListItemButton onClick={() => navigate(menuItem.navigate)}>
-              <ListItemIcon>
-               {/* TODO: add icon */}
-              </ListItemIcon>
+              {/* <ListItemIcon>
+               TODO: add icon
+              </ListItemIcon> */}
               <ListItemText primary={menuItem.title} style={{color: "white"}}/>
             </ListItemButton>
           </ListItem>
         ))}
       </List>
-      <Divider />
+      <Divider sx={{backgroundColor: "grey"}}/>
       <List>
         {secondaryMenu.map((menuItem, index) => (
           <ListItem key={menuItem.title} disablePadding>
             <ListItemButton onClick={logoutUser}>
-              <ListItemIcon>
-               {/* TODO: add icon */}
-               </ListItemIcon>
+              {/* <ListItemIcon>
+               TODO: add icon
+               </ListItemIcon> */}
               <ListItemText primary={menuItem.title} style={{color: "white"}}/>
             </ListItemButton>
           </ListItem>
