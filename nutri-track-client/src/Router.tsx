@@ -10,6 +10,7 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import Registration from "./views/Registration";
 import HomePage from "./views/HomePage";
 import Login from "./views/LoginPage";
+import CreatePost from "./views/Post";
 
 // Main App Component
 const Router: React.FC = () => {
@@ -21,6 +22,7 @@ const Router: React.FC = () => {
       <Route path='/register' element={<Registration />} />
       <Route path='/home' element={<HomePage />} />
       <Route path='/' element={<Navigate to='/login' replace />} />
+      <Route path='/post/create' element={<CreatePost />} />
     </Routes>
   );
 };
