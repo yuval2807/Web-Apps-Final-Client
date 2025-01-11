@@ -1,14 +1,19 @@
 import { Button } from "@mui/material";
 import LoginForm from "./LoginForm";
 import { useNavigate } from "react-router-dom";
+import { login } from "../../queries/auth";
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogin = async (email: string, password: string) => {
-    // Add your authentication logic here
-    // For demo, just navigate to home
-    navigate("/home");
+    try {
+      const response = await login({ email, password });
+      console.log("Logged in:", response);
+      navigate("/home");
+    } catch (err: any) {
+      console.error(err.message);
+    }
   };
 
   return (
