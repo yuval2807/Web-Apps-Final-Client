@@ -1,5 +1,12 @@
+import PageLayout from "../../components/Common/PageLayout";
+
 const HomePage: React.FC = () => {
-  return <div className='App'> first page</div>;
+
+  return (
+    <PageLayout>
+          <text>home page </text> 
+    </PageLayout>
+  );
 };
 
 export default HomePage;
