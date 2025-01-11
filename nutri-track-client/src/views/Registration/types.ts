@@ -4,4 +4,6 @@ export interface RegistrationData {
   password: string;
   gender: string;
   fitLevel: string;
+  weight: number;
+  height: number;
 }
