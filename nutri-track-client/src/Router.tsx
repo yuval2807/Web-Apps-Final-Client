@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-  useNavigate,
-} from "react-router-dom";
-import { createTheme, ThemeProvider } from "@mui/material";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Registration from "./views/Registration";
 import HomePage from "./views/HomePage";
 import Login from "./views/LoginPage";
@@ -14,8 +7,6 @@ import CreatePost from "./views/Post";
 
 // Main App Component
 const Router: React.FC = () => {
-  const theme = createTheme();
-
   return (
     <Routes>
       <Route path='/login' element={<Login />} />
