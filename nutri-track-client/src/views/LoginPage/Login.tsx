@@ -9,6 +9,8 @@ export const Login: React.FC = () => {
   const handleLogin = async (email: string, password: string) => {
     try {
       const response = await login({ email, password });
+      localStorage.setItem("accessToken", response.accessToken)
+      localStorage.setItem("refreshToken", response.refreshToken)
       console.log("Logged in:", response);
       navigate("/home");
     } catch (err: any) {

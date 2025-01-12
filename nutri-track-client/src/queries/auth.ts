@@ -8,6 +8,8 @@ interface LoginPayload {
 
 interface AuthResponse {
   token: string;
+  accessToken: string;
+  refreshToken: string;
   user: {
     id: string;
     name: string;
@@ -38,5 +40,17 @@ export const register = async (
     return response.data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "Registration failed");
+  }
+};
+
+// Logout function
+export const logout = async (refreshToken: string) => {
+  try {
+    const response = await axiosInstance.get(
+      `${AUTH_ROUTE}/logout`, { headers: {"authorization" : `Bearer ${refreshToken}`} }
+    );
+    return response;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "Logout failed");
   }
 };
