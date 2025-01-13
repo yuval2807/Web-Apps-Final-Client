@@ -106,6 +106,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
             value={formData.password}
             onChange={handleChange}
             required
+            slotProps={{ htmlInput: { minLength: 6 } }}
           />
           <RadioGroupButtons
             label='gender'
