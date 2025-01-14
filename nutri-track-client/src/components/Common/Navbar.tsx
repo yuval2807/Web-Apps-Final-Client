@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Drawer,
   Box,
@@ -12,38 +12,39 @@ import {
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../queries/auth";
 import { mainMenu, secondaryMenu } from "./menuData";
+import { UserContext } from "../../context/UserContext";
 
 interface DrawerListProps {
-    navWidth: string;
+  navWidth: string;
 }
 
 const DrawerList = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { resetConnectedUser, connectedUser } = useContext(UserContext);
 
-    const logoutUser = async () => {
-      try {
-        const refreshToken = localStorage.getItem("refreshToken");
+  const logoutUser = async () => {
+    try {
+      const refreshToken = connectedUser?.refreshToken;
 
-        if (!refreshToken) {
-          console.log("No refresh token found");
-          return;
-        }
-
-        const response = await logout(refreshToken);
-
-        if (response.status === 200) {
-          localStorage.removeItem("accessToken");
-          localStorage.removeItem("refreshToken");
-          console.log("Logged out");
-          navigate("/login");
-        }
-      } catch (error) {
-        console.log("error: ", error);
+      if (!refreshToken) {
+        console.log("No refresh token found");
+        return;
       }
-    }
 
- return (
-    <Box role="presentation">
+      const response = await logout(refreshToken);
+
+      if (response.status === 200) {
+        resetConnectedUser();
+        console.log("Logged out");
+        navigate("/login");
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
+  return (
+    <Box role='presentation'>
       <List>
         {mainMenu.map((menuItem, index) => (
           <ListItem key={menuItem.title} disablePadding>
@@ -51,12 +52,15 @@ const DrawerList = () => {
               {/* <ListItemIcon>
                TODO: add icon
               </ListItemIcon> */}
-              <ListItemText primary={menuItem.title} style={{color: "white"}}/>
+              <ListItemText
+                primary={menuItem.title}
+                style={{ color: "white" }}
+              />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
-      <Divider sx={{backgroundColor: "grey"}}/>
+      <Divider sx={{ backgroundColor: "grey" }} />
       <List>
         {secondaryMenu.map((menuItem, index) => (
           <ListItem key={menuItem.title} disablePadding>
@@ -64,22 +68,27 @@ const DrawerList = () => {
               {/* <ListItemIcon>
                TODO: add icon
                </ListItemIcon> */}
-              <ListItemText primary={menuItem.title} style={{color: "white"}}/>
+              <ListItemText
+                primary={menuItem.title}
+                style={{ color: "white" }}
+              />
             </ListItemButton>
           </ListItem>
         ))}
       </List>
     </Box>
- )
+  );
 };
 
-
-const NavbarDrawer: React.FC<DrawerListProps> = ({navWidth}) => {
+const NavbarDrawer: React.FC<DrawerListProps> = ({ navWidth }) => {
   return (
-    <Drawer open={true} variant="persistent" PaperProps={{sx: { width: navWidth}}}>
-        <div style={{backgroundColor: "#113537", height: "100%"}}>
-            <DrawerList />
-        </div>
+    <Drawer
+      open={true}
+      variant='persistent'
+      PaperProps={{ sx: { width: navWidth } }}>
+      <div style={{ backgroundColor: "#113537", height: "100%" }}>
+        <DrawerList />
+      </div>
     </Drawer>
   );
 };

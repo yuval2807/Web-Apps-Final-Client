@@ -2,17 +2,20 @@ import { Button } from "@mui/material";
 import LoginForm from "./LoginForm";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../queries/auth";
+import { useContext } from "react";
+import { UserContext } from "../../context/UserContext";
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
+  const { updateConnectedUser } = useContext(UserContext);
 
   const handleLogin = async (email: string, password: string) => {
     try {
-      const response = await login({ email, password });
-      localStorage.setItem("accessToken", response.accessToken)
-      localStorage.setItem("refreshToken", response.refreshToken)
-      console.log("Logged in:", response);
-      navigate("/home");
+      const connectedUser = await login({ email, password });
+      if (!!connectedUser) {
+        updateConnectedUser(connectedUser);
+        navigate("/home");
+      }
     } catch (err: any) {
       console.error(err.message);
     }
