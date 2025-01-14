@@ -16,7 +16,7 @@ interface NewPostFormProps {
     setTitle: (title: string) => void,
     setContent: (content: string) => void,
     setImage: (image: string) => void,
-    onSubmit: (title: string, content: string, image?: string) => void;
+    onSubmit: () => void;
 }
 
 const NewPostForm: React.FC<NewPostFormProps> = ({ title, content, image, setTitle, setContent, setImage, onSubmit }) => {
@@ -29,7 +29,7 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ title, content, image, setTit
     setLoading(true);
 
     try {
-      await onSubmit(title, content, image);
+      await onSubmit();
     } catch (err) {
       setError("Invalid fields");
     } finally {

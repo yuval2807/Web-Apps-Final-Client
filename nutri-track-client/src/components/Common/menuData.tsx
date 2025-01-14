@@ -22,6 +22,11 @@ export const mainMenu: MainMenuItem[] = [{
     icon: "plus",
     navigate: "/post/create"
 },
+{
+    title: "All posts",
+    icon: "list",
+    navigate: "/post"
+},
 ]
 
 export const secondaryMenu: MenuItem[] = [{
