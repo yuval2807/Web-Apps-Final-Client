@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 import {
   ToggleButtonGroup,
   ToggleButton as MuiToggleButton,
   FormControl,
   FormLabel,
-  FormHelperText
-} from '@mui/material';
+  FormHelperText,
+} from "@mui/material";
 
 interface Option {
   value: string;
@@ -27,7 +27,7 @@ const ToggleButton: React.FC<CustomToggleButtonProps> = ({
   value,
   onChange,
   error,
-  required = false
+  required = false,
 }) => {
   const handleChange = (_: React.MouseEvent<HTMLElement>, newValue: string) => {
     if (newValue !== null) {
@@ -36,7 +36,7 @@ const ToggleButton: React.FC<CustomToggleButtonProps> = ({
   };
 
   return (
-    <FormControl error={!!error} required={required} fullWidth margin="normal">
+    <FormControl error={!!error} required={required} fullWidth margin='normal'>
       <FormLabel>{label}</FormLabel>
       <ToggleButtonGroup
         value={value}
@@ -44,22 +44,20 @@ const ToggleButton: React.FC<CustomToggleButtonProps> = ({
         onChange={handleChange}
         aria-label={label}
         fullWidth
-        sx={{ mt: 1 }}
-      >
+        sx={{ mt: 1 }}>
         {options.map((option) => (
-          <MuiToggleButton 
-            key={option.value} 
+          <MuiToggleButton
+            key={option.value}
             value={option.value}
             sx={{
-              '&.Mui-selected': {
-                backgroundColor: 'primary.main',
-                color: 'white',
-                '&:hover': {
-                  backgroundColor: 'primary.dark',
-                }
-              }
-            }}
-          >
+              "&.Mui-selected": {
+                backgroundColor: "primary.main",
+                color: "white",
+                "&:hover": {
+                  backgroundColor: "primary.dark",
+                },
+              },
+            }}>
             {option.label}
           </MuiToggleButton>
         ))}

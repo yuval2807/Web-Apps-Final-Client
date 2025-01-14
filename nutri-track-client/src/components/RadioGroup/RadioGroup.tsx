@@ -22,6 +22,7 @@ interface CustomRadioGroupProps {
   error?: string;
   required?: boolean;
   row?: boolean;
+  disabled?: boolean;
 }
 
 const RadioGroupButtons: React.FC<CustomRadioGroupProps> = ({
@@ -33,17 +34,19 @@ const RadioGroupButtons: React.FC<CustomRadioGroupProps> = ({
   error,
   required = false,
   row = false,
+  disabled = false,
 }) => {
   return (
     <FormControl error={!!error} required={required} margin='normal' fullWidth>
       <FormLabel>{label}</FormLabel>
-      <RadioGroup name={name} value={value} onChange={onChange} row={row}>
+      <RadioGroup name={name} value={value} onChange={onChange} row={row} >
         {options.map((option) => (
           <FormControlLabel
             key={option.value}
             value={option.value}
             control={<Radio />}
             label={option.label}
+            disabled={disabled}
           />
         ))}
       </RadioGroup>
