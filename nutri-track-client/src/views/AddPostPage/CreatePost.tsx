@@ -20,7 +20,7 @@ export const CreatePost: React.FC = () => {
           return;
         }
 
-        const payload = { title, content, image, sender: "6782a8eb3ebe51f5c3c03079" }; //TODO: get sender from user context
+        const payload = { title, content, image, date: new Date(), sender: "6782a8eb3ebe51f5c3c03079" }; //TODO: get sender from user context
 
         const response = await createPost(payload, accessToken);
 

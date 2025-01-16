@@ -4,6 +4,7 @@ interface CreatePostPayloadData {
   title: string;
   content: string;
   image?: string;
+  date: Date;
   sender: string;
 }
 
@@ -30,11 +31,11 @@ export const createPost = async (
   payload: CreatePostPayloadData,
   accessToken: string
 ) => {
-    const parsedData = {title: payload.title, content: payload.content, sender: payload.sender}; //TODO: add image (backend can't receive image yet)
   try {
+    console.log("createPost payload: ", payload);   
     const response = await axiosInstance.post(
       `${POST_ROUTE}/`,
-        parsedData,
+        payload,
         { headers: {"authorization" : `Bearer ${accessToken}`} }
     );
     return response;
