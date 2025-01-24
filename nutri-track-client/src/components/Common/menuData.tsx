@@ -28,6 +28,11 @@ export const mainMenu: MainMenuItem[] = [
     icon: "man",
     navigate: "/UserProfile",
   },
+  {
+    title: "All posts",
+    icon: "list",
+    navigate: "/post",
+  },
 ];
 
 export const secondaryMenu: MenuItem[] = [
