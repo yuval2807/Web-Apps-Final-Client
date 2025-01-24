@@ -1,36 +1,43 @@
 interface MenuItem {
-    title: string;
-    icon: string;
+  title: string;
+  icon: string;
 }
 
 interface MainMenuItem extends MenuItem {
-    navigate: string;
+  navigate: string;
 }
 
-export const mainMenu: MainMenuItem[] = [{
+export const mainMenu: MainMenuItem[] = [
+  {
     title: "Home",
     icon: "Home",
-    navigate: "/home"
-},
-{
+    navigate: "/home",
+  },
+  {
     title: "Forum",
     icon: "Forum",
-    navigate: "/register" //TODO: change to real page
-},
-{
+    navigate: "/register", //TODO: change to real page
+  },
+  {
     title: "Create post",
     icon: "plus",
-    navigate: "/post/create"
-},
-{
+    navigate: "/post/create",
+  },
+  {
+    title: "User profile",
+    icon: "man",
+    navigate: "/UserProfile",
+  },
+  {
     title: "All posts",
     icon: "list",
-    navigate: "/post"
-},
-]
+    navigate: "/post",
+  },
+];
 
-export const secondaryMenu: MenuItem[] = [{
+export const secondaryMenu: MenuItem[] = [
+  {
     title: "Logout",
-    icon: "Logout"
-  }
-]
+    icon: "Logout",
+  },
+];
