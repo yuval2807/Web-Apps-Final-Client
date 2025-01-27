@@ -2,18 +2,20 @@ import { useNavigate } from "react-router-dom";
 import PageLayout from "../../components/Common/PageLayout";
 import NewPostForm from "./PostForm";
 import PostPreview from "./PostPreview";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { createPost } from "../../queries/post";
+import { UserContext } from "../../context/UserContext";
 
 export const CreatePost: React.FC = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [image, setImage] = useState<string>("");
+  const {connectedUser } = useContext(UserContext);
 
   const handlePressCreate = async () => {
       try {
-        const accessToken = localStorage.getItem("accessToken");
+        const accessToken = connectedUser?.accessToken;
 
         if (!accessToken) {
           console.log("No access token found");
