@@ -8,6 +8,7 @@ export interface IPost {
   content: string;
   image: string;
   date: Date;
+  numOfLikes: number;
   sender: typeof User;
 }
 
@@ -21,6 +22,10 @@ const postSchema = new Schema<IPost>({
   date: {
     type: Date,
     default: Date.now,
+  },
+  numOfLikes: {
+    type: Number,
+    default: 0,
   },
   sender: {
     type: mongoose.Schema.Types.ObjectId,
