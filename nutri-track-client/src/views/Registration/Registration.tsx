@@ -3,16 +3,21 @@ import RegistrationForm from "./RegistrationForm";
 import { useNavigate } from "react-router-dom";
 import { RegistrationData } from "./types";
 import { register } from "../../queries/auth";
+import { useContext } from "react";
+import { UserContext } from "../../context/UserContext";
 
 export const Registration: React.FC = () => {
   const navigate = useNavigate();
+  const { updateConnectedUser } = useContext(UserContext);
 
   const handleRegister = async (data: RegistrationData) => {
     // Add registration logic here
     try {
-      const response = await register(data);
-      console.log("Registered:", response);
-      navigate("/login");
+      const connectedUser = await register(data);
+      if (!!connectedUser) {
+        updateConnectedUser(connectedUser);
+        navigate("/home");
+      }
     } catch (err: any) {
       console.error(err.message);
     }
