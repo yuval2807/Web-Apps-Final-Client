@@ -1,4 +1,5 @@
 import axiosInstance from "../axiosInstance";
+import { ConnectedUser } from "../context/UserContext";
 import { RegistrationData } from "../views/Registration/types";
 
 interface LoginPayload {
@@ -6,20 +7,9 @@ interface LoginPayload {
   password: string;
 }
 
-interface AuthResponse {
-  token: string;
-  accessToken: string;
-  refreshToken: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-  };
-}
-
 const AUTH_ROUTE = "/auth";
 // Login function
-export const login = async (payload: LoginPayload): Promise<AuthResponse> => {
+export const login = async (payload: LoginPayload): Promise<ConnectedUser> => {
   try {
     const response = await axiosInstance.post(`${AUTH_ROUTE}/login`, payload);
     return response.data;
@@ -31,7 +21,7 @@ export const login = async (payload: LoginPayload): Promise<AuthResponse> => {
 // Register function
 export const register = async (
   payload: RegistrationData
-): Promise<AuthResponse> => {
+): Promise<ConnectedUser> => {
   try {
     const response = await axiosInstance.post(
       `${AUTH_ROUTE}/register`,
@@ -46,9 +36,9 @@ export const register = async (
 // Logout function
 export const logout = async (refreshToken: string) => {
   try {
-    const response = await axiosInstance.get(
-      `${AUTH_ROUTE}/logout`, { headers: {"authorization" : `Bearer ${refreshToken}`} }
-    );
+    const response = await axiosInstance.get(`${AUTH_ROUTE}/logout`, {
+      headers: { authorization: `Bearer ${refreshToken}` },
+    });
     return response;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "Logout failed");
