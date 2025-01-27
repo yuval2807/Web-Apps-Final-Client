@@ -32,12 +32,7 @@ export const mainMenu: MainMenuItem[] = [
     title: "User profile",
     icon: "man",
     navigate: "/UserProfile",
-  },
-  {
-    title: "All posts",
-    icon: "list",
-    navigate: "/post",
-  },
+  }
 ];
 
 export const secondaryMenu: MenuItem[] = [
