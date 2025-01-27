@@ -25,7 +25,14 @@ export const login = async (
   const refreshToken = generateRefreshToken(user.id);
   updateRefreshToken(user, refreshToken);
 
-  return { accessToken, refreshToken };
+  return {
+    accessToken,
+    refreshToken,
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    tokens: user.tokens,
+  };
 };
 
 export const logout = async (refreshToken: string) => {
@@ -54,5 +61,12 @@ export const register = async (newUser: IUser) => {
   const refreshToken = generateRefreshToken(user.id);
   updateRefreshToken(user, refreshToken);
 
-  return { accessToken, refreshToken };
+  return {
+    accessToken,
+    refreshToken,
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    tokens: user.tokens,
+  };
 };

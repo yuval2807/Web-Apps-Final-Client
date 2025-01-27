@@ -115,6 +115,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
             options={genderOptions}
             value={formData.gender}
             required
+            row={true}
           />
           <Grid container spacing={2} sx={{ mt: 1 }}>
             <Grid size={6}>
