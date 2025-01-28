@@ -10,8 +10,9 @@ import {
 
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { createLike, findOneLike, removeLike } from "../../queries/like";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { updatePost } from "../../queries/post";
+import { UserContext } from "../../context/UserContext";
 
 export interface PostData {
   _id: string;
@@ -37,6 +38,8 @@ export const PostCard: React.FC<PostCardProps > = ({
   date,
   showLikes,
 }) => {
+  const {connectedUser } = useContext(UserContext);
+  const accessToken = connectedUser?.accessToken;
   const [isAlreadyLiked, setIsAlreadyLiked]= useState<boolean>(false);
   const [likesCount, setLikesCount] = useState<number>(numOfLikes || 0)
   const [currentPost, setCurrentPost]= useState<PostData>({
@@ -50,32 +53,40 @@ export const PostCard: React.FC<PostCardProps > = ({
   } );
 
   const onLikeClick = async () => {
-    const accessToken = localStorage.getItem("accessToken"); //TODO get accessToken from userContext
+    const userId = connectedUser?.id;
 
     if (!accessToken) {
       console.log("No access token found");
       return;
     }
+    if (!userId) {
+      console.log("No user id found");
+      return;
+    }
     if (isAlreadyLiked) {
-      const response = await removeLike({ postId: _id, userId: "67925e4359808757b6e3b5d9"}, accessToken);//TODO get userid from userContext
+      const response = await removeLike({ postId: _id, userId: userId}, accessToken);
         setLikesCount((prev) => prev -1)
  
       setIsAlreadyLiked(false)
     } else {
-      const response = await createLike({ postId: _id, userId: "67925e4359808757b6e3b5d9"}, accessToken);//TODO get userid from userContext
+      const response = await createLike({ postId: _id, userId: userId}, accessToken);
       setLikesCount((prev) => prev + 1)
       setIsAlreadyLiked(true)
     }
   };
 
   const initAlreadyLike = async ()=>{
-    const accessToken = localStorage.getItem("accessToken");
+    const userId = connectedUser?.id;
 
     if (!accessToken) {
       console.log("No access token found");
       return;
     }
-    const response = await findOneLike({ postId: _id, userId: "67925e4359808757b6e3b5d9"}, accessToken);
+    if (!userId) {
+      console.log("No user id found");
+      return;
+    }
+    const response = await findOneLike({ postId: _id, userId: userId}, accessToken);
     
     setIsAlreadyLiked(response!!)
   }
@@ -86,8 +97,6 @@ export const PostCard: React.FC<PostCardProps > = ({
 
   useEffect(() => {
     const update = async () => {
-      const accessToken = localStorage.getItem("accessToken");
-
     if (!accessToken) {
       console.log("No access token found");
       return;

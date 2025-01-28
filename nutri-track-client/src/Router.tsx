@@ -3,9 +3,9 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Registration from "./views/Registration";
 import HomePage from "./views/HomePage";
 import Login from "./views/LoginPage";
+import UserProfile from "./views/UserProfile";
 import CreatePost from "./views/AddPostPage";
 import PostsList from "./views/PostsPage";
-import UserProfile from "./views/UserProfile";
 
 // Main App Component
 const Router: React.FC = () => {
