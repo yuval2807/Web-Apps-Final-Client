@@ -7,7 +7,9 @@ import {
   Button,
   Alert,
   Box,
+  CardActions,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 interface NewPostFormProps {
     title: string,
@@ -16,10 +18,12 @@ interface NewPostFormProps {
     setTitle: (title: string) => void,
     setContent: (content: string) => void,
     setImage: (image: string) => void,
-    onSubmit: () => void;
+    onSubmit: () => void,
+    isEdit?: boolean
 }
 
-const NewPostForm: React.FC<NewPostFormProps> = ({ title, content, image, setTitle, setContent, setImage, onSubmit }) => {
+const NewPostForm: React.FC<NewPostFormProps> = ({ title, content, image, setTitle, setContent, setImage, onSubmit, isEdit = false}) => {
+  const navigate = useNavigate();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -78,16 +82,39 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ title, content, image, setTit
               {error}
             </Alert>
           )}
+        </Box>
+      </CardContent>
+      <CardActions>
+      {isEdit ? (
+            <>
+            <Button
+            type='submit'
+            onClick={handleSubmit}
+            variant='contained'
+            disabled={loading}
+            sx={{ mt: 3 }}>
+            {loading ? "Updateing..." : "Update post"}
+          </Button>
+          <Button
+            variant='contained'
+            disabled={loading}
+            onClick={() => navigate("/post")}
+            sx={{ mt: 3 }}>
+            Cancel
+          </Button>
+            </>
+          ) : ( 
           <Button
             type='submit'
+            onClick={handleSubmit}
             fullWidth
             variant='contained'
             disabled={loading}
             sx={{ mt: 3 }}>
             {loading ? "Creating..." : "Create post"}
-          </Button>
-        </Box>
-      </CardContent>
+          </Button>)
+          }
+      </CardActions>
     </Card>
   );
 };

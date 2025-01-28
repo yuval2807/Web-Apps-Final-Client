@@ -61,3 +61,19 @@ export const updatePost = async (
     throw new Error(error.response?.data?.message || "post update failed");
   }
 };
+
+// Delete post function
+export const deletePost = async (
+  postId: string,
+  accessToken: string
+) => {
+  try {
+    const response = await axiosInstance.delete(
+      `${POST_ROUTE}/${postId}`,
+        { headers: {"authorization" : `Bearer ${accessToken}`} }
+    );
+    return response;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "post deletion failed");
+  }
+};

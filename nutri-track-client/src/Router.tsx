@@ -6,6 +6,7 @@ import Login from "./views/LoginPage";
 import UserProfile from "./views/UserProfile";
 import CreatePost from "./views/AddPostPage";
 import PostsList from "./views/PostsPage";
+import EditPost from "./views/EditPostPage";
 
 // Main App Component
 const Router: React.FC = () => {
@@ -17,7 +18,8 @@ const Router: React.FC = () => {
       <Route path="/userProfile" element={<UserProfile />} />
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/post" element={<PostsList />} />
-      <Route path="/post/create" element={<CreatePost />} />
+      <Route path="/post/create" element={<CreatePost/>} />
+      <Route path="/post/edit/:postid" element={<EditPost/>} />
     </Routes>
   );
 };
