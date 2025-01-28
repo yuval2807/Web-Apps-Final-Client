@@ -13,11 +13,11 @@ export const PostsPage: React.FC = () => {
     try {
         const accessToken = connectedUser?.accessToken;
 
-        if (!accessToken) {
-          console.log("No access token found");
-          return;
-        }
-  
+      if (!accessToken) {
+        console.log("No access token found");
+        return;
+      }
+
       const response = await getAllPosts(accessToken);
       if (response.status === 200) {
         console.log("Query success");
@@ -34,7 +34,9 @@ export const PostsPage: React.FC = () => {
 
   return (
     <PageLayout>
-        {postList ? (<PostsList postList={postList} ></PostsList>) : null }
+      {postList ? (
+        <PostsList postList={postList} showLikes={true}></PostsList>
+      ) : null}
     </PageLayout>
   );
 };
