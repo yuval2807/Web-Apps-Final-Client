@@ -17,3 +17,6 @@ export const updatePostById = (
     { title, content, sender, image, numOfLikes },
     { new: true }
   );
+
+  export const deletePostById = (id: string) =>
+  postModel.findByIdAndDelete(id);
