@@ -5,10 +5,10 @@ export interface IUser {
   email: string;
   name: string;
   password: string;
-  gender: string;
-  fitLevel: string;
-  weight: number;
-  height: number;
+  gender?: string;
+  fitLevel?: string;
+  weight?: number;
+  height?: number;
   tokens: string[];
 }
 
