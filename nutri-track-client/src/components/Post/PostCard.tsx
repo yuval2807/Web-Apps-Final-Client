@@ -20,7 +20,7 @@ export const PostCard: React.FC<PostData> = ({
   date,
 }) => {
   return title || content ? (
-    <Card sx={{ maxWidth: 400, mx: "auto", mt: 4 }}>
+    <Card sx={{ maxWidth: 800, minWidth: 400, mx: "auto", mt: 4 }}>
       <CardHeader
         title={title}
         subheader={new Date(date).toLocaleDateString()}
