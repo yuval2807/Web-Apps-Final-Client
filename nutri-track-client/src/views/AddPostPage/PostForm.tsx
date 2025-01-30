@@ -27,6 +27,13 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ title, content, image, setTit
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if(e.target.files && e.target.files.length > 0){
+      const newURL = URL.createObjectURL(e.target.files[0]);
+      setImage(newURL)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -71,10 +78,10 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ title, content, image, setTit
           <TextField
             fullWidth
             margin='normal'
-            label='Image URL'
-            type='text'
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
+           // label='Image URL'
+            type='file'
+            value={""}
+            onChange={handleImageChange}
             inputProps={{ minLength: 6 }}
           />
           {error && (
