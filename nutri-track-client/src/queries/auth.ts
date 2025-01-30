@@ -44,3 +44,18 @@ export const logout = async (refreshToken: string) => {
     throw new Error(error.response?.data?.message || "Logout failed");
   }
 };
+
+export const googleLogin = async (
+  credential: string
+): Promise<ConnectedUser> => {
+  try {
+    const response = await axiosInstance.post(
+      `${AUTH_ROUTE}/google`, // Your backend endpoint
+      { credential }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

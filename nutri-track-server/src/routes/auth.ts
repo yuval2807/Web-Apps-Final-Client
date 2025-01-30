@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 const router = express.Router();
-import { login, logout, refresh } from "../controllers/auth";
+import { googleLogin, login, logout, refresh } from "../controllers/auth";
 import { addNewUser } from "../controllers/user";
 
 /**
@@ -129,6 +129,40 @@ router.post("/login", async (req: Request, res: Response) => {
     res.status(200).send(await login(email, password));
   } catch (err) {
     res.status(400).send(err);
+  }
+});
+
+/**
+ * @swagger
+ * /auth/google:
+ *   post:
+ *       summary: login user with google
+ *       tags: [Auth]
+ *       requestBody:
+ *           required: true
+ *           content:
+ *               application/json:
+ *                   schema:
+ *                       $ref: '#/components/schemas/User'
+ *       responses:
+ *           200:
+ *               description: The access & refresh tokens
+ *               content:
+ *                   application/json:
+ *                       schema:
+ *                           $ref: '#/components/schemas/Tokens'
+ *           400:
+ *              description: Bad request
+ */
+router.post("/google", async (req, res) => {
+  try {
+    const { credential } = req.body;
+    if (!credential) {
+      throw new Error("Google credential is required");
+    }
+    res.status(200).send(await googleLogin(credential));
+  } catch (error: any) {
+    res.status(401).json({ error: error.message });
   }
 });
 
