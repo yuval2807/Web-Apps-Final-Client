@@ -5,6 +5,7 @@ interface CreatePostPayloadData {
   content: string;
   image?: string;
   date: Date;
+  numOfLikes?: number;
   sender: string;
 }
 
@@ -32,7 +33,6 @@ export const createPost = async (
   accessToken: string
 ) => {
   try {
-    console.log("createPost payload: ", payload);   
     const response = await axiosInstance.post(
       `${POST_ROUTE}/`,
         payload,
@@ -41,5 +41,39 @@ export const createPost = async (
     return response;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "post creation failed");
+  }
+};
+
+// Update post function
+export const updatePost = async (
+  payload: CreatePostPayloadData,
+  postId: string,
+  accessToken: string
+) => {
+  try {
+    const response = await axiosInstance.put(
+      `${POST_ROUTE}/${postId}`,
+        payload,
+        { headers: {"authorization" : `Bearer ${accessToken}`} }
+    );
+    return response;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "post update failed");
+  }
+};
+
+// Delete post function
+export const deletePost = async (
+  postId: string,
+  accessToken: string
+) => {
+  try {
+    const response = await axiosInstance.delete(
+      `${POST_ROUTE}/${postId}`,
+        { headers: {"authorization" : `Bearer ${accessToken}`} }
+    );
+    return response;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "post deletion failed");
   }
 };

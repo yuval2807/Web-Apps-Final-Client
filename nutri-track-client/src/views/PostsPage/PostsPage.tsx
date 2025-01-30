@@ -17,11 +17,11 @@ export const PostsPage: React.FC = () => {
     try {
         const accessToken = connectedUser?.accessToken;
 
-        if (!accessToken) {
-          console.log("No access token found");
-          return;
-        }
-  
+      if (!accessToken) {
+        console.log("No access token found");
+        return;
+      }
+
       const response = await getAllPosts(accessToken);
       if (response.status === 200) {
         console.log("Query success");
@@ -45,9 +45,9 @@ export const PostsPage: React.FC = () => {
 
   useEffect(() => {
     let tempPost: PostData[] = postList;
-    // if (userFilter) {
-    //   tempPost = tempPost.filter((post: PostData) => post?.sender === userFilter);
-    // }
+    if (userFilter) {
+      tempPost = tempPost.filter((post: PostData) => post?.sender === userFilter);
+    }
     if(userFilter === "" && contentTypeFilter === "") {
       setFilterPostList([...postList]);
       return;
@@ -62,7 +62,7 @@ export const PostsPage: React.FC = () => {
     <PageLayout>
       <div style={{display: "flex", flexDirection: "row-reverse", width: "95%", justifyContent:"space-around"  }}>
         <FilterBar setUserFilter={setUserFilter} setContentTypeFilter={setContentTypeFilter} onFilter={onFilter}  />
-        {filterPostList ? (<PostsList postList={filterPostList}/>) : null }
+        {filterPostList ? (<PostsList showLikes={true} postList={filterPostList}/>) : null }
         </div>
     </PageLayout>
   );
