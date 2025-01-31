@@ -5,6 +5,7 @@ import PostPreview from "../AddPostPage/PostPreview";
 import { useContext, useState } from "react";
 import { updatePost } from "../../queries/post";
 import { UserContext } from "../../context/UserContext";
+import { Typography } from "@mui/material";
 
 export const EditPost: React.FC = () => {
   const navigate = useNavigate();
@@ -41,6 +42,9 @@ export const EditPost: React.FC = () => {
 
   return (
     <PageLayout>
+        <Typography variant='h5' component='h1' gutterBottom align='center'>
+          Edit post
+        </Typography>
         <NewPostForm title={title} content={content} image={image} setTitle={setTitle} setContent={setContent} setImage={setImage} onSubmit={handlePressUpdate} isEdit={true} />
         <PostPreview title={title} content={content} image={image} />
     </PageLayout>

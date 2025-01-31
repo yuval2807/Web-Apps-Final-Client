@@ -5,6 +5,7 @@ import PostPreview from "./PostPreview";
 import { useContext, useState } from "react";
 import { createPost } from "../../queries/post";
 import { UserContext } from "../../context/UserContext";
+import { Typography } from "@mui/material";
 
 export const CreatePost: React.FC = () => {
   const navigate = useNavigate();
@@ -37,6 +38,9 @@ export const CreatePost: React.FC = () => {
 
   return (
     <PageLayout>
+       <Typography variant='h5' component='h1' gutterBottom align='center'>
+          New post
+        </Typography>
         <NewPostForm title={title} content={content} image={image} setTitle={setTitle} setContent={setContent} setImage={setImage} onSubmit={handlePressCreate} />
         <PostPreview title={title} content={content} image={image} />
     </PageLayout>

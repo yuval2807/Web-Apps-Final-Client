@@ -51,9 +51,6 @@ const NewPostForm: React.FC<NewPostFormProps> = ({ title, content, image, setTit
   return (
     <Card sx={{ maxWidth: 400, mx: "auto", mt: 4 }}>
       <CardContent>
-        <Typography variant='h5' component='h1' gutterBottom align='center'>
-          New post
-        </Typography>
         <Box component='form' onSubmit={handleSubmit} sx={{ mt: 2 }}>
           <TextField
             fullWidth
