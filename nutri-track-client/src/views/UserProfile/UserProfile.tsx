@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Box, Container, Grid2 as Grid } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import PageLayout from "../../components/Common/PageLayout";
-import ToggleButton from "../../components/ToggleButtons";
 import { UserContext } from "../../context/UserContext";
 import UserDetails from "./UserDetails";
 import { getUserById, updateUserById, User } from "../../queries/user";

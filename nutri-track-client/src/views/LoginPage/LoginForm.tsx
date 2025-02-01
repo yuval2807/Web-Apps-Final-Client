@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  TextField,
-  Button,
-  Alert,
-  Box,
-} from "@mui/material";
+import { Typography, TextField, Button, Alert, Box } from "@mui/material";
 
 interface LoginFormProps {
   onSubmit: (email: string, password: string) => void;
@@ -70,7 +62,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
           fullWidth
           variant='contained'
           disabled={loading}
-          sx={{ mt: 3 }}>
+          sx={{ my: 3 }}>
           {loading ? "Logging in..." : "Login"}
         </Button>
       </Box>
