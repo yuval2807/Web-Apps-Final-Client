@@ -19,6 +19,7 @@ import RadioGroupButtons, {
 } from "../../components/RadioGroup/RadioGroup";
 import PageLayout from "../../components/Common/PageLayout";
 import { UserInfo } from "./types";
+import { toast } from "react-toastify";
 
 interface UserDetailsProps {
   user: UserInfo;
@@ -58,9 +59,11 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
       if (updatedUser) {
         setProfile(editedProfile);
         setIsEditing(false);
+        toast.success("User updated successfully!");
       }
     } catch (err: any) {
       console.error(err.message);
+      toast.error("Something went wrong!");
     }
   };
 
@@ -80,7 +83,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
 
   return (
     <PageLayout>
-      <Container maxWidth='md' sx={{ width: "70%" }}>
+      <Container maxWidth='md' sx={{ width: "80%" }}>
         <Box
           sx={{
             display: "flex",

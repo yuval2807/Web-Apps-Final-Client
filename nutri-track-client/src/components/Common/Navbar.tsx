@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { logout } from "../../queries/auth";
 import { mainMenu, secondaryMenu } from "./menuData";
 import { UserContext } from "../../context/UserContext";
+import { toast } from "react-toastify";
 
 interface DrawerListProps {
   navWidth: string;
@@ -35,11 +36,12 @@ const DrawerList = () => {
 
       if (response.status === 200) {
         resetConnectedUser();
-        console.log("Logged out");
+        toast.success("User logged out successfully!");
         navigate("/login");
       }
     } catch (error) {
       console.log("error: ", error);
+      toast.error("Something went wrong!");
     }
   };
 

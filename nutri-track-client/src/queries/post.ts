@@ -39,7 +39,6 @@ export const createPost = async (
   accessToken: string
 ) => {
   try {
-    console.log("createPost payload: ", payload);
     const response = await axiosInstance.post(`${POST_ROUTE}/`, payload, {
       headers: { authorization: `Bearer ${accessToken}` },
     });

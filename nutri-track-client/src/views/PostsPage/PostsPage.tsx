@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { PostsList } from "../../components/Post/PostList";
 import { getAllPosts, PostData } from "../../queries/post";
 import { UserContext } from "../../context/UserContext";
+import { toast } from "react-toastify";
 
 export const PostsPage: React.FC = () => {
   const [postList, setPostList] = useState<PostData[]>([]);
@@ -19,11 +20,11 @@ export const PostsPage: React.FC = () => {
 
       const response = await getAllPosts(accessToken);
       if (response) {
-        console.log("Query success");
         setPostList(response);
       }
     } catch (error) {
       console.log("error: ", error);
+      toast.error("Something went wrong!");
     }
   };
 

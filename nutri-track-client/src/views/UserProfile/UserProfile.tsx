@@ -8,6 +8,7 @@ import { getUserById, updateUserById, User } from "../../queries/user";
 import { getAllPosts, PostData } from "../../queries/post";
 import { UserInfo } from "./types";
 import { PostsList } from "../../components/Post/PostList";
+import { toast } from "react-toastify";
 
 const UserProfile: React.FC = () => {
   const { connectedUser } = useContext(UserContext);
@@ -25,6 +26,7 @@ const UserProfile: React.FC = () => {
       setUser(response);
     } catch (error) {
       console.error("Failed to fetch user:", error);
+      toast.error("Something went wrong!");
     }
   };
 
@@ -39,11 +41,11 @@ const UserProfile: React.FC = () => {
 
       const response = await getAllPosts(accessToken, connectedUser.id);
       if (response) {
-        console.log("Query success");
         setPostList(response);
       }
     } catch (error) {
       console.log("error: ", error);
+      toast.error("Something went wrong!");
     }
   };
 
@@ -58,6 +60,7 @@ const UserProfile: React.FC = () => {
       );
     } catch (error) {
       console.log("error: ", error);
+      toast.error("Something went wrong!");
     }
   };
 
