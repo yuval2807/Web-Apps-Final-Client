@@ -30,14 +30,11 @@ import authenticateToken from "../middleware/jwt";
  *                   type: string
  *               sender:
  *                   type: string
- *               numOfLikes:
- *                  type: number
  *           example:
  *              _id: 'hgsfjhskljslkgl2kgldjd'
  *              title: 'example title'
  *              content: 'example content'
  *              sender: 'adraaggayajala'
- *              numOfLikes: 1
  *       PostBody:
  *           type: object
  *           required:
