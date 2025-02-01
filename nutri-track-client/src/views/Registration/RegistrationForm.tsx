@@ -14,14 +14,14 @@ import RadioGroupButtons, {
   Option,
 } from "../../components/RadioGroup/RadioGroup";
 import ToggleButton from "../../components/ToggleButtons";
-import { RegistrationData } from "./types";
+import { User } from "./types";
 
 interface RegistrationFormProps {
-  onSubmit: (data: RegistrationData) => Promise<void>;
+  onSubmit: (data: User) => Promise<void>;
 }
 
 const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
-  const [formData, setFormData] = useState<RegistrationData>({
+  const [formData, setFormData] = useState<User>({
     email: "",
     name: "",
     password: "",

@@ -1,6 +1,6 @@
 import axiosInstance from "../axiosInstance";
 import { ConnectedUser } from "../context/UserContext";
-import { RegistrationData } from "../views/Registration/types";
+import { User } from "../views/Registration/types";
 
 interface LoginPayload {
   email: string;
@@ -19,9 +19,7 @@ export const login = async (payload: LoginPayload): Promise<ConnectedUser> => {
 };
 
 // Register function
-export const register = async (
-  payload: RegistrationData
-): Promise<ConnectedUser> => {
+export const register = async (payload: User): Promise<ConnectedUser> => {
   try {
     const response = await axiosInstance.post(
       `${AUTH_ROUTE}/register`,
