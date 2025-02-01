@@ -31,7 +31,7 @@ export const getAllPosts = async (
         `${POST_ROUTE}/${sender ? `?sender=${sender}` : ""}`,
           { headers: {authorization : `Bearer ${accessToken}`} }
       );
-        console.log(response)
+
       let posts: PostData[] = response.data
       posts.map(async (post: PostData) => {
         return post.numOfLikes = await getLikeCount(post._id, accessToken);

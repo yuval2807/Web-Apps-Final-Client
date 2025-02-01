@@ -10,10 +10,10 @@ export const addNewPost = (post: IPost) => postModel.create(post);
 
 export const updatePostById = (
   id: string,
-  { title, content, sender, image, numOfLikes }
+  { title, content, sender, image }
 ) =>
   postModel.findByIdAndUpdate(
     id,
-    { title, content, sender, image, numOfLikes },
+    { title, content, sender, image },
     { new: true }
   );
