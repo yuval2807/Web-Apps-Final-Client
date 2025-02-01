@@ -1,13 +1,21 @@
 import axiosInstance from "../axiosInstance";
-import { PostData } from "../components/Post/PostCard";
 import { getLikeCount } from "./like";
+
+export interface PostData {
+  _id: string;
+  title: string;
+  content: string;
+  image?: string;
+  sender: string;
+  numOfLikes: number;
+  date: Date;
+}
 
 interface CreatePostPayloadData {
   title: string;
   content: string;
   image?: string;
   date: Date;
-  numOfLikes?: number;
   sender: string;
 }
 
@@ -21,9 +29,9 @@ export const getAllPosts = async (
     try {
       const response = await axiosInstance.get(
         `${POST_ROUTE}/${sender ? `?sender=${sender}` : ""}`,
-          { headers: {"authorization" : `Bearer ${accessToken}`} }
+          { headers: {authorization : `Bearer ${accessToken}`} }
       );
-
+        console.log(response)
       let posts: PostData[] = response.data
       posts.map(async (post: PostData) => {
         return post.numOfLikes = await getLikeCount(post._id, accessToken);
@@ -40,11 +48,10 @@ export const createPost = async (
   accessToken: string
 ) => {
   try {
-    const response = await axiosInstance.post(
-      `${POST_ROUTE}/`,
-        payload,
-        { headers: {"authorization" : `Bearer ${accessToken}`} }
-    );
+    console.log("createPost payload: ", payload);
+    const response = await axiosInstance.post(`${POST_ROUTE}/`, payload, {
+      headers: { authorization: `Bearer ${accessToken}` },
+    });
     return response;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "post creation failed");
@@ -61,7 +68,7 @@ export const updatePost = async (
     const response = await axiosInstance.put(
       `${POST_ROUTE}/${postId}`,
         payload,
-        { headers: {"authorization" : `Bearer ${accessToken}`} }
+        { headers: {authorization : `Bearer ${accessToken}`} }
     );
     return response;
   } catch (error: any) {

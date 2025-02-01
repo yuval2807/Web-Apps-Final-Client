@@ -7,21 +7,11 @@ import {
   CardActions,
   IconButton,
 } from "@mui/material";
-
+import { PostData } from "../../queries/post";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { createLike, findOneLike, getLikeCount, removeLike } from "../../queries/like";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext";
-
-export interface PostData {
-  _id: string;
-  title: string;
-  content: string;
-  image?: string;
-  sender: string;
-  numOfLikes: number;
-  date: Date;
-}
 
 interface PostCardProps {
   post: PostData,
