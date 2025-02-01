@@ -1,7 +1,5 @@
 import postModel, { IPost } from "../models/post";
 
-export const getAllPosts = () => postModel.find();
-
 export const getAllPostsWithLikes = () => postModel.aggregate([
   {
     $lookup: {
@@ -52,8 +50,6 @@ export const getAllPostsWithLikesBySender = (sender) => postModel.aggregate([
 ])
 
 export const getPostById = (id: string) => postModel.findById(id);
-
-export const getPostBySender = (sender) => postModel.find({ sender });
 
 export const addNewPost = (post: IPost) => postModel.create(post);
 
