@@ -19,6 +19,7 @@ import RadioGroupButtons, {
   Option,
 } from "../../components/RadioGroup/RadioGroup";
 import ToggleButton from "../../components/ToggleButtons";
+import { updateUserById, User } from "../../queries/user";
 import { UserInfo } from "./types";
 
 interface UserDetailsProps {

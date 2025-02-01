@@ -7,6 +7,7 @@ import UserDetails from "./UserDetails";
 import { getUserById, updateUserById, User } from "../../queries/user";
 import { getAllPosts, PostData } from "../../queries/post";
 import { UserInfo } from "./types";
+import { PostsList } from "../../components/Post/PostList";
 
 const UserProfile: React.FC = () => {
   const { connectedUser } = useContext(UserContext);
@@ -36,7 +37,7 @@ const UserProfile: React.FC = () => {
         return;
       }
 
-      const response = await getAllPosts(accessToken);
+      const response = await getAllPosts(accessToken, connectedUser.id);
       if (response) {
         console.log("Query success");
         setPostList(response);
@@ -71,6 +72,7 @@ const UserProfile: React.FC = () => {
         <Box sx={{ p: 3 }}>
           {user ? <UserDetails user={user} onSave={handleUserUpdate} /> : null}
         </Box>
+        <PostsList postList={postList} />
       </Container>
     </PageLayout>
   );

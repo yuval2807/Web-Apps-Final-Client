@@ -1,5 +1,6 @@
 import axiosInstance from "../axiosInstance";
 import { ConnectedUser } from "../context/UserContext";
+import { UserInfo } from "../views/UserProfile/types";
 
 export interface User {
   email: string;
@@ -30,7 +31,7 @@ export const getUserById = async (
 export const updateUserById = async (
   refreshToken: string,
   userId: ConnectedUser["id"],
-  payload: Omit<User, "password">
+  payload: UserInfo
 ): Promise<User> => {
   try {
     const response = await axiosInstance.put(
