@@ -28,9 +28,28 @@ export const findOneLike= async (
         }
     } catch (error: any) {
         if (response?.status === 404) {
-            return false;
-          } 
-    //   throw new Error(error.response?.data?.message || "Like query failed");
+          return false;
+        } 
+    }
+  };
+
+
+// Get likes count on  post
+export const getLikeCount = async (
+    postId: string,
+    accessToken: string
+  ) => {
+    let response = null
+    try {
+       response = await axiosInstance.get(
+        `${LIKE_ROUTE}/find/${postId}`,
+          { headers: {authorization : `Bearer ${accessToken}`} }
+      );
+      if (response) {
+        return response.data.likesCount
+      }
+    } catch (error: any) {
+      console.log("Likes count query failed" )
     }
   };
 

@@ -1,4 +1,5 @@
-import { PostCard, PostData } from "./PostCard";
+import { PostData } from "../../queries/post";
+import { PostCard } from "./PostCard";
 
 export interface PostsListData {
   postList: PostData[];
@@ -10,13 +11,7 @@ export const PostsList: React.FC<PostsListData> = ({ postList, showLikes }) => {
     <div>
       {postList.map((post: PostData) => (
         <PostCard
-          _id={post?._id}
-          title={post?.title}
-          content={post?.content}
-          sender={post?.sender}
-          image={post?.image}
-          numOfLikes={post?.numOfLikes}
-          date={post?.date}
+          post={post}
           showLikes={showLikes}
         />
       ))}

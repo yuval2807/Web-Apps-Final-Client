@@ -1,10 +1,10 @@
 import express, { Request, Response } from "express";
 import {
-  getPostBySender,
-  getAllPosts,
   getPostById,
   addNewPost,
   updatePostById,
+  getAllPostsWithLikes,
+  getAllPostsWithLikesBySender,
   deletePostById,
 } from "../controllers/post";
 import authenticateToken from "../middleware/jwt";
@@ -31,14 +31,11 @@ import authenticateToken from "../middleware/jwt";
  *                   type: string
  *               sender:
  *                   type: string
- *               numOfLikes:
- *                  type: number
  *           example:
  *              _id: 'hgsfjhskljslkgl2kgldjd'
  *              title: 'example title'
  *              content: 'example content'
  *              sender: 'adraaggayajala'
- *              numOfLikes: 1
  *       PostBody:
  *           type: object
  *           required:
@@ -81,10 +78,8 @@ router.get("/", async (req: Request, res: Response) => {
   const sender = req.query.sender;
 
   try {
-    if (sender) res.status(200).send(await getPostBySender(sender));
-    else {
-      res.status(200).send(await getAllPosts());
-    }
+    if (sender) res.status(200).send(await getAllPostsWithLikesBySender(sender));
+    else { res.status(200).send(await getAllPostsWithLikes());}
   } catch (err) {
     res.status(400).send(err);
   }
