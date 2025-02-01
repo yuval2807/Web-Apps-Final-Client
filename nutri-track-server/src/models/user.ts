@@ -5,6 +5,7 @@ export interface IUser {
   email: string;
   name: string;
   password: string;
+  image?: string;
   gender?: string;
   fitLevel?: string;
   weight?: number;
@@ -48,6 +49,9 @@ const userSchema = new Schema<IUser>({
   },
   weight: {
     type: Number,
+  },
+  image: {
+    type: String,
   },
 });
 

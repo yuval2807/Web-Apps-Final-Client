@@ -5,6 +5,7 @@ import { UserInfo } from "../views/UserProfile/types";
 export interface User {
   email: string;
   name: string;
+  image: string;
   password: string;
   gender: string;
   fitLevel: string;

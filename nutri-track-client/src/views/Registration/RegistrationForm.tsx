@@ -9,6 +9,7 @@ import {
   Box,
   Grid2 as Grid,
   InputAdornment,
+  Avatar,
 } from "@mui/material";
 import RadioGroupButtons, {
   Option,
@@ -29,6 +30,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
     fitLevel: "",
     height: 0,
     weight: 0,
+    image: "",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -57,6 +59,17 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
     }
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const newURL = URL.createObjectURL(e.target.files[0]);
+
+      setFormData((prev) => ({
+        ...prev,
+        image: newURL,
+      }));
+    }
+  };
+
   const genderOptions: Option[] = [
     { label: "male", value: "male" },
     { label: "female", value: "female" },
@@ -76,6 +89,26 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
           Register
         </Typography>
         <Box component='form' onSubmit={handleSubmit} sx={{ mt: 2 }}>
+          <Box sx={{ display: "flex", justifyContent: "center", mr: 2 }}>
+            <label
+              htmlFor='photo-upload'
+              style={{
+                cursor: "pointer",
+              }}>
+              <input
+                id='photo-upload'
+                type='file'
+                accept='image/*'
+                onChange={handleImageChange}
+                style={{ display: "none" }}
+              />
+              <Avatar
+                sx={{ width: 100, height: 100 }}
+                alt={formData.image}
+                src={formData.image}
+              />
+            </label>
+          </Box>
           <TextField
             fullWidth
             margin='normal'
