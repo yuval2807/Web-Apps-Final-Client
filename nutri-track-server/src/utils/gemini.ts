@@ -13,7 +13,7 @@ export const geminiAskQuestion = async (question: string) => {
         const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-        const result = await model.generateContent(appBackground + question);
+        const result = await model.generateContent(appBackground + "Give me a short and concise answer to the following question:" + question);
         return result.response.text();
 
     } catch (error) {
