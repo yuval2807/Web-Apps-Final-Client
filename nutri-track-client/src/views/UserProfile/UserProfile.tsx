@@ -4,8 +4,9 @@ import PageLayout from "../../components/Common/PageLayout";
 import ToggleButton from "../../components/ToggleButtons";
 import { UserContext } from "../../context/UserContext";
 import UserDetails from "./UserDetails";
-import { getUserById, User } from "../../queries/user";
+import { getUserById, updateUserById, User } from "../../queries/user";
 import { getAllPosts, PostData } from "../../queries/post";
+import { UserInfo } from "./types";
 
 const UserProfile: React.FC = () => {
   const { connectedUser } = useContext(UserContext);
@@ -45,6 +46,20 @@ const UserProfile: React.FC = () => {
     }
   };
 
+  const handleUserUpdate = async (data: UserInfo) => {
+    if (!connectedUser) return;
+
+    try {
+      return await updateUserById(
+        connectedUser.accessToken,
+        connectedUser?.id,
+        data
+      );
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+
   useEffect(() => {
     fetchUserInfo();
     fetchUserPosts();
@@ -53,7 +68,9 @@ const UserProfile: React.FC = () => {
   return (
     <PageLayout>
       <Container maxWidth='md'>
-        <Box sx={{ p: 3 }}>{user ? <UserDetails user={user} /> : null}</Box>
+        <Box sx={{ p: 3 }}>
+          {user ? <UserDetails user={user} onSave={handleUserUpdate} /> : null}
+        </Box>
       </Container>
     </PageLayout>
   );

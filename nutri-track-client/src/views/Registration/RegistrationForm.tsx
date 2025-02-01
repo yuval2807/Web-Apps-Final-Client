@@ -14,7 +14,7 @@ import RadioGroupButtons, {
   Option,
 } from "../../components/RadioGroup/RadioGroup";
 import ToggleButton from "../../components/ToggleButtons";
-import { User } from "./types";
+import { User } from "../../queries/user";
 
 interface RegistrationFormProps {
   onSubmit: (data: User) => Promise<void>;

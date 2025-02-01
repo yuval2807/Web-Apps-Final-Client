@@ -19,15 +19,14 @@ import RadioGroupButtons, {
   Option,
 } from "../../components/RadioGroup/RadioGroup";
 import ToggleButton from "../../components/ToggleButtons";
-import { User } from "../../queries/user";
-
-type UserInfo = Omit<User, "password">;
+import { UserInfo } from "./types";
 
 interface UserDetailsProps {
   user: UserInfo;
+  onSave: (data: UserInfo) => Promise<UserInfo | undefined>;
 }
 
-const UserDetails: React.FC<UserDetailsProps> = ({ user }) => {
+const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState<UserInfo>(user);
 
@@ -50,10 +49,16 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user }) => {
     setEditedProfile(profile);
   };
 
-  const handleSave = () => {
-    setProfile(editedProfile);
-
-    setIsEditing(false);
+  const handleSave = async () => {
+    try {
+      const updatedUser = await onSave(editedProfile);
+      if (!!updatedUser) {
+        setProfile(editedProfile);
+        setIsEditing(false);
+      }
+    } catch (err: any) {
+      console.error(err.message);
+    }
   };
 
   const handleCancel = () => {
