@@ -1,10 +1,10 @@
 import { Button } from "@mui/material";
 import RegistrationForm from "./RegistrationForm";
 import { useNavigate } from "react-router-dom";
-import { User } from "./types";
 import { register } from "../../queries/auth";
 import { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
+import { User } from "../../queries/user";
 
 export const Registration: React.FC = () => {
   const navigate = useNavigate();

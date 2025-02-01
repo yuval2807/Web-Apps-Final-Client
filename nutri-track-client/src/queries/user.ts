@@ -1,7 +1,16 @@
 import axiosInstance from "../axiosInstance";
 import { ConnectedUser } from "../context/UserContext";
-import { User } from "../views/Registration/types";
 
+export interface User {
+    email: string;
+    name: string;
+    password: string;
+    gender: string;
+    fitLevel: string;
+    weight: number;
+    height: number;
+  }
+  
 const USER_ROUTE = "/user";
 
 export const getUserById = async (

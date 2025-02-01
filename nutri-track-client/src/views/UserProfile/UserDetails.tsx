@@ -18,8 +18,8 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import RadioGroupButtons, {
   Option,
 } from "../../components/RadioGroup/RadioGroup";
-import { User } from "../Registration/types";
 import ToggleButton from "../../components/ToggleButtons";
+import { User } from "../../queries/user";
 
 type UserInfo = Omit<User, "password">;
 
@@ -52,6 +52,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user }) => {
 
   const handleSave = () => {
     setProfile(editedProfile);
+
     setIsEditing(false);
   };
 

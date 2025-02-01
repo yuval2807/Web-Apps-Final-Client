@@ -1,16 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Box, Container, Grid2 as Grid } from "@mui/material";
 import PageLayout from "../../components/Common/PageLayout";
-import { User } from "../Registration/types";
 import ToggleButton from "../../components/ToggleButtons";
 import { UserContext } from "../../context/UserContext";
 import UserDetails from "./UserDetails";
-import { getUserById } from "../../queries/user";
+import { getUserById, User } from "../../queries/user";
 import { getAllPosts, PostData } from "../../queries/post";
 
 const UserProfile: React.FC = () => {
   const { connectedUser } = useContext(UserContext);
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(null);
   const [postList, setPostList] = useState<PostData[]>([]);
 
   const fetchUserInfo = async () => {

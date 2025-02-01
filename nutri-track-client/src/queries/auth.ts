@@ -1,6 +1,6 @@
 import axiosInstance from "../axiosInstance";
 import { ConnectedUser } from "../context/UserContext";
-import { User } from "../views/Registration/types";
+import { User } from "./user";
 
 interface LoginPayload {
   email: string;
