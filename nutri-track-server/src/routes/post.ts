@@ -1,7 +1,5 @@
 import express, { Request, Response } from "express";
 import {
-  getPostBySender,
-  getAllPosts,
   getPostById,
   addNewPost,
   updatePostById,
