@@ -1,4 +1,6 @@
 import axiosInstance from "../axiosInstance";
+import { PostData } from "../components/Post/PostCard";
+import { getLikeCount } from "./like";
 
 interface CreatePostPayloadData {
   title: string;
@@ -15,13 +17,18 @@ const POST_ROUTE = "/post";
 export const getAllPosts = async (
     accessToken: string,
     sender?: string
-  ) => {
+  ): Promise<PostData[]> => {
     try {
       const response = await axiosInstance.get(
         `${POST_ROUTE}/${sender ? `?sender=${sender}` : ""}`,
           { headers: {"authorization" : `Bearer ${accessToken}`} }
       );
-      return response;
+
+      let posts: PostData[] = response.data
+      posts.map(async (post: PostData) => {
+        return post.numOfLikes = await getLikeCount(post._id, accessToken);
+      });
+      return posts;
     } catch (error: any) {
       throw new Error(error.response?.data?.message || "posts query failed");
     }

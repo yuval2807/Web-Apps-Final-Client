@@ -19,9 +19,9 @@ export const PostsPage: React.FC = () => {
       }
 
       const response = await getAllPosts(accessToken);
-      if (response.status === 200) {
-        console.log("Query success");
-        setPostList(response.data);
+      if (response) {
+        console.log("Query success", response);
+        setPostList(response);
       }
     } catch (error) {
       console.log("error: ", error);

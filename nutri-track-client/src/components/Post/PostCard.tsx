@@ -9,9 +9,8 @@ import {
 } from "@mui/material";
 
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { createLike, findOneLike, removeLike } from "../../queries/like";
+import { createLike, findOneLike, getLikeCount, removeLike } from "../../queries/like";
 import { useContext, useEffect, useState } from "react";
-import { updatePost } from "../../queries/post";
 import { UserContext } from "../../context/UserContext";
 
 export interface PostData {
@@ -20,37 +19,23 @@ export interface PostData {
   content: string;
   image?: string;
   sender: string;
-  numOfLikes?: number;
+  numOfLikes: number;
   date: Date;
 }
 
-interface PostCardProps extends PostData {
+interface PostCardProps {
+  post: PostData,
   showLikes: boolean;
 }
 
-export const PostCard: React.FC<PostCardProps > = ({
-  _id,
-  title,
-  content,
-  image,
-  sender,
-  numOfLikes,
-  date,
+export const PostCard: React.FC<PostCardProps> = ({
+  post,
   showLikes,
 }) => {
   const {connectedUser } = useContext(UserContext);
   const accessToken = connectedUser?.accessToken;
   const [isAlreadyLiked, setIsAlreadyLiked]= useState<boolean>(false);
-  const [likesCount, setLikesCount] = useState<number>(numOfLikes || 0)
-  const [currentPost, setCurrentPost]= useState<PostData>({
-    _id,
-    title,
-    content,
-    image,
-    sender,
-    numOfLikes,
-    date
-  } );
+  const [currentPost, setCurrentPost]= useState<PostData>(post);
 
   const onLikeClick = async () => {
     const userId = connectedUser?.id;
@@ -64,13 +49,14 @@ export const PostCard: React.FC<PostCardProps > = ({
       return;
     }
     if (isAlreadyLiked) {
-      const response = await removeLike({ postId: _id, userId: userId}, accessToken);
-        setLikesCount((prev) => prev -1)
- 
+      const response = await removeLike({ postId: post?._id, userId: userId}, accessToken);
+      const updatedLikesCount = await getLikeCount(currentPost?._id, accessToken)
+      setCurrentPost({...currentPost, numOfLikes: updatedLikesCount}) 
       setIsAlreadyLiked(false)
     } else {
-      const response = await createLike({ postId: _id, userId: userId}, accessToken);
-      setLikesCount((prev) => prev + 1)
+      const response = await createLike({ postId: post?._id, userId: userId}, accessToken);
+      const updatedLikesCount = await getLikeCount(currentPost?._id, accessToken)
+      setCurrentPost({...currentPost, numOfLikes: updatedLikesCount})
       setIsAlreadyLiked(true)
     }
   };
@@ -86,7 +72,7 @@ export const PostCard: React.FC<PostCardProps > = ({
       console.log("No user id found");
       return;
     }
-    const response = await findOneLike({ postId: _id, userId: userId}, accessToken);
+    const response = await findOneLike({ postId: post?._id, userId: userId}, accessToken);
     
     setIsAlreadyLiked(response!!)
   }
@@ -95,37 +81,23 @@ export const PostCard: React.FC<PostCardProps > = ({
     initAlreadyLike()
   }, []);
 
-  useEffect(() => {
-    const update = async () => {
-    if (!accessToken) {
-      console.log("No access token found");
-      return;
-    }
-
-      const updateRes = await updatePost({...currentPost, numOfLikes:likesCount}, _id, accessToken);
-      setCurrentPost(updateRes.data);
-    }
-    update()
-  
-  }, [likesCount])
-
-  return title || content ? (
+  return post?.title || post?.content ? (
     <Card sx={{ maxWidth: 400, mx: "auto", mt: 4 }}>
       <CardHeader
-        title={title}
-        subheader={new Date(date).toLocaleDateString()}
+        title={post.title}
+        subheader={new Date(post.date).toLocaleDateString()}
       />
-      {image && (
+      {post.image && (
         <CardMedia
           component="img"
           height="194"
-          image={image}
+          image={post.image}
           alt="Paella dish"
         />
       )}
       <CardContent>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          {content}
+          {post.content}
         </Typography>
       </CardContent>
       {showLikes && (
@@ -134,7 +106,7 @@ export const PostCard: React.FC<PostCardProps > = ({
             <FavoriteIcon color={isAlreadyLiked ? "error" : "inherit"} />
           </IconButton>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            {currentPost.numOfLikes ? `${currentPost.numOfLikes} likes`: "No likes yet"}
+            {currentPost?.numOfLikes ? `${currentPost.numOfLikes} likes`: "No likes yet"}
           </Typography>
         </CardActions>
       )}
