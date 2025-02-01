@@ -1,4 +1,5 @@
-import { PostCard, PostData } from "./PostCard";
+import { PostData } from "../../queries/post";
+import { PostCard } from "./PostCard";
 
 export interface PostsListData {
   postList: PostData[];
