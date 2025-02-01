@@ -34,6 +34,7 @@ import { addNewUser } from "../controllers/user";
  *               - gender
  *               - height
  *               - weight
+ *               - image
  *           properties:
  *               email:
  *                   type: string
