@@ -13,7 +13,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from '@mui/icons-material/Delete';
 import { createLike, findOneLike, getLikeCount, removeLike } from "../../queries/like";
 import { useContext, useEffect, useState } from "react";
-import { deletePost, updatePost } from "../../queries/post";
+import { deletePost } from "../../queries/post";
 import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
@@ -57,7 +57,7 @@ export const PostCard: React.FC<PostCardProps> = ({
   };
 
   const onEditClick = async () => {
-    navigate(`/post/edit/${_id}`, { state: currentPost });
+    navigate(`/post/edit/${post._id}`, { state: currentPost });
   }
 
   const onDeleteClick = async () => {
@@ -67,7 +67,7 @@ export const PostCard: React.FC<PostCardProps> = ({
       return;
     }
 
-    const response = await deletePost(_id, accessToken);
+    const response = await deletePost(post._id, accessToken);
     if (response.status === 200) {
       console.log("Post deleted");
     }

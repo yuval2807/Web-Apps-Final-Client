@@ -1,5 +1,4 @@
 import axiosInstance from "../axiosInstance";
-import { getLikeCount } from "./like";
 
 export interface PostData {
   _id: string;
@@ -80,7 +79,7 @@ export const deletePost = async (
   try {
     const response = await axiosInstance.delete(
       `${POST_ROUTE}/${postId}`,
-        { headers: {"authorization" : `Bearer ${accessToken}`} }
+        { headers: {authorization : `Bearer ${accessToken}`} }
     );
     return response;
   } catch (error: any) {
