@@ -33,7 +33,9 @@ export const PostsPage: React.FC = () => {
 
   return (
     <PageLayout>
-      {postList ? <PostsList postList={postList}></PostsList> : null}
+      {postList ? (
+        <PostsList postList={postList} showLikes={true} />
+      ) : null}
     </PageLayout>
   );
 };

@@ -3,17 +3,16 @@ import { PostCard } from "./PostCard";
 
 export interface PostsListData {
   postList: PostData[];
+  showLikes: boolean;
 }
 
-export const PostsList: React.FC<PostsListData> = ({ postList }) => {
+export const PostsList: React.FC<PostsListData> = ({ postList, showLikes }) => {
   return (
     <div>
       {postList.map((post: PostData) => (
         <PostCard
-          title={post?.title}
-          content={post?.content}
-          image={post?.image}
-          date={post?.date}
+          post={post}
+          showLikes={showLikes}
         />
       ))}
     </div>
