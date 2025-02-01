@@ -1,4 +1,15 @@
 import axiosInstance from "../axiosInstance";
+import { getLikeCount } from "./like";
+
+export interface PostData {
+  _id: string;
+  title: string;
+  content: string;
+  image?: string;
+  sender: string;
+  numOfLikes: number;
+  date: Date;
+}
 
 interface CreatePostPayloadData {
   title: string;
@@ -14,13 +25,14 @@ const POST_ROUTE = "/post";
 export const getAllPosts = async (
     accessToken: string,
     sender?: string
-  ) => {
+  ): Promise<PostData[]> => {
     try {
       const response = await axiosInstance.get(
         `${POST_ROUTE}/${sender ? `?sender=${sender}` : ""}`,
-          { headers: {"authorization" : `Bearer ${accessToken}`} }
+          { headers: {authorization : `Bearer ${accessToken}`} }
       );
-      return response;
+
+      return response.data;
     } catch (error: any) {
       throw new Error(error.response?.data?.message || "posts query failed");
     }
@@ -32,14 +44,30 @@ export const createPost = async (
   accessToken: string
 ) => {
   try {
-    console.log("createPost payload: ", payload);   
-    const response = await axiosInstance.post(
-      `${POST_ROUTE}/`,
-        payload,
-        { headers: {"authorization" : `Bearer ${accessToken}`} }
-    );
+    console.log("createPost payload: ", payload);
+    const response = await axiosInstance.post(`${POST_ROUTE}/`, payload, {
+      headers: { authorization: `Bearer ${accessToken}` },
+    });
     return response;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "post creation failed");
+  }
+};
+
+// Update post function
+export const updatePost = async (
+  payload: CreatePostPayloadData,
+  postId: string,
+  accessToken: string
+) => {
+  try {
+    const response = await axiosInstance.put(
+      `${POST_ROUTE}/${postId}`,
+        payload,
+        { headers: {authorization : `Bearer ${accessToken}`} }
+    );
+    return response;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "post update failed");
   }
 };

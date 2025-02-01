@@ -1,27 +1,26 @@
 import PageLayout from "../../components/Common/PageLayout";
 import { useContext, useEffect, useState } from "react";
 import { PostsList } from "../../components/Post/PostList";
-import { PostData } from "../../components/Post/PostCard";
-import { getAllPosts } from "../../queries/post";
+import { getAllPosts, PostData } from "../../queries/post";
 import { UserContext } from "../../context/UserContext";
 
 export const PostsPage: React.FC = () => {
   const [postList, setPostList] = useState<PostData[]>([]);
-  const {connectedUser } = useContext(UserContext);
+  const { connectedUser } = useContext(UserContext);
 
   const fetchPosts = async () => {
     try {
-        const accessToken = connectedUser?.accessToken;
+      const accessToken = connectedUser?.accessToken;
 
-        if (!accessToken) {
-          console.log("No access token found");
-          return;
-        }
-  
+      if (!accessToken) {
+        console.log("No access token found");
+        return;
+      }
+
       const response = await getAllPosts(accessToken);
-      if (response.status === 200) {
+      if (response) {
         console.log("Query success");
-        setPostList(response.data);
+        setPostList(response);
       }
     } catch (error) {
       console.log("error: ", error);
@@ -34,7 +33,9 @@ export const PostsPage: React.FC = () => {
 
   return (
     <PageLayout>
-        {postList ? (<PostsList postList={postList} ></PostsList>) : null }
+      {postList ? (
+        <PostsList postList={postList} showLikes={true} />
+      ) : null}
     </PageLayout>
   );
 };

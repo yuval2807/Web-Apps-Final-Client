@@ -1,4 +1,3 @@
-// UserProfileEdit.tsx
 import React, { useState } from "react";
 import {
   Box,
@@ -12,28 +11,27 @@ import {
   Grid2 as Grid,
   InputAdornment,
 } from "@mui/material";
-import PageLayout from "../components/Common/PageLayout";
+import PageLayout from "../../components/Common/PageLayout";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
-import RadioGroupButtons, { Option } from "../components/RadioGroup/RadioGroup";
-import { RegistrationData } from "./Registration/types";
-import ToggleButton from "../components/ToggleButtons";
+import RadioGroupButtons, {
+  Option,
+} from "../../components/RadioGroup/RadioGroup";
+import ToggleButton from "../../components/ToggleButtons";
+import { updateUserById, User } from "../../queries/user";
+import { UserInfo } from "./types";
 
-type User = Omit<RegistrationData, "password">;
+interface UserDetailsProps {
+  user: UserInfo;
+  onSave: (data: UserInfo) => Promise<UserInfo | undefined>;
+}
 
-const UserProfile: React.FC = () => {
+const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [profile, setProfile] = useState<User>({
-    name: "John Doe",
-    email: "john.doe@example.com",
-    fitLevel: "Beginner",
-    gender: "female",
-    height: 160,
-    weight: 50,
-  });
+  const [profile, setProfile] = useState<UserInfo>(user);
 
-  const [editedProfile, setEditedProfile] = useState<User>(profile);
+  const [editedProfile, setEditedProfile] = useState<UserInfo>(profile);
 
   const genderOptions: Option[] = [
     { label: "male", value: "male" },
@@ -52,9 +50,16 @@ const UserProfile: React.FC = () => {
     setEditedProfile(profile);
   };
 
-  const handleSave = () => {
-    setProfile(editedProfile);
-    setIsEditing(false);
+  const handleSave = async () => {
+    try {
+      const updatedUser = await onSave(editedProfile);
+      if (!!updatedUser) {
+        setProfile(editedProfile);
+        setIsEditing(false);
+      }
+    } catch (err: any) {
+      console.error(err.message);
+    }
   };
 
   const handleCancel = () => {
@@ -63,7 +68,7 @@ const UserProfile: React.FC = () => {
   };
 
   const handleChange =
-    (field: keyof User) =>
+    (field: keyof UserInfo) =>
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setEditedProfile((prev) => ({
         ...prev,
@@ -191,4 +196,4 @@ const UserProfile: React.FC = () => {
   );
 };
 
-export default UserProfile;
+export default UserDetails;

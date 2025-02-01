@@ -4,6 +4,7 @@ import commentRoutes from "./src/routes/comment";
 import userRoutes from "./src/routes/user";
 import authRoutes from "./src/routes/auth";
 import aiRoutes from "./src/routes/aiSuggestion";
+import likeRoutes from "./src/routes/like";
 import connectToDatabase from "./src/config/db";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
@@ -46,6 +47,7 @@ app.use("/comment", commentRoutes);
 app.use("/user", userRoutes);
 app.use("/auth", authRoutes);
 app.use("/ai", aiRoutes); 
+app.use("/like", likeRoutes);
 
 app.listen(port, () => {
   console.log(`lisening at http:/localhost:${port}`);
