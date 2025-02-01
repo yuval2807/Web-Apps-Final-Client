@@ -7,7 +7,6 @@ import {
   refresh,
   register,
 } from "../controllers/auth";
-import { addNewUser } from "../controllers/user";
 
 /**
  * @swagger
