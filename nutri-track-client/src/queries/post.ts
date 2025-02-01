@@ -32,11 +32,7 @@ export const getAllPosts = async (
           { headers: {authorization : `Bearer ${accessToken}`} }
       );
 
-      let posts: PostData[] = response.data
-      posts.map(async (post: PostData) => {
-        return post.numOfLikes = await getLikeCount(post._id, accessToken);
-      });
-      return posts;
+      return response.data;
     } catch (error: any) {
       throw new Error(error.response?.data?.message || "posts query failed");
     }

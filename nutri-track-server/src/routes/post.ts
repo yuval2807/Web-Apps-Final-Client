@@ -5,6 +5,8 @@ import {
   getPostById,
   addNewPost,
   updatePostById,
+  getAllPostsWithLikes,
+  getAllPostsWithLikesBySender,
 } from "../controllers/post";
 import authenticateToken from "../middleware/jwt";
 
@@ -77,10 +79,8 @@ router.get("/", async (req: Request, res: Response) => {
   const sender = req.query.sender;
 
   try {
-    if (sender) res.status(200).send(await getPostBySender(sender));
-    else {
-      res.status(200).send(await getAllPosts());
-    }
+    if (sender) res.status(200).send(await getAllPostsWithLikesBySender(sender));
+    else { res.status(200).send(await getAllPostsWithLikes());}
   } catch (err) {
     res.status(400).send(err);
   }
