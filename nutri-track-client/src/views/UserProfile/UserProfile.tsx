@@ -37,7 +37,7 @@ const UserProfile: React.FC = () => {
         return;
       }
 
-      const response = await getAllPosts(accessToken, connectedUser.id);
+      const response = await getAllPosts(accessToken, 0, connectedUser.id);
       if (response) {
         console.log("Query success");
         setPostList(response);
@@ -68,7 +68,7 @@ const UserProfile: React.FC = () => {
 
   return (
     <PageLayout>
-      <Container maxWidth='md'>
+      <Container maxWidth="md">
         <Box sx={{ p: 3 }}>
           {user ? <UserDetails user={user} onSave={handleUserUpdate} /> : null}
         </Box>

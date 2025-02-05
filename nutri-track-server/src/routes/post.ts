@@ -7,6 +7,7 @@ import {
   getAllPostsWithLikesBySender,
 } from "../controllers/post";
 import authenticateToken from "../middleware/jwt";
+import postModel from "../models/post";
 
 /**
  * @swagger
@@ -74,11 +75,24 @@ router.use(authenticateToken);
  *              description: Bad request
  */
 router.get("/", async (req: Request, res: Response) => {
-  const sender = req.query.sender;
+  const sender: string = req.query.sender?.toString();
+  const page = parseInt(req.query.page?.toString()) || 1;
+  const limit = parseInt(req.query.limit?.toString()) || 10;
+  const skip = (page - 1) * limit;
 
   try {
-    if (sender) res.status(200).send(await getAllPostsWithLikesBySender(sender));
-    else { res.status(200).send(await getAllPostsWithLikes());}
+    if (sender)
+      res.status(200).send(await getAllPostsWithLikesBySender(sender));
+    else {
+      const posts = await getAllPostsWithLikes(skip, limit);
+      const total = await postModel.countDocuments();
+      res.status(200).json({
+        posts,
+        currentPage: page,
+        totalPages: Math.ceil(total / limit),
+        totalPosts: total,
+      });
+    }
   } catch (err) {
     res.status(400).send(err);
   }

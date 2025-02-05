@@ -10,10 +10,7 @@ export const PostsList: React.FC<PostsListData> = ({ postList, showLikes }) => {
   return (
     <div>
       {postList.map((post: PostData) => (
-        <PostCard
-          post={post}
-          showLikes={showLikes}
-        />
+        <PostCard key={post?._id} post={post} showLikes={showLikes} />
       ))}
     </div>
   );

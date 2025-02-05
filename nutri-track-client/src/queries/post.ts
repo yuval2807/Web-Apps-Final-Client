@@ -24,14 +24,19 @@ const POST_ROUTE = "/post";
 // Get all posts function
 export const getAllPosts = async (
     accessToken: string,
+    page: number,
     sender?: string
-  ): Promise<PostData[]> => {
+  )=> {
     try {
-      const response = await axiosInstance.get(
-        `${POST_ROUTE}/${sender ? `?sender=${sender}` : ""}`,
-          { headers: {authorization : `Bearer ${accessToken}`} }
+      let url: string = `${POST_ROUTE}/`
+      if (sender) {
+        url = url.concat(`?sender=${sender}`)
+      }
+      if (page > 0) {
+        url = url.concat(`?page=${page}&limit=10`)
+      }
+      const response = await axiosInstance.get(url, {headers: {authorization : `Bearer ${accessToken}`}}
       );
-
       return response.data;
     } catch (error: any) {
       throw new Error(error.response?.data?.message || "posts query failed");
