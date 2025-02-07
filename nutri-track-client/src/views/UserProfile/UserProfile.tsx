@@ -74,8 +74,7 @@ const UserProfile: React.FC = () => {
         <Box sx={{ p: 3 }}>
           {user ? <UserDetails user={user} onSave={handleUserUpdate} /> : null}
         </Box>
-        <p>ssssssssssss</p>
-        <PostsList postList={postList} direction='row' />
+        <PostsList postList={postList} showLikes={false} direction='row'/>
       </Container>
     </PageLayout>
   );

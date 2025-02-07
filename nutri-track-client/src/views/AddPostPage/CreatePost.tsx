@@ -28,8 +28,8 @@ export const CreatePost: React.FC = () => {
         content,
         image,
         date: new Date(),
-        sender: "6782a8eb3ebe51f5c3c03079",
-      }; //TODO: get sender from user context
+        sender: connectedUser?.id,
+      };
 
       const response = await createPost(payload, accessToken);
 
