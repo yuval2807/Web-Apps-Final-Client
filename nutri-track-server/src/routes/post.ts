@@ -82,15 +82,15 @@ router.get("/", async (req: Request, res: Response) => {
 
   try {
     if (sender)
-      res.status(200).send(await getAllPostsWithLikesBySender(sender));
+      res
+        .status(200)
+        .json({ posts: await getAllPostsWithLikesBySender(sender) });
     else {
       const posts = await getAllPostsWithLikes(skip, limit);
       const total = await postModel.countDocuments();
       res.status(200).json({
         posts,
-        currentPage: page,
         totalPages: Math.ceil(total / limit),
-        totalPosts: total,
       });
     }
   } catch (err) {

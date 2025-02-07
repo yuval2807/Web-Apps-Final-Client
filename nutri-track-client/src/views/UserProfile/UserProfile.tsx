@@ -37,10 +37,10 @@ const UserProfile: React.FC = () => {
         return;
       }
 
-      const response = await getAllPosts(accessToken, 0, connectedUser.id);
-      if (response) {
+      const { posts } = await getAllPosts(accessToken, 0, connectedUser.id);
+      if (posts) {
         console.log("Query success");
-        setPostList(response);
+        setPostList(posts);
       }
     } catch (error) {
       console.log("error: ", error);
