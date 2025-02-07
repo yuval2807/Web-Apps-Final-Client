@@ -35,12 +35,12 @@ const DrawerList = () => {
 
       if (response.status === 200) {
         resetConnectedUser();
-        toast.success("User logged out successfully!");
+        toast.success("התנתקת בהצלחה!");
         navigate("/login");
       }
     } catch (error) {
       console.log("error: ", error);
-      toast.error("Something went wrong!");
+      toast.error(" משהו השתבש!");
     }
   };
 

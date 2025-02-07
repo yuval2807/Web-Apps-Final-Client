@@ -4,7 +4,8 @@ export const getAllPosts = () => postModel.find();
 
 export const getPostById = (id: string) => postModel.findById(id);
 
-export const getPostBySender = (sender) => postModel.find({ sender });
+export const getPostBySender = (senderId) =>
+  postModel.find({ sender: senderId });
 
 export const addNewPost = (post: IPost) => postModel.create(post);
 

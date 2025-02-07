@@ -59,11 +59,11 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
       if (updatedUser) {
         setProfile(editedProfile);
         setIsEditing(false);
-        toast.success("User updated successfully!");
+        toast.success("משתמש עודכן בהצלחה!");
       }
     } catch (err: any) {
       console.error(err.message);
-      toast.error("Something went wrong!");
+      toast.error(" משהו השתבש!");
     }
   };
 

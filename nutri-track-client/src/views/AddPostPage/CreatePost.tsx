@@ -34,12 +34,12 @@ export const CreatePost: React.FC = () => {
       const response = await createPost(payload, accessToken);
 
       if (response.status === 200) {
-        toast.success("Post created successfully!");
+        toast.success("פוסט נוצר בהצלחה!");
         navigate("/home");
       }
     } catch (error) {
       console.log("error: ", error);
-      toast.error("Something went wrong!");
+      toast.error(" משהו השתבש!");
     }
   };
 

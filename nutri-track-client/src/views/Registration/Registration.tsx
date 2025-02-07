@@ -21,7 +21,7 @@ export const Registration: React.FC = () => {
       }
     } catch (err: any) {
       console.error(err.message);
-      toast.error("Something went wrong!");
+      toast.error(" משהו השתבש!");
     }
   };
 

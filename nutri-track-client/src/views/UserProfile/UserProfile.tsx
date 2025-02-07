@@ -25,7 +25,7 @@ const UserProfile: React.FC = () => {
       setUser(response);
     } catch (error) {
       console.error("Failed to fetch user:", error);
-      toast.error("Something went wrong!");
+      toast.error(" משהו השתבש!");
     }
   };
 
@@ -44,7 +44,7 @@ const UserProfile: React.FC = () => {
       }
     } catch (error) {
       console.log("error: ", error);
-      toast.error("Something went wrong!");
+      toast.error(" משהו השתבש!");
     }
   };
 
@@ -59,7 +59,7 @@ const UserProfile: React.FC = () => {
       );
     } catch (error) {
       console.log("error: ", error);
-      toast.error("Something went wrong!");
+      toast.error(" משהו השתבש!");
     }
   };
 
@@ -74,7 +74,8 @@ const UserProfile: React.FC = () => {
         <Box sx={{ p: 3 }}>
           {user ? <UserDetails user={user} onSave={handleUserUpdate} /> : null}
         </Box>
-        <PostsList postList={postList} />
+        <p>ssssssssssss</p>
+        <PostsList postList={postList} direction='row' />
       </Container>
     </PageLayout>
   );

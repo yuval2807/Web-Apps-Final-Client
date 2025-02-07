@@ -24,7 +24,7 @@ export const PostsPage: React.FC = () => {
       }
     } catch (error) {
       console.log("error: ", error);
-      toast.error("Something went wrong!");
+      toast.error(" משהו השתבש!");
     }
   };
 
@@ -34,7 +34,7 @@ export const PostsPage: React.FC = () => {
 
   return (
     <PageLayout>
-      {postList ? <PostsList postList={postList}></PostsList> : null}
+      {postList ? <PostsList postList={postList} /> : null}
     </PageLayout>
   );
 };

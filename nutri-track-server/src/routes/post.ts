@@ -61,6 +61,12 @@ router.use(authenticateToken);
  *       tags: [Posts]
  *       security:
  *           - bearerAuth: []
+ *       parameters:
+ *          - name: senderId
+ *            in: path
+ *            required: false
+ *            schema:
+ *              type: string
  *       responses:
  *           200:
  *               description: A list of posts
@@ -74,10 +80,10 @@ router.use(authenticateToken);
  *              description: Bad request
  */
 router.get("/", async (req: Request, res: Response) => {
-  const sender = req.query.sender;
+  const senderId = req.query.senderId;
 
   try {
-    if (sender) res.status(200).send(await getPostBySender(sender));
+    if (senderId) res.status(200).send(await getPostBySender(senderId));
     else {
       res.status(200).send(await getAllPosts());
     }
