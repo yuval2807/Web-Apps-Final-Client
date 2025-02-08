@@ -18,9 +18,10 @@ export const PostsList: React.FC<PostsListData> = ({
         display: "grid",
         gridTemplateColumns: direction === "row" ? "repeat(3, 1fr)" : "1fr",
         gap: "16px",
-      }}>
+      }}
+    >
       {postList.map((post: PostData) => (
-        <PostCard post={post} showLikes={showLikes} />
+        <PostCard key={post?._id} post={post} showLikes={showLikes} />
       ))}
     </div>
   );
