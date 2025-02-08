@@ -5,6 +5,7 @@ import PostPreview from "./PostPreview";
 import { useContext, useState } from "react";
 import { createPost } from "../../queries/post";
 import { UserContext } from "../../context/UserContext";
+import { toast } from "react-toastify";
 import { Typography } from "@mui/material";
 import { uploadImg } from "../../utils/uploadImage";
 
@@ -42,17 +43,18 @@ export const CreatePost: React.FC = () => {
       const response = await createPost(payload, accessToken);
 
       if (response.status === 200) {
-        console.log("Post created");
+        toast.success("פוסט נוצר בהצלחה!");
         navigate("/post");
       }
     } catch (error) {
       console.log("error: ", error);
+      toast.error(" משהו השתבש!");
     }
   };
 
   return (
     <PageLayout>
-      <Typography variant="h5" component="h1" gutterBottom align="center">
+      <Typography variant='h5' component='h1' gutterBottom align='center'>
         New post
       </Typography>
       <NewPostForm

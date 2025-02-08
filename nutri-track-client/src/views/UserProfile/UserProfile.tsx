@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Box, Container, Grid2 as Grid } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import PageLayout from "../../components/Common/PageLayout";
-import ToggleButton from "../../components/ToggleButtons";
 import { UserContext } from "../../context/UserContext";
 import UserDetails from "./UserDetails";
 import { getUserById, updateUserById, User } from "../../queries/user";
 import { getAllPosts, PostData } from "../../queries/post";
 import { UserInfo } from "./types";
 import { PostsList } from "../../components/Post/PostList";
+import { toast } from "react-toastify";
 
 const UserProfile: React.FC = () => {
   const { connectedUser } = useContext(UserContext);
@@ -25,6 +25,7 @@ const UserProfile: React.FC = () => {
       setUser(response);
     } catch (error) {
       console.error("Failed to fetch user:", error);
+      toast.error(" משהו השתבש!");
     }
   };
 
@@ -39,11 +40,11 @@ const UserProfile: React.FC = () => {
 
       const response = await getAllPosts(accessToken, connectedUser.id);
       if (response) {
-        console.log("Query success");
         setPostList(response);
       }
     } catch (error) {
       console.log("error: ", error);
+      toast.error(" משהו השתבש!");
     }
   };
 
@@ -58,6 +59,7 @@ const UserProfile: React.FC = () => {
       );
     } catch (error) {
       console.log("error: ", error);
+      toast.error(" משהו השתבש!");
     }
   };
 
@@ -72,7 +74,7 @@ const UserProfile: React.FC = () => {
         <Box sx={{ p: 3 }}>
           {user ? <UserDetails user={user} onSave={handleUserUpdate} /> : null}
         </Box>
-        <PostsList postList={postList} showLikes={false} />
+        <PostsList postList={postList} showLikes={false} direction='row'/>
       </Container>
     </PageLayout>
   );

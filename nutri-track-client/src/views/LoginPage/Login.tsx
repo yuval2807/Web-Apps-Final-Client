@@ -1,10 +1,11 @@
-import { Button } from "@mui/material";
+import { Button, Card, CardContent } from "@mui/material";
 import LoginForm from "./LoginForm";
 import { useNavigate } from "react-router-dom";
 import { googleLogin, login } from "../../queries/auth";
 import { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import { toast } from "react-toastify";
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ export const Login: React.FC = () => {
       }
     } catch (err: any) {
       console.error(err.message);
+      toast.error(" משהו השתבש!");
     }
   };
 
@@ -35,21 +37,32 @@ export const Login: React.FC = () => {
       }
     } catch (err: any) {
       console.error("Google login failed:", err.message);
+      toast.error(" משהו השתבש!");
     }
   };
 
   return (
-    <div>
-      <LoginForm onSubmit={handleLogin} />
-      <div className='separator'>OR</div>
-      <GoogleLogin
-        onSuccess={handleGoogleSuccess}
-        onError={() => console.error("Google Login Failed")}
-        useOneTap={false}
-      />
-      <Button onClick={() => navigate("/register")} sx={{ mt: 2 }}>
-        Need an account? Register
-      </Button>
-    </div>
+    <Card
+      sx={{
+        maxWidth: 400,
+        display: "flex",
+        justifyContent: "center",
+        mx: "auto",
+        mt: 4,
+      }}>
+      <CardContent>
+        <LoginForm onSubmit={handleLogin} />
+        <GoogleLogin
+          size='medium'
+          onSuccess={handleGoogleSuccess}
+          onError={() => toast.error("Google Login Failed")}
+          useOneTap={false}
+        />
+
+        <Button onClick={() => navigate("/register")} sx={{ mt: 2 }}>
+          Need an account? Register
+        </Button>
+      </CardContent>
+    </Card>
   );
 };

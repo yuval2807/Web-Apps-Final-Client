@@ -3,6 +3,7 @@ import "./App.css";
 import Router from "./Router";
 import { UserProvider } from "./context/UserContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <UserProvider>
           <BrowserRouter>
             <Router />
+            <ToastContainer position='bottom-right' />
           </BrowserRouter>
         </UserProvider>
       </GoogleOAuthProvider>

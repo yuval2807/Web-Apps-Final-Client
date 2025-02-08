@@ -6,13 +6,13 @@ import {
   List,
   ListItem,
   ListItemButton,
-  ListItemIcon,
   ListItemText,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../queries/auth";
 import { mainMenu, secondaryMenu } from "./menuData";
 import { UserContext } from "../../context/UserContext";
+import { toast } from "react-toastify";
 
 interface DrawerListProps {
   navWidth: string;
@@ -35,11 +35,12 @@ const DrawerList = () => {
 
       if (response.status === 200) {
         resetConnectedUser();
-        console.log("Logged out");
+        toast.success("התנתקת בהצלחה!");
         navigate("/login");
       }
     } catch (error) {
       console.log("error: ", error);
+      toast.error(" משהו השתבש!");
     }
   };
 
