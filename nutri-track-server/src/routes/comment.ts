@@ -33,7 +33,7 @@ import {
  *                   type: string
  *           example:
  *              _id: 'hgsfjhskljslkgl2kgldjd'
- *              title: 'example message'
+ *              message: 'example message'
  *              post: 'hbjjgsiayhnnsh'
  *              user: 'adraaggayajala'
  *       CommentsBody:
@@ -50,7 +50,7 @@ import {
  *               user:
  *                   type: string
  *           example:
- *              title: 'example message'
+ *              message: 'example message'
  *              post: 'hbjjgsiayhnnsh'
  *              user: 'adraaggayajala'
  */

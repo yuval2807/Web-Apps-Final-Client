@@ -5,7 +5,13 @@ export interface Comment {
   id: number;
   user: string;
   message: string;
-  avatar: string;
+  avatar?: string;
+}
+
+export interface CommentPayload {
+  user: string;
+  message: string;
+  post: string;
 }
 
 const COMMENT_ROUTE = "/comment";
@@ -27,5 +33,19 @@ export const getCommentsByPostId = async (
     throw new Error(
       error.response?.data?.message || "getCommentsByPostId failed"
     );
+  }
+};
+
+export const createComment = async (
+  payload: CommentPayload,
+  accessToken: string
+) => {
+  try {
+    const response = await axiosInstance.post(`${COMMENT_ROUTE}/`, payload, {
+      headers: { authorization: `Bearer ${accessToken}` },
+    });
+    return response;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "comment creation failed");
   }
 };

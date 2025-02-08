@@ -12,7 +12,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
 import { PostData } from "../../../queries/post";
 import { toast } from "react-toastify";
-import { Comment, getCommentsByPostId } from "../../../queries/comment";
+import {
+  Comment,
+  createComment,
+  getCommentsByPostId,
+} from "../../../queries/comment";
 import { UserContext } from "../../../context/UserContext";
 import CommentCard from "./CommentCard";
 
@@ -46,11 +50,28 @@ const CommentsDialog: React.FC<CommentsDialogProps> = ({
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newComment.trim()) {
-      // Add comment logic here
-      setNewComment("");
+    try {
+      if (newComment.trim()) {
+        // Add comment logic here
+        if (connectedUser) {
+          await createComment(
+            {
+              user: connectedUser?.id,
+              message: newComment,
+              post: postId,
+            },
+            connectedUser?.accessToken
+          );
+        }
+
+        await fetchComments();
+        setNewComment("");
+      }
+    } catch (error) {
+      console.log("error: ", error);
+      toast.error(" משהו השתבש!");
     }
   };
 
