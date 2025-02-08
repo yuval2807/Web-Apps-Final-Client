@@ -18,9 +18,9 @@ const CommentCard: React.FC<CommentProps> = ({ comment }) => {
           alignItems: "flex-start",
           flexDirection: "row-reverse",
         }}>
-        <Avatar sx={{ bgcolor: "primary.main" }}>{comment.avatar}</Avatar>
+        <Avatar sx={{ bgcolor: "primary.main" }}>{comment.user.image}</Avatar>
         <Box sx={{ textAlign: "right" }}>
-          <Typography variant='subtitle2'>{comment.user}</Typography>
+          <Typography variant='subtitle2'>{comment.user.name}</Typography>
           <Typography
             variant='body2'
             color='text.secondary'

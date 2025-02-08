@@ -1,11 +1,14 @@
 import axiosInstance from "../axiosInstance";
 import { PostData } from "./post";
+import { User } from "./user";
 
 export interface Comment {
   id: number;
-  user: string;
   message: string;
-  avatar?: string;
+  user: {
+    name: User["name"];
+    image: User["image"];
+  };
 }
 
 export interface CommentPayload {
