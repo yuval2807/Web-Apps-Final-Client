@@ -34,7 +34,7 @@ export const getAllPosts = async (
   try {
     let url: string = `${POST_ROUTE}/`;
     if (sender) {
-      url = url.concat(`?sender=${sender}`);
+      url = url.concat(`?senderId=${sender}`);
     }
     if (page > 0) {
       url = url.concat(`?page=${page}&limit=10`);
