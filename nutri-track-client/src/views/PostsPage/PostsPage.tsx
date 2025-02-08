@@ -1,5 +1,5 @@
 import PageLayout from "../../components/Common/PageLayout";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { PostsList } from "../../components/Post/PostList";
 import { getAllPosts, PostData } from "../../queries/post";
 import { UserContext } from "../../context/UserContext";
@@ -8,12 +8,18 @@ import { FilterBar } from "./FilterBar";
 
 export const PostsPage: React.FC = () => {
   const [postList, setPostList] = useState<PostData[]>([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const observerTarget = useRef(null);
   const [filterPostList, setFilterPostList] = useState<PostData[]>([]);
   const [userFilter, setUserFilter] = useState<string>("");
   const [contentTypeFilter, setContentTypeFilter] = useState<string>("");
   const { connectedUser } = useContext(UserContext);
 
   const fetchPosts = async () => {
+    if (hasMore === false) return;
+    setLoading(true);
     try {
       const accessToken = connectedUser?.accessToken;
 
@@ -22,10 +28,12 @@ export const PostsPage: React.FC = () => {
         return;
       }
 
-      const response = await getAllPosts(accessToken);
-      if (response) {
-        setPostList(response);
-        setFilterPostList(response.data);
+      const { posts, totalPages } = await getAllPosts(accessToken, page);
+      if (posts) {
+        setLoading(false);
+        setPostList((prevPosts) => [...prevPosts, ...posts]);
+        setFilterPostList((prevPosts) => [...prevPosts, ...posts]);
+        setHasMore(page < totalPages);
       }
     } catch (error) {
       console.log("error: ", error);
@@ -39,8 +47,29 @@ export const PostsPage: React.FC = () => {
   };
 
   useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !loading) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current);
+      }
+    };
+  }, [loading]);
+
+  useEffect(() => {
     fetchPosts();
-  }, []);
+  }, [page]);
 
   useEffect(() => {
     let tempPost: PostData[] = postList;
@@ -63,22 +92,25 @@ export const PostsPage: React.FC = () => {
 
   return (
     <PageLayout>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row-reverse",
-          width: "95%",
-          justifyContent: "space-around",
-        }}
-      >
-        <FilterBar
-          setUserFilter={setUserFilter}
-          setContentTypeFilter={setContentTypeFilter}
-          onFilter={onFilter}
-        />
-        {filterPostList ? (
-          <PostsList showLikes={true} postList={filterPostList} />
-        ) : null}
+      <div  style={{ display: "flex", flexDirection: "column", width: "95%", }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row-reverse",
+            justifyContent: "space-around",
+          }}
+        >
+          <FilterBar
+            setUserFilter={setUserFilter}
+            setContentTypeFilter={setContentTypeFilter}
+            onFilter={onFilter}
+          />
+          {filterPostList ? (
+            <PostsList showLikes={true} postList={filterPostList} />
+          ) : null}
+        </div>
+        {loading && <div>Loading more posts...</div>}
+        <div ref={observerTarget}></div>
       </div>
     </PageLayout>
   );

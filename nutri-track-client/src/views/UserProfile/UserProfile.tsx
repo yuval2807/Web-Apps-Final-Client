@@ -38,9 +38,9 @@ const UserProfile: React.FC = () => {
         return;
       }
 
-      const response = await getAllPosts(accessToken, connectedUser.id);
-      if (response) {
-        setPostList(response);
+      const { posts } = await getAllPosts(accessToken, 0, connectedUser.id);
+      if (posts) {
+        setPostList(posts);
       }
     } catch (error) {
       console.log("error: ", error);
@@ -70,11 +70,11 @@ const UserProfile: React.FC = () => {
 
   return (
     <PageLayout>
-      <Container maxWidth='md'>
+      <Container maxWidth="md">
         <Box sx={{ p: 3 }}>
           {user ? <UserDetails user={user} onSave={handleUserUpdate} /> : null}
         </Box>
-        <PostsList postList={postList} showLikes={false} direction='row'/>
+        <PostsList postList={postList} showLikes={false} direction="row" />
       </Container>
     </PageLayout>
   );
