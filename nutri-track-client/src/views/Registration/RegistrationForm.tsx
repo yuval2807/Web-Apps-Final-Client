@@ -34,6 +34,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [imgFile, setImgFile] = useState<File>();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>
@@ -67,6 +68,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
         ...prev,
         image: newURL,
       }));
+
+      setImgFile(e.target.files[0]);
     }
   };
 

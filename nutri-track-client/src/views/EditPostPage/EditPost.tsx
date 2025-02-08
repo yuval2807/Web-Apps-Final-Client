@@ -29,11 +29,8 @@ export const EditPost: React.FC = () => {
         return;
       }
 
-      const url: string | undefined = await uploadImg(
-        imgFile!!,
-        accessToken,
-        setImage
-      );
+      const url: string | undefined = await uploadImg(imgFile!!, accessToken);
+      setImage(url ? url : image);
 
       const payload = {
         title,
@@ -56,7 +53,7 @@ export const EditPost: React.FC = () => {
 
   return (
     <PageLayout>
-      <Typography variant="h5" component="h1" gutterBottom align="center">
+      <Typography variant='h5' component='h1' gutterBottom align='center'>
         Edit post
       </Typography>
       <NewPostForm
