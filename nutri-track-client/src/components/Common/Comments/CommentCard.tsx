@@ -1,12 +1,6 @@
 import React from "react";
 import { Avatar, Box, Typography } from "@mui/material";
-
-interface Comment {
-  id: number;
-  user: string;
-  text: string;
-  avatar: string;
-}
+import { Comment } from "../../../queries/comment";
 
 interface CommentProps {
   comment: Comment;
@@ -31,7 +25,7 @@ const CommentCard: React.FC<CommentProps> = ({ comment }) => {
             variant='body2'
             color='text.secondary'
             sx={{ wordBreak: "break-word" }}>
-            {comment.text}
+            {comment.message}
           </Typography>
         </Box>
       </Box>

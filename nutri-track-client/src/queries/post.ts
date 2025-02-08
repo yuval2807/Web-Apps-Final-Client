@@ -23,20 +23,20 @@ const POST_ROUTE = "/post";
 
 // Get all posts function
 export const getAllPosts = async (
-    accessToken: string,
-    sender?: string
-  ): Promise<PostData[]> => {
-    try {
-      const response = await axiosInstance.get(
-        `${POST_ROUTE}/${sender ? `?sender=${sender}` : ""}`,
-          { headers: {authorization : `Bearer ${accessToken}`} }
-      );
+  accessToken: string,
+  sender?: string
+): Promise<PostData[]> => {
+  try {
+    const response = await axiosInstance.get(
+      `${POST_ROUTE}/${sender ? `?senderId=${sender}` : ""}`,
+      { headers: { authorization: `Bearer ${accessToken}` } }
+    );
 
-      return response.data;
-    } catch (error: any) {
-      throw new Error(error.response?.data?.message || "posts query failed");
-    }
-  };
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "posts query failed");
+  }
+};
 
 // Create post function
 export const createPost = async (
@@ -62,8 +62,8 @@ export const updatePost = async (
   try {
     const response = await axiosInstance.put(
       `${POST_ROUTE}/${postId}`,
-        payload,
-        { headers: {authorization : `Bearer ${accessToken}`} }
+      payload,
+      { headers: { authorization: `Bearer ${accessToken}` } }
     );
     return response;
   } catch (error: any) {

@@ -91,7 +91,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, showLikes }) => {
     initAlreadyLike();
   }, []);
 
-  return post?.title || post?.content ? (
+  return !!post ? (
     <Card sx={{ width: "90%", maxWidth: 500, mx: "auto", mt: 4 }}>
       <CardHeader
         title={post.title}
@@ -130,6 +130,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, showLikes }) => {
       <CommentsDialog
         open={openCommentDialog}
         onClose={() => setOpenCommentDialog(false)}
+        postId={post._id}
       />
     </Card>
   ) : null;

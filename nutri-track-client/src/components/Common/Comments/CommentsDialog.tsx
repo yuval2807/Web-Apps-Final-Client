@@ -1,37 +1,50 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   TextField,
   IconButton,
-  Avatar,
   Box,
-  Typography,
   Button,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
-import Comment from "./CommentCard";
-
-interface Comment {
-  id: number;
-  user: string;
-  text: string;
-  avatar: string;
-}
+import { PostData } from "../../../queries/post";
+import { toast } from "react-toastify";
+import { Comment, getCommentsByPostId } from "../../../queries/comment";
+import { UserContext } from "../../../context/UserContext";
+import CommentCard from "./CommentCard";
 
 interface CommentsDialogProps {
   open: boolean;
   onClose: () => void;
+  postId: PostData["_id"];
 }
 
-const CommentsDialog: React.FC<CommentsDialogProps> = ({ open, onClose }) => {
+const CommentsDialog: React.FC<CommentsDialogProps> = ({
+  open,
+  onClose,
+  postId,
+}) => {
+  const { connectedUser } = useContext(UserContext);
   const [newComment, setNewComment] = useState<string>("");
-  const [comments] = useState<Comment[]>([
-    { id: 1, user: "User A", text: "First comment", avatar: "A" },
-    { id: 2, user: "User B", text: "Second comment", avatar: "B" },
-  ]);
+  const [comments, setComments] = useState<Comment[]>([]);
+
+  const fetchComments = async () => {
+    if (!connectedUser) return;
+
+    try {
+      const response: Comment[] = await getCommentsByPostId(
+        postId,
+        connectedUser.accessToken
+      );
+      setComments(response);
+    } catch (error) {
+      console.error("Failed to fetch comments:", error);
+      toast.error(" משהו השתבש!");
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,6 +53,12 @@ const CommentsDialog: React.FC<CommentsDialogProps> = ({ open, onClose }) => {
       setNewComment("");
     }
   };
+
+  useEffect(() => {
+    if (open) {
+      fetchComments();
+    }
+  }, [connectedUser, postId, open]);
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth='sm' fullWidth>
@@ -60,7 +79,7 @@ const CommentsDialog: React.FC<CommentsDialogProps> = ({ open, onClose }) => {
       <DialogContent>
         <Box sx={{ mb: 2, maxHeight: "60vh", overflowY: "auto" }}>
           {comments.map((comment) => (
-            <Comment comment={comment} />
+            <CommentCard comment={comment} />
           ))}
         </Box>
         <Box
