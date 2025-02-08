@@ -15,7 +15,7 @@ export const askQuestion = async (
     const response = await axiosInstance.post(
       `${AI_ROUTE}/`,
         payload,
-       { headers: {"authorization" : `Bearer ${accessToken}`} }
+       { headers: {authorization : `Bearer ${accessToken}`} }
     );
     return response;
   } catch (error: any) {
