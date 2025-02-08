@@ -1,9 +1,8 @@
-import { AxiosResponse } from "axios";
 import axiosInstance from "../axiosInstance";
 
 interface CreateLikeData {
   userId: string;
-    postId: string;
+  postId: string;
 }
 
 const LIKE_ROUTE = "/like";
@@ -18,7 +17,7 @@ export const findOneLike= async (
        response = await axiosInstance.post(
         `${LIKE_ROUTE}/find`,
             like,
-          { headers: {"authorization" : `Bearer ${accessToken}`} }
+          { headers: {authorization : `Bearer ${accessToken}`} }
       );
       if (response.status === 200) {
         return true;
@@ -62,7 +61,7 @@ export const createLike = async (
     const response = await axiosInstance.post(
       `${LIKE_ROUTE}/`,
         payload,
-        { headers: {"authorization" : `Bearer ${accessToken}`} }
+        { headers: {authorization : `Bearer ${accessToken}`} }
     );
     return response;
   } catch (error: any) {
@@ -79,7 +78,7 @@ export const removeLike = async (
         const foundLike = await axiosInstance.post(
             `${LIKE_ROUTE}/find`,
                 like,
-              { headers: {"authorization" : `Bearer ${accessToken}`} }
+              { headers: {authorization : `Bearer ${accessToken}`} }
           );
         if (!foundLike) throw new Error("Like not found");
         else {
