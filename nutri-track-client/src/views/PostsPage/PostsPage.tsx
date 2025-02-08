@@ -3,6 +3,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { PostsList } from "../../components/Post/PostList";
 import { getAllPosts, PostData } from "../../queries/post";
 import { UserContext } from "../../context/UserContext";
+import { toast } from "react-toastify";
 
 export const PostsPage: React.FC = () => {
   const [postList, setPostList] = useState<PostData[]>([]);
@@ -23,23 +24,23 @@ export const PostsPage: React.FC = () => {
         return;
       }
 
-      const {posts, totalPages} = await getAllPosts(accessToken,page);
+      const { posts, totalPages } = await getAllPosts(accessToken, page);
       if (posts) {
-        console.log("Query success");
         setLoading(false);
-        setPostList(prevPosts => [...prevPosts, ...posts]);
+        setPostList((prevPosts) => [...prevPosts, ...posts]);
         setHasMore(page < totalPages);
       }
     } catch (error) {
       console.log("error: ", error);
+      toast.error(" משהו השתבש!");
     }
   };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      entries => {
+      (entries) => {
         if (entries[0].isIntersecting && !loading) {
-          setPage(prevPage => prevPage + 1);
+          setPage((prevPage) => prevPage + 1);
         }
       },
       { threshold: 1.0 }
@@ -62,9 +63,7 @@ export const PostsPage: React.FC = () => {
 
   return (
     <PageLayout>
-      {postList ? (
-        <PostsList postList={postList} showLikes={true} />
-      ) : null}
+      {postList ? <PostsList postList={postList} showLikes={true} /> : null}
       {loading && <div>Loading more posts...</div>}
       <div ref={observerTarget}></div>
     </PageLayout>

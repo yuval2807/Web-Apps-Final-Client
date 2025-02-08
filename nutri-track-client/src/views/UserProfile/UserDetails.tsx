@@ -11,16 +11,15 @@ import {
   Grid2 as Grid,
   InputAdornment,
 } from "@mui/material";
-import PageLayout from "../../components/Common/PageLayout";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
 import RadioGroupButtons, {
   Option,
 } from "../../components/RadioGroup/RadioGroup";
-import ToggleButton from "../../components/ToggleButtons";
-import { updateUserById, User } from "../../queries/user";
+import PageLayout from "../../components/Common/PageLayout";
 import { UserInfo } from "./types";
+import { toast } from "react-toastify";
 
 interface UserDetailsProps {
   user: UserInfo;
@@ -30,7 +29,6 @@ interface UserDetailsProps {
 const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState<UserInfo>(user);
-
   const [editedProfile, setEditedProfile] = useState<UserInfo>(profile);
 
   const genderOptions: Option[] = [
@@ -39,11 +37,16 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
     { label: "other", value: "other" },
   ];
 
-  const fitLevelOptions: Option[] = [
-    { label: "Beginner", value: "Beginner" },
-    { label: "Intermediate", value: "Intermediate" },
-    { label: "Advanced", value: "Advanced" },
-  ];
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const newURL = URL.createObjectURL(e.target.files[0]);
+
+      setEditedProfile((prev) => ({
+        ...prev,
+        image: newURL,
+      }));
+    }
+  };
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -53,12 +56,14 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
   const handleSave = async () => {
     try {
       const updatedUser = await onSave(editedProfile);
-      if (!!updatedUser) {
+      if (updatedUser) {
         setProfile(editedProfile);
         setIsEditing(false);
+        toast.success("משתמש עודכן בהצלחה!");
       }
     } catch (err: any) {
       console.error(err.message);
+      toast.error(" משהו השתבש!");
     }
   };
 
@@ -78,8 +83,38 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
 
   return (
     <PageLayout>
-      <Container maxWidth='md'>
-        <Box sx={{ p: 3 }}>
+      <Container maxWidth='md' sx={{ width: "80%" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}>
+          <Box sx={{ display: "flex", alignItems: "center", mb: 4 }}>
+            <Box sx={{ display: "flex", justifyContent: "center", mr: 2 }}>
+              <label
+                htmlFor='photo-upload'
+                style={{
+                  cursor: "pointer",
+                }}>
+                <input
+                  id='photo-upload'
+                  type='file'
+                  accept='image/*'
+                  onChange={handleImageChange}
+                  style={{ display: "none" }}
+                />
+                <Avatar
+                  sx={{ width: 100, height: 100 }}
+                  alt={profile.name}
+                  src={isEditing ? editedProfile.image : profile.image}
+                />
+              </label>
+            </Box>
+            <Typography variant='subtitle1' color='text.secondary'>
+              {profile.email}
+            </Typography>
+          </Box>
           <Box
             sx={{
               display: "flex",
@@ -87,9 +122,6 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
               alignItems: "center",
               mb: 3,
             }}>
-            <Typography variant='h4' component='h1'>
-              User Profile
-            </Typography>
             {!isEditing ? (
               <IconButton
                 color='primary'
@@ -116,81 +148,57 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
               </Box>
             )}
           </Box>
+        </Box>
+
+        <Stack spacing={2} sx={{ width: "100%" }}>
+          <TextField
+            label='Full Name'
+            variant='outlined'
+            fullWidth
+            value={isEditing ? editedProfile.name : profile.name}
+            onChange={handleChange("name")}
+            disabled={!isEditing}
+          />
+          <RadioGroupButtons
+            label='gender'
+            name='gender'
+            row={true}
+            options={genderOptions}
+            value={isEditing ? editedProfile.gender : profile.gender}
+            onChange={handleChange("gender")}
+            disabled={!isEditing}
+          />
           <Grid container spacing={2} sx={{ mt: 1 }}>
             <Grid size={6}>
-              <Box sx={{ display: "flex", alignItems: "center", mb: 4 }}>
-                <Avatar
-                  sx={{ width: 100, height: 100, mr: 2 }}
-                  alt={profile.name}
-                  src='/api/placeholder/100/100'
-                />
-                <Typography variant='subtitle1' color='text.secondary'>
-                  Profile Picture
-                </Typography>
-              </Box>
+              <TextField
+                label='Height'
+                name='height'
+                value={isEditing ? editedProfile.height : profile.height}
+                onChange={handleChange("height")}
+                disabled={!isEditing}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>cm</InputAdornment>
+                  ),
+                }}
+              />
             </Grid>
             <Grid size={6}>
-              <Stack spacing={3}>
-                <TextField
-                  label='Email'
-                  type='email'
-                  variant='outlined'
-                  fullWidth
-                  value={profile.email}
-                  disabled={true}
-                />
-                <TextField
-                  label='Full Name'
-                  variant='outlined'
-                  fullWidth
-                  value={isEditing ? editedProfile.name : profile.name}
-                  onChange={handleChange("name")}
-                  disabled={!isEditing}
-                />
-
-                <RadioGroupButtons
-                  label='gender'
-                  name='gender'
-                  row={true}
-                  options={genderOptions}
-                  value={isEditing ? editedProfile.gender : profile.gender}
-                  onChange={handleChange("gender")}
-                  disabled={!isEditing}
-                />
-                <Grid container spacing={2} sx={{ mt: 1 }}>
-                  <Grid size={6}>
-                    <TextField
-                      label='Height'
-                      name='height'
-                      value={isEditing ? editedProfile.height : profile.height}
-                      onChange={handleChange("height")}
-                      disabled={!isEditing}
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position='end'>cm</InputAdornment>
-                        ),
-                      }}
-                    />
-                  </Grid>
-                  <Grid size={6}>
-                    <TextField
-                      label='Weight'
-                      name='weight'
-                      value={isEditing ? editedProfile.weight : profile.weight}
-                      onChange={handleChange("weight")}
-                      disabled={!isEditing}
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position='end'>kg</InputAdornment>
-                        ),
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-              </Stack>
+              <TextField
+                label='Weight'
+                name='weight'
+                value={isEditing ? editedProfile.weight : profile.weight}
+                onChange={handleChange("weight")}
+                disabled={!isEditing}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>kg</InputAdornment>
+                  ),
+                }}
+              />
             </Grid>
           </Grid>
-        </Box>
+        </Stack>
       </Container>
     </PageLayout>
   );

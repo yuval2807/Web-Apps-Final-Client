@@ -5,6 +5,7 @@ import { register } from "../../queries/auth";
 import { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import { User } from "../../queries/user";
+import { toast } from "react-toastify";
 
 export const Registration: React.FC = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ export const Registration: React.FC = () => {
       }
     } catch (err: any) {
       console.error(err.message);
+      toast.error(" משהו השתבש!");
     }
   };
 

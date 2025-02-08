@@ -1,7 +1,12 @@
 import express, { Request, Response } from "express";
 const router = express.Router();
-import { googleLogin, login, logout, refresh } from "../controllers/auth";
-import { addNewUser } from "../controllers/user";
+import {
+  googleLogin,
+  login,
+  logout,
+  refresh,
+  register,
+} from "../controllers/auth";
 
 /**
  * @swagger
@@ -34,6 +39,7 @@ import { addNewUser } from "../controllers/user";
  *               - gender
  *               - height
  *               - weight
+ *               - image
  *           properties:
  *               email:
  *                   type: string
@@ -253,7 +259,7 @@ router.post("/register", async (req: Request, res: Response) => {
   const user = req.body;
 
   try {
-    res.status(200).send(await addNewUser(user));
+    res.status(200).send(await register(user));
   } catch (err) {
     res.status(400).send(err);
   }
