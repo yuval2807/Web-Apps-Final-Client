@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { PostData } from "../../queries/post";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import {
   createLike,
   findOneLike,
@@ -17,6 +18,7 @@ import {
 } from "../../queries/like";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/UserContext";
+import CommentsDialog from "../Common/Comments/CommentsDialog";
 
 interface PostCardProps {
   post: PostData;
@@ -27,6 +29,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post, showLikes }) => {
   const { connectedUser } = useContext(UserContext);
   const accessToken = connectedUser?.accessToken;
   const [isAlreadyLiked, setIsAlreadyLiked] = useState<boolean>(false);
+  const [openCommentDialog, setOpenCommentDialog] = useState(false);
   const [currentPost, setCurrentPost] = useState<PostData>(post);
 
   const onLikeClick = async () => {
@@ -109,6 +112,11 @@ export const PostCard: React.FC<PostCardProps> = ({ post, showLikes }) => {
       </CardContent>
       {showLikes && (
         <CardActions disableSpacing>
+          <IconButton
+            aria-label='show comments'
+            onClick={() => setOpenCommentDialog(true)}>
+            <ChatBubbleOutlineIcon />
+          </IconButton>
           <IconButton aria-label='like post' onClick={onLikeClick}>
             <FavoriteIcon color={isAlreadyLiked ? "error" : "inherit"} />
           </IconButton>
@@ -119,6 +127,10 @@ export const PostCard: React.FC<PostCardProps> = ({ post, showLikes }) => {
           </Typography>
         </CardActions>
       )}
+      <CommentsDialog
+        open={openCommentDialog}
+        onClose={() => setOpenCommentDialog(false)}
+      />
     </Card>
   ) : null;
 };
