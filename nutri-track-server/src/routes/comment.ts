@@ -87,7 +87,6 @@ router.get("/", async (req: Request, res: Response) => {
   try {
     if (postId) {
       res.status(200).send(await getCommentsByPostId(postId));
-      console.log(await getCommentsByPostId(postId));
     } else {
       res.status(200).send(await getAllComments());
     }

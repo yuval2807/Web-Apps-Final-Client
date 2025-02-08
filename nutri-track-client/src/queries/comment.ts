@@ -25,8 +25,7 @@ export const getCommentsByPostId = async (
 ) => {
   try {
     const response = await axiosInstance.get(
-      // `${COMMENT_ROUTE}/${postId ? `?postId=${postId}` : ""}`,
-      `${COMMENT_ROUTE}/`,
+      `${COMMENT_ROUTE}/${postId ? `?postId=${postId}` : ""}`,
       {
         headers: { authorization: `Bearer ${accessToken}` },
       }

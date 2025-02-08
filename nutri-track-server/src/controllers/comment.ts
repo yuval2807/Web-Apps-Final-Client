@@ -1,4 +1,5 @@
 import commentModel, { IComment } from "../models/comment";
+import { Types } from "mongoose";
 
 export const getAllComments = () =>
   commentModel.aggregate([
@@ -31,7 +32,7 @@ export const getCommentsByPostId = (postId) =>
   commentModel.aggregate([
     {
       $match: {
-        post: postId,
+        post: Types.ObjectId.createFromHexString(postId),
       },
     },
     {
