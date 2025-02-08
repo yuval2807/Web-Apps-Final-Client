@@ -82,16 +82,16 @@ router.use(authenticateToken);
  *              description: Bad request
  */
 router.get("/", async (req: Request, res: Response) => {
-  const sender: string = req.query.sender?.toString();
+  const senderId: string = req.query.senderId?.toString();
   const page = parseInt(req.query.page?.toString()) || 1;
   const limit = parseInt(req.query.limit?.toString()) || 10;
   const skip = (page - 1) * limit;
 
   try {
-    if (sender)
+    if (senderId)
       res
         .status(200)
-        .json({ posts: await getAllPostsWithLikesBySender(sender) });
+        .json({ posts: await getAllPostsWithLikesBySender(senderId) });
     else {
       const posts = await getAllPostsWithLikes(skip, limit);
       const total = await countTotalRecords();
