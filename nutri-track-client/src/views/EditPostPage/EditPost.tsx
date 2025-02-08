@@ -56,12 +56,13 @@ export const EditPost: React.FC = () => {
 
   return (
     <PageLayout>
-      <Typography variant="h5" component="h1" gutterBottom align="center">
+      <Typography variant='h5' component='h1' gutterBottom align='center'>
         Edit post
       </Typography>
       <NewPostForm
         title={title}
         content={content}
+        image={image}
         setTitle={setTitle}
         setContent={setContent}
         setImage={setImage}

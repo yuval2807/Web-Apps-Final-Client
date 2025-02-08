@@ -60,6 +60,7 @@ export const CreatePost: React.FC = () => {
       <NewPostForm
         title={title}
         content={content}
+        image={image}
         setTitle={setTitle}
         setContent={setContent}
         setImage={setImage}
