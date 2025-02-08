@@ -1,11 +1,20 @@
 import axiosInstance from "../axiosInstance";
 
+export interface PostData {
+  _id: string;
+  title: string;
+  content: string;
+  image?: string;
+  sender: string;
+  numOfLikes: number;
+  date: Date;
+}
+
 interface CreatePostPayloadData {
   title: string;
   content: string;
   image?: string;
   date: Date;
-  numOfLikes?: number;
   sender: string;
 }
 
@@ -15,13 +24,14 @@ const POST_ROUTE = "/post";
 export const getAllPosts = async (
     accessToken: string,
     sender?: string
-  ) => {
+  ): Promise<PostData[]> => {
     try {
       const response = await axiosInstance.get(
         `${POST_ROUTE}/${sender ? `?sender=${sender}` : ""}`,
-          { headers: {"authorization" : `Bearer ${accessToken}`} }
+          { headers: {authorization : `Bearer ${accessToken}`} }
       );
-      return response;
+
+      return response.data;
     } catch (error: any) {
       throw new Error(error.response?.data?.message || "posts query failed");
     }
@@ -33,11 +43,9 @@ export const createPost = async (
   accessToken: string
 ) => {
   try {
-    const response = await axiosInstance.post(
-      `${POST_ROUTE}/`,
-        payload,
-        { headers: {"authorization" : `Bearer ${accessToken}`} }
-    );
+    const response = await axiosInstance.post(`${POST_ROUTE}/`, payload, {
+      headers: { authorization: `Bearer ${accessToken}` },
+    });
     return response;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "post creation failed");
@@ -54,7 +62,7 @@ export const updatePost = async (
     const response = await axiosInstance.put(
       `${POST_ROUTE}/${postId}`,
         payload,
-        { headers: {"authorization" : `Bearer ${accessToken}`} }
+        { headers: {authorization : `Bearer ${accessToken}`} }
     );
     return response;
   } catch (error: any) {
@@ -70,7 +78,7 @@ export const deletePost = async (
   try {
     const response = await axiosInstance.delete(
       `${POST_ROUTE}/${postId}`,
-        { headers: {"authorization" : `Bearer ${accessToken}`} }
+        { headers: {authorization : `Bearer ${accessToken}`} }
     );
     return response;
   } catch (error: any) {

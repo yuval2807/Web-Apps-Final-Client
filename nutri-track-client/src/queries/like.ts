@@ -1,9 +1,8 @@
-import { AxiosResponse } from "axios";
 import axiosInstance from "../axiosInstance";
 
 interface CreateLikeData {
   userId: string;
-    postId: string;
+  postId: string;
 }
 
 const LIKE_ROUTE = "/like";
@@ -18,7 +17,7 @@ export const findOneLike= async (
        response = await axiosInstance.post(
         `${LIKE_ROUTE}/find`,
             like,
-          { headers: {"authorization" : `Bearer ${accessToken}`} }
+          { headers: {authorization : `Bearer ${accessToken}`} }
       );
       if (response.status === 200) {
         return true;
@@ -28,9 +27,28 @@ export const findOneLike= async (
         }
     } catch (error: any) {
         if (response?.status === 404) {
-            return false;
-          } 
-    //   throw new Error(error.response?.data?.message || "Like query failed");
+          return false;
+        } 
+    }
+  };
+
+
+// Get likes count on  post
+export const getLikeCount = async (
+    postId: string,
+    accessToken: string
+  ) => {
+    let response = null
+    try {
+       response = await axiosInstance.get(
+        `${LIKE_ROUTE}/find/${postId}`,
+          { headers: {authorization : `Bearer ${accessToken}`} }
+      );
+      if (response) {
+        return response.data.likesCount
+      }
+    } catch (error: any) {
+      console.log("Likes count query failed" )
     }
   };
 
@@ -43,7 +61,7 @@ export const createLike = async (
     const response = await axiosInstance.post(
       `${LIKE_ROUTE}/`,
         payload,
-        { headers: {"authorization" : `Bearer ${accessToken}`} }
+        { headers: {authorization : `Bearer ${accessToken}`} }
     );
     return response;
   } catch (error: any) {
@@ -60,7 +78,7 @@ export const removeLike = async (
         const foundLike = await axiosInstance.post(
             `${LIKE_ROUTE}/find`,
                 like,
-              { headers: {"authorization" : `Bearer ${accessToken}`} }
+              { headers: {authorization : `Bearer ${accessToken}`} }
           );
         if (!foundLike) throw new Error("Like not found");
         else {

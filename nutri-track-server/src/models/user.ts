@@ -5,10 +5,11 @@ export interface IUser {
   email: string;
   name: string;
   password: string;
-  gender: string;
-  fitLevel: string;
-  weight: number;
-  height: number;
+  image?: string;
+  gender?: string;
+  fitLevel?: string;
+  weight?: number;
+  height?: number;
   tokens: string[];
 }
 
@@ -48,6 +49,9 @@ const userSchema = new Schema<IUser>({
   },
   weight: {
     type: Number,
+  },
+  image: {
+    type: String,
   },
 });
 

@@ -1,4 +1,5 @@
 import { IUser, tUser } from "../models/user";
+import { verifyGoogleToken } from "../utils/googleVerification";
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -24,6 +25,33 @@ export const login = async (
   const accessToken = generateAccessToken(user.id);
   const refreshToken = generateRefreshToken(user.id);
   updateRefreshToken(user, refreshToken);
+
+  return {
+    accessToken,
+    refreshToken,
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    tokens: user.tokens,
+  };
+};
+
+export const googleLogin = async (credential: string) => {
+  const googleUser = await verifyGoogleToken(credential);
+  let user = await getUserByEmail(googleUser.email);
+
+  if (!user) {
+    user = await addNewUser({
+      email: googleUser.email,
+      name: googleUser.name,
+      password: "genericPass",
+      tokens: [],
+    });
+  }
+
+  const accessToken = generateAccessToken(user.id);
+  const refreshToken = generateRefreshToken(user.id);
+  await updateRefreshToken(user, refreshToken);
 
   return {
     accessToken,

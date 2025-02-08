@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Card,
   CardContent,
@@ -20,14 +20,14 @@ const PostPreview: React.FC<PostPreviewProps> = ({ title, content, image }) => {
       <CardHeader title={title} />
       {image && (
         <CardMedia
-          component="img"
-          height="194"
+          component='img'
+          height='194'
           image={image}
-          alt="Paella dish"
+          alt='Paella dish'
         />
       )}
       <CardContent>
-        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+        <Typography variant='body2' sx={{ color: "text.secondary" }}>
           {content}
         </Typography>
       </CardContent>

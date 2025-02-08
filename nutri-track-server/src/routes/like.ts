@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { addNewLike, getLike, removeLike } from "../controllers/like";
+import { addNewLike, getLike, getLikesByPostId, removeLike } from "../controllers/like";
 
 import authenticateToken from "../middleware/jwt";
 
@@ -101,6 +101,48 @@ router.post("/find", async (req: Request, res: Response) => {
     else res.status(200).send(found);
   } catch (err) {
     res.status(400).send(err);
+  }
+});
+
+/**
+ * @swagger
+ * /like/find/{post_id}:
+ *   get:
+ *       summary: Retrieve likes count of post
+ *       tags: [Like]
+ *       security:
+ *           - bearerAuth: []
+ *       parameters:
+ *          - name: post_id
+ *            in: path
+ *            required: true
+ *            schema:
+ *              type: string
+ *       responses:
+ *           200:
+ *               description: Likes count
+ *               content:
+ *                   application/json:
+ *                      schema:
+ *                          number
+ *           400:
+ *              description: Bad request
+ *           404:
+ *              description: Not Found
+ */
+router.get("/find/:post_id", async (req: Request, res: Response) => {
+  const postId = req.params.post_id;
+
+  try {
+    const likesArr = await (getLikesByPostId(postId));
+    if (!likesArr) res.status(404).json({ message: "No likes are found" });
+    else {
+      const likesCount = likesArr.length;
+      res.status(200).json({likesCount});
+    }
+  } catch (err) {
+    console.log("error: ", err)
+    res.status(500).send(err);
   }
 });
 
