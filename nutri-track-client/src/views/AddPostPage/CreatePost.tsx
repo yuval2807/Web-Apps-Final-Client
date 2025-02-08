@@ -7,6 +7,7 @@ import { createPost } from "../../queries/post";
 import { UserContext } from "../../context/UserContext";
 import { toast } from "react-toastify";
 import { Typography } from "@mui/material";
+import { uploadImg } from "../../utils/uploadImage";
 
 export const CreatePost: React.FC = () => {
   const navigate = useNavigate();
