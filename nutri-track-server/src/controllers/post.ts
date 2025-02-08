@@ -64,3 +64,7 @@ export const updatePostById = (id: string, { title, content, sender, image }) =>
     { title, content, sender, image },
     { new: true }
   );
+
+export const countTotalRecords = async () => {
+  return await postModel.countDocuments();
+};

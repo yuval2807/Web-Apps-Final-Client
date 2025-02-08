@@ -5,9 +5,9 @@ import {
   updatePostById,
   getAllPostsWithLikes,
   getAllPostsWithLikesBySender,
+  countTotalRecords,
 } from "../controllers/post";
 import authenticateToken from "../middleware/jwt";
-import postModel from "../models/post";
 
 /**
  * @swagger
@@ -87,7 +87,7 @@ router.get("/", async (req: Request, res: Response) => {
         .json({ posts: await getAllPostsWithLikesBySender(sender) });
     else {
       const posts = await getAllPostsWithLikes(skip, limit);
-      const total = await postModel.countDocuments();
+      const total = await countTotalRecords();
       res.status(200).json({
         posts,
         totalPages: Math.ceil(total / limit),
