@@ -6,6 +6,7 @@ import { useContext, useState } from "react";
 import { updatePost } from "../../queries/post";
 import { UserContext } from "../../context/UserContext";
 import { Typography } from "@mui/material";
+import { uploadImg } from "../../utils/uploadImage";
 
 export const EditPost: React.FC = () => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ export const EditPost: React.FC = () => {
   const [title, setTitle] = useState<string>(post?.title);
   const [content, setContent] = useState<string>(post?.content);
   const [image, setImage] = useState<string>(post?.image);
+  const [imgFile, setImgFile] = useState<File>();
 
   const handlePressUpdate = async () => {
     try {
@@ -27,10 +29,16 @@ export const EditPost: React.FC = () => {
         return;
       }
 
+      const url: string | undefined = await uploadImg(
+        imgFile!!,
+        accessToken,
+        setImage
+      );
+
       const payload = {
         title,
         content,
-        image,
+        image: url ? url : image,
         date: new Date(),
         sender: connectedUser?.id,
       };
@@ -54,10 +62,10 @@ export const EditPost: React.FC = () => {
       <NewPostForm
         title={title}
         content={content}
-        image={image}
         setTitle={setTitle}
         setContent={setContent}
         setImage={setImage}
+        setImgFile={setImgFile}
         onSubmit={handlePressUpdate}
         isEdit={true}
       />

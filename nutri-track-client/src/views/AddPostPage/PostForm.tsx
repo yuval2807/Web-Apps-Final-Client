@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -9,16 +9,14 @@ import {
   CardActions,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { postImage } from "../../queries/imageServer";
-import { UserContext } from "../../context/UserContext";
 
 interface NewPostFormProps {
   title: string;
   content: string;
-  image?: string;
   setTitle: (title: string) => void;
   setContent: (content: string) => void;
   setImage: (image: string) => void;
+  setImgFile: (image: File) => void;
   onSubmit: () => void;
   isEdit?: boolean;
 }
@@ -26,18 +24,16 @@ interface NewPostFormProps {
 const NewPostForm: React.FC<NewPostFormProps> = ({
   title,
   content,
-  image,
   setTitle,
   setContent,
   setImage,
+  setImgFile,
   onSubmit,
   isEdit = false,
 }) => {
   const navigate = useNavigate();
-  const { connectedUser } = useContext(UserContext);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [imgFile, setImgFile] = useState<File>();
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -51,36 +47,13 @@ const NewPostForm: React.FC<NewPostFormProps> = ({
     e.preventDefault();
     setError("");
     setLoading(true);
-    await uploadImg(imgFile!!);
 
     try {
-      await onSubmit();
+      onSubmit();
     } catch (err) {
       setError("Invalid fields");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const uploadImg = async (file: File) => {
-    const formData = new FormData();
-    const accessToken = connectedUser?.accessToken;
-
-    if (!accessToken) {
-      console.log("No access token found");
-      return;
-    }
-
-    if (file) {
-      formData.append("file", file);
-      postImage(formData, accessToken)
-        .then((res) => {
-          const url = res.data.url;
-          setImage(url);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     }
   };
 
