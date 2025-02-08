@@ -9,9 +9,13 @@ import {
 } from "@mui/material";
 import { PostData } from "../../queries/post";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from '@mui/icons-material/Delete';
 import { createLike, findOneLike, getLikeCount, removeLike } from "../../queries/like";
 import { useContext, useEffect, useState } from "react";
+import { deletePost } from "../../queries/post";
 import { UserContext } from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 interface PostCardProps {
   post: PostData,
@@ -23,6 +27,7 @@ export const PostCard: React.FC<PostCardProps> = ({
   showLikes,
 }) => {
   const {connectedUser } = useContext(UserContext);
+  const navigate = useNavigate();
   const accessToken = connectedUser?.accessToken;
   const [isAlreadyLiked, setIsAlreadyLiked]= useState<boolean>(false);
   const [currentPost, setCurrentPost]= useState<PostData>(post);
@@ -50,6 +55,23 @@ export const PostCard: React.FC<PostCardProps> = ({
       setIsAlreadyLiked(true)
     }
   };
+
+  const onEditClick = async () => {
+    navigate(`/post/edit/${post._id}`, { state: currentPost });
+  }
+
+  const onDeleteClick = async () => {
+
+    if (!accessToken) {
+      console.log("No access token found");
+      return;
+    }
+
+    const response = await deletePost(post._id, accessToken);
+    if (response.status === 200) {
+      console.log("Post deleted");
+    }
+  }
 
   const initAlreadyLike = async ()=>{
     const userId = connectedUser?.id;
@@ -98,6 +120,15 @@ export const PostCard: React.FC<PostCardProps> = ({
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
             {currentPost?.numOfLikes ? `${currentPost.numOfLikes} likes`: "No likes yet"}
           </Typography>
+          {connectedUser?.id === currentPost.sender && (
+            <>
+          <IconButton aria-label="like post" onClick={onEditClick}>
+            <EditIcon />
+          </IconButton>
+          <IconButton aria-label="like post" onClick={onDeleteClick}>
+            <DeleteIcon />
+          </IconButton>
+          </>)}
         </CardActions>
       )}
     </Card>

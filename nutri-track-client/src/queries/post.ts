@@ -1,5 +1,4 @@
 import axiosInstance from "../axiosInstance";
-import { getLikeCount } from "./like";
 
 export interface PostData {
   _id: string;
@@ -69,5 +68,21 @@ export const updatePost = async (
     return response;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "post update failed");
+  }
+};
+
+// Delete post function
+export const deletePost = async (
+  postId: string,
+  accessToken: string
+) => {
+  try {
+    const response = await axiosInstance.delete(
+      `${POST_ROUTE}/${postId}`,
+        { headers: {authorization : `Bearer ${accessToken}`} }
+    );
+    return response;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || "post deletion failed");
   }
 };

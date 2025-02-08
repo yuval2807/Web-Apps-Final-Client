@@ -1,22 +1,26 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PageLayout from "../../components/Common/PageLayout";
-import NewPostForm from "./PostForm";
-import PostPreview from "./PostPreview";
+import NewPostForm from "../AddPostPage/PostForm";
+import PostPreview from "../AddPostPage/PostPreview";
 import { useContext, useState } from "react";
-import { createPost } from "../../queries/post";
+import { updatePost } from "../../queries/post";
 import { UserContext } from "../../context/UserContext";
 import { Typography } from "@mui/material";
 import { uploadImg } from "../../utils/uploadImage";
 
-export const CreatePost: React.FC = () => {
+export const EditPost: React.FC = () => {
   const navigate = useNavigate();
-  const [title, setTitle] = useState<string>("");
-  const [content, setContent] = useState<string>("");
-  const [image, setImage] = useState<string>("");
-  const [imgFile, setImgFile] = useState<File>();
   const { connectedUser } = useContext(UserContext);
+  const params = useParams();
+  const postId = params.postid;
+  const location = useLocation();
+  const post = location.state;
+  const [title, setTitle] = useState<string>(post?.title);
+  const [content, setContent] = useState<string>(post?.content);
+  const [image, setImage] = useState<string>(post?.image);
+  const [imgFile, setImgFile] = useState<File>();
 
-  const handlePressCreate = async () => {
+  const handlePressUpdate = async () => {
     try {
       const accessToken = connectedUser?.accessToken;
 
@@ -39,10 +43,10 @@ export const CreatePost: React.FC = () => {
         sender: connectedUser?.id,
       };
 
-      const response = await createPost(payload, accessToken);
+      const response = await updatePost(payload, postId!, accessToken);
 
       if (response.status === 200) {
-        console.log("Post created");
+        console.log("Post updated");
         navigate("/post");
       }
     } catch (error) {
@@ -53,7 +57,7 @@ export const CreatePost: React.FC = () => {
   return (
     <PageLayout>
       <Typography variant="h5" component="h1" gutterBottom align="center">
-        New post
+        Edit post
       </Typography>
       <NewPostForm
         title={title}
@@ -62,7 +66,8 @@ export const CreatePost: React.FC = () => {
         setContent={setContent}
         setImage={setImage}
         setImgFile={setImgFile}
-        onSubmit={handlePressCreate}
+        onSubmit={handlePressUpdate}
+        isEdit={true}
       />
       <PostPreview title={title} content={content} image={image} />
     </PageLayout>

@@ -5,6 +5,7 @@ import {
   updatePostById,
   getAllPostsWithLikes,
   getAllPostsWithLikesBySender,
+  deletePostById,
 } from "../controllers/post";
 import authenticateToken from "../middleware/jwt";
 
@@ -141,6 +142,42 @@ router.put("/:id", async (req: Request, res: Response) => {
 
     if (!updatedPost) res.status(404).json({ message: "Post not found" });
     else res.status(200).send(updatedPost);
+  } catch (err) {
+    res.status(400).send(err);
+  }
+});
+
+/**
+ * @swagger
+ * /post/{post_id}:
+ *   delete:
+ *       summary: Delete a post by id
+ *       tags: [Posts]
+ *       security:
+ *           - bearerAuth: []
+ *       parameters:
+ *          - name: post_id
+ *            in: path
+ *            required: true
+ *            schema:
+ *              type: string
+ *       responses:
+ *           200:
+ *               description: A specific post is deleted
+ *               content:
+ *                   application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Post'
+ *           400:
+ *              description: Bad request
+ *           404:
+ *              description: Not Found
+ */
+
+router.delete("/:id", async (req: Request, res: Response) => {
+  const postId = req.params.id;
+  try {
+    res.status(200).send(await deletePostById(postId));
   } catch (err) {
     res.status(400).send(err);
   }
