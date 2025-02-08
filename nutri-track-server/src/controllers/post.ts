@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import postModel, { IPost } from "../models/post";
 
 export const getAllPostsWithLikes = () =>
@@ -27,7 +28,7 @@ export const getAllPostsWithLikesBySender = (sender) =>
   postModel.aggregate([
     {
       $match: {
-        sender: sender,
+        sender: Types.ObjectId.createFromHexString(sender),
       },
     },
     {
