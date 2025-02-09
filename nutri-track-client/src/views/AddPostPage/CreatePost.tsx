@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import PageLayout from "../../components/Common/PageLayout";
 import NewPostForm from "./PostForm";
-import PostPreview from "./PostPreview";
 import { useContext, useState } from "react";
 import { createPost } from "../../queries/post";
 import { UserContext } from "../../context/UserContext";
@@ -67,7 +66,6 @@ export const CreatePost: React.FC = () => {
         setImgFile={setImgFile}
         onSubmit={handlePressCreate}
       />
-      <PostPreview title={title} content={content} image={image} />
     </PageLayout>
   );
 };
