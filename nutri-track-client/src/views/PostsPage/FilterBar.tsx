@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { UserContext } from "../../context/UserContext";
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, InputBase, TextField } from "@mui/material";
+import { Search } from "@mui/icons-material";
 
 interface FilterBarData {
     setUserFilter: (userFilter: string) => void;
@@ -20,33 +21,41 @@ export const FilterBar: React.FC<FilterBarData> = ({setContentTypeFilter, setUse
     }
 
   return (
-    <Box display="flex" flexDirection="column" width="20%">
-         <TextField  
+    <Box display="flex" flexDirection="row" width="50%" alignSelf="center" >
+         {/* <TextField  
             margin='normal'
             label='Search by user'
             type='text'
             name='userFilter'
             value={userTempFilter}
             onChange={(e) => setUserTempFilter(e.target.value)}
-          />
-          <TextField  
-            margin='normal'
-            label='Search by content type'
+          /> */}
+          <InputBase  
+            // margin='normal'
+            // label='Search by content type'
+            color="primary"
+            fullWidth
             type='text'
             name='contentTypeFilter'
             value={contentTypeTempFilter}
             onChange={(e) => setContentTypeTempFilter(e.target.value)}
+            sx={{ border: '1px solid #000', borderRadius: '5px', p: 1, height: '5vh' }}
+            endAdornment={contentTypeTempFilter.length >= 1 && <Button onClick={() => setContentTypeTempFilter("")}>X</Button>}
+            startAdornment={<Search/>}
+            
           />
           <Button
-            variant='contained'
+            variant='outlined'
+            size="small"
             onClick={clearFilters}
-            sx={{ mt: 3 }}>
+            sx={{ ml: 2, height: '5vh' }}>
             Clear All Filters
           </Button>
           <Button
             variant='contained'
+            size="small"
             onClick={() => {onFilter(userTempFilter, contentTypeTempFilter)}}
-            sx={{ mt: 3 }}>
+            sx={{ ml: 2, height: '5vh' }}>
             Apply Filters
           </Button>
     </Box>
