@@ -4,12 +4,10 @@ import { PostCard } from "./PostCard";
 export interface PostsListData {
   postList: PostData[];
   direction?: "column" | "row";
-  showLikes: boolean;
 }
 
 export const PostsList: React.FC<PostsListData> = ({
   postList,
-  showLikes,
   direction = "column",
 }) => {
   return (
@@ -18,10 +16,9 @@ export const PostsList: React.FC<PostsListData> = ({
         display: "grid",
         gridTemplateColumns: direction === "row" ? "repeat(3, 1fr)" : "1fr",
         gap: "16px",
-      }}
-    >
+      }}>
       {postList.map((post: PostData) => (
-        <PostCard key={post?._id} post={post} showLikes={showLikes} />
+        <PostCard key={post?._id} post={post} />
       ))}
     </div>
   );

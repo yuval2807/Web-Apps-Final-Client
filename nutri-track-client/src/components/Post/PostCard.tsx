@@ -29,7 +29,6 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 
 interface PostCardProps {
   post: PostData;
-  showLikes: boolean;
 }
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -41,7 +40,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
   border: `1px solid ${theme.palette.divider}`,
 }));
 
-export const PostCard: React.FC<PostCardProps> = ({ post, showLikes }) => {
+export const PostCard: React.FC<PostCardProps> = ({ post }) => {
   const { connectedUser } = useContext(UserContext);
   const navigate = useNavigate();
   const accessToken = connectedUser?.accessToken;
@@ -128,10 +127,10 @@ export const PostCard: React.FC<PostCardProps> = ({ post, showLikes }) => {
       <CardContent>
         <Stack direction='row' alignItems='center' spacing={1} mb={2}>
           <Avatar sx={{ bgcolor: "primary.light", width: 32, height: 32 }}>
-            A
+            {currentPost.senderData.image ?? currentPost.senderData.name}
           </Avatar>
           <Typography variant='body2' color='text.secondary'>
-            {/* {user} */}
+            {currentPost.senderData.name}
           </Typography>
         </Stack>
 
@@ -170,23 +169,21 @@ export const PostCard: React.FC<PostCardProps> = ({ post, showLikes }) => {
           <Stack direction='row' spacing={0.5} alignItems='center'>
             <ChatBubbleOutlineIcon fontSize='small' color='action' />
             <Typography variant='body2' color='text.secondary'>
-              0
+              {currentPost.numOfComments || 0}
             </Typography>
           </Stack>
 
-          {showLikes && (
-            <Stack direction='row' spacing={0.5} alignItems='center'>
-              <IconButton size='small' onClick={onLikeClick}>
-                <FavoriteIcon
-                  fontSize='small'
-                  color={isAlreadyLiked ? "error" : "action"}
-                />
-              </IconButton>
-              <Typography variant='body2' color='text.secondary'>
-                {currentPost.numOfLikes || 0}
-              </Typography>
-            </Stack>
-          )}
+          <Stack direction='row' spacing={0.5} alignItems='center'>
+            <IconButton size='small' onClick={onLikeClick}>
+              <FavoriteIcon
+                fontSize='small'
+                color={isAlreadyLiked ? "error" : "action"}
+              />
+            </IconButton>
+            <Typography variant='body2' color='text.secondary'>
+              {currentPost.numOfLikes || 0}
+            </Typography>
+          </Stack>
         </Stack>
       </CardActions>
     </StyledCard>

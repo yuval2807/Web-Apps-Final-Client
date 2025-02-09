@@ -86,6 +86,11 @@ router.get("/", async (req: Request, res: Response) => {
   const page = parseInt(req.query.page?.toString()) || 1;
   const limit = parseInt(req.query.limit?.toString()) || 10;
   const skip = (page - 1) * limit;
+  console.log(
+    "senderId",
+    senderId,
+    await getAllPostsWithLikesBySender(senderId)
+  );
 
   try {
     if (senderId)

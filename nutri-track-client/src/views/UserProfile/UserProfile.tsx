@@ -70,11 +70,11 @@ const UserProfile: React.FC = () => {
 
   return (
     <PageLayout>
-      <Container maxWidth="md">
+      <Container maxWidth='md'>
         <Box sx={{ p: 3 }}>
           {user ? <UserDetails user={user} onSave={handleUserUpdate} /> : null}
         </Box>
-        <PostsList postList={postList} showLikes={false} direction="row" />
+        <PostsList postList={postList} direction='row' />
       </Container>
     </PageLayout>
   );
