@@ -11,7 +11,6 @@ import {
 import { styled } from "@mui/material/styles";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { PostData } from "../../queries/post";
 import { UserContext } from "../../context/UserContext";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
@@ -20,6 +19,36 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   margin: "0 auto",
   borderRadius: theme.spacing(2),
 }));
+
+const ImagePlaceholder = styled(Box)(({ theme }) => ({
+  width: "100%",
+  height: 200,
+  backgroundColor: theme.palette.grey[200],
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  gap: theme.spacing(2),
+  marginBottom: theme.spacing(2),
+}));
+
+const Shape = styled(Box)<{ shape?: "circle" | "square" | "triangle" }>(
+  ({ theme, shape }) => ({
+    width: 40,
+    height: 40,
+    backgroundColor: theme.palette.grey[400],
+    ...(shape === "circle" && {
+      borderRadius: "50%",
+    }),
+    ...(shape === "triangle" && {
+      width: 0,
+      height: 0,
+      backgroundColor: "transparent",
+      borderLeft: "20px solid transparent",
+      borderRight: "20px solid transparent",
+      borderBottom: `40px solid ${theme.palette.grey[400]}`,
+    }),
+  })
+);
 
 interface NewPostFormProps {
   title: string;
@@ -112,7 +141,15 @@ const PostCreationForm: React.FC<NewPostFormProps> = ({
             onChange={handleImageChange}
             style={{ display: "none" }}
           />
-          <CardMedia component='img' height='194' image={image} />{" "}
+          {image ? (
+            <CardMedia component='img' height='194' image={image} />
+          ) : (
+            <ImagePlaceholder>
+              <Shape shape='triangle' />
+              <Shape shape='square' />
+              <Shape shape='circle' />
+            </ImagePlaceholder>
+          )}
         </label>
         <TextField
           fullWidth
