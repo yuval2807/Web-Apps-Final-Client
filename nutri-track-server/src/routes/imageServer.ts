@@ -6,7 +6,6 @@ import authenticateToken from "../middleware/jwt";
 dotenv.config();
 
 const router = express.Router();
-router.use(authenticateToken);
 
 const base = "http://" + "localhost" + ":" + process.env.PORT + "/"; //TODO domain should change when uploaded to VM
 const storage = multer.diskStorage({

@@ -1,4 +1,4 @@
-import mongoose, { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 import postModel, { IPost } from "../models/post";
 
 export const getAllPostsWithLikes = (skip: number, limit: number) =>
