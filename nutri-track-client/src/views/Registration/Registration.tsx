@@ -17,7 +17,7 @@ export const Registration: React.FC = () => {
       const connectedUser = await register(data);
       if (!!connectedUser) {
         updateConnectedUser(connectedUser);
-        navigate("/home");
+        navigate("/post");
       }
     } catch (err: any) {
       console.error(err.message);

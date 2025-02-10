@@ -4,6 +4,7 @@ import Router from "./Router";
 import { UserProvider } from "./context/UserContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ToastContainer } from "react-toastify";
+import { NavProvider } from "./context/NavContext";
 
 function App() {
   return (
@@ -13,10 +14,12 @@ function App() {
           "663257001119-t30hvqookots5n6oji8eqkuvv4lkkc86.apps.googleusercontent.com"
         }>
         <UserProvider>
-          <BrowserRouter>
-            <Router />
-            <ToastContainer position='bottom-right' />
-          </BrowserRouter>
+          <NavProvider>
+            <BrowserRouter>
+              <Router />
+              <ToastContainer position='bottom-right' />
+            </BrowserRouter>
+          </NavProvider>
         </UserProvider>
       </GoogleOAuthProvider>
     </div>

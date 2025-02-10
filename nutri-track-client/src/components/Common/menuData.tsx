@@ -1,6 +1,12 @@
+import HomeIcon from '@mui/icons-material/Home';
+import AddIcon from '@mui/icons-material/Add';
+import PersonIcon from '@mui/icons-material/Person';
+import LogoutIcon from '@mui/icons-material/Logout';
+import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
+
 interface MenuItem {
   title: string;
-  icon: string;
+  icon: React.ReactNode;
 }
 
 interface MainMenuItem extends MenuItem {
@@ -10,27 +16,22 @@ interface MainMenuItem extends MenuItem {
 export const mainMenu: MainMenuItem[] = [
   {
     title: "Home",
-    icon: "Home",
-    navigate: "/home",
+    icon: <HomeIcon sx={{color: 'white'}} />,
+    navigate: "/post",
   },
   {
-    title: "Forum",
-    icon: "Forum",
-    navigate: "/register", //TODO: change to real page
+    title: "Tips",
+    icon: <TipsAndUpdatesIcon sx={{color: 'white'}}/>,
+    navigate: "/tips", //TODO: change to real page
   },
   {
     title: "Create post",
-    icon: "plus",
+    icon: <AddIcon sx={{color: 'white'}}/>,
     navigate: "/post/create"
-},
-{
-    title: "All posts",
-    icon: "list",
-    navigate: "/post"
-},
+  },
   {
-    title: "User profile",
-    icon: "man",
+    title: "Profile",
+    icon: <PersonIcon sx={{color: 'white'}}/>,
     navigate: "/UserProfile",
   }
 ];
@@ -38,6 +39,6 @@ export const mainMenu: MainMenuItem[] = [
 export const secondaryMenu: MenuItem[] = [
   {
     title: "Logout",
-    icon: "Logout",
+    icon: <LogoutIcon sx={{color: 'white'}} />,
   },
 ];
