@@ -1,7 +1,6 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PageLayout from "../../components/Common/PageLayout";
 import NewPostForm from "../AddPostPage/PostForm";
-import PostPreview from "../AddPostPage/PostPreview";
 import { useContext, useState } from "react";
 import { updatePost } from "../../queries/post";
 import { UserContext } from "../../context/UserContext";
@@ -59,14 +58,15 @@ export const EditPost: React.FC = () => {
       <NewPostForm
         title={title}
         content={content}
+        image={image}
         setTitle={setTitle}
         setContent={setContent}
         setImage={setImage}
         setImgFile={setImgFile}
         onSubmit={handlePressUpdate}
         isEdit={true}
+        onCancel={() => navigate("/home")}
       />
-      <PostPreview title={title} content={content} image={image} />
     </PageLayout>
   );
 };

@@ -10,6 +10,8 @@ export const PostsPage: React.FC = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [refresh, setRefresh] = useState(false);
+
   const observerTarget = useRef(null);
   const { connectedUser } = useContext(UserContext);
 
@@ -25,6 +27,7 @@ export const PostsPage: React.FC = () => {
       }
 
       const { posts, totalPages } = await getAllPosts(accessToken, page);
+
       if (posts) {
         setLoading(false);
         setPostList((prevPosts) => [...prevPosts, ...posts]);
@@ -59,11 +62,13 @@ export const PostsPage: React.FC = () => {
 
   useEffect(() => {
     fetchPosts();
-  }, [page]);
+  }, [page, refresh]);
 
   return (
     <PageLayout>
-      {postList ? <PostsList postList={postList} showLikes={true} /> : null}
+      {postList ? (
+        <PostsList postList={postList} setRefresh={setRefresh} />
+      ) : null}
       {loading && <div>Loading more posts...</div>}
       <div ref={observerTarget}></div>
     </PageLayout>
