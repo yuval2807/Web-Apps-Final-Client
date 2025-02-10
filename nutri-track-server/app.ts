@@ -9,4 +9,3 @@ const buildApp = async () => {
 };
 
 buildApp();
-

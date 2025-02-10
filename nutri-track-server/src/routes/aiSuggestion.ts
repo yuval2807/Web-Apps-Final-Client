@@ -1,5 +1,5 @@
-import express, { Request, Response } from "express";
-import { askQuestion} from "../controllers/aiSuggestion";
+import express, { NextFunction, Request, Response } from "express";
+import { askQuestion } from "../controllers/aiSuggestion";
 
 import authenticateToken from "../middleware/jwt";
 
@@ -67,16 +67,17 @@ router.use(authenticateToken);
  *              description: Not Found
  */
 
-router.post("/", async (req: Request, res: Response) => {
+router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   const question = req.body.question;
 
   try {
     const answer = await askQuestion(question);
 
-    if (!answer) res.status(404).json({ message: "Couldn't get answer from gemini AI" });
+    if (!answer)
+      res.status(404).json({ message: "Couldn't get answer from gemini AI" });
     else res.status(200).send(answer);
   } catch (err) {
-    res.status(400).send(err);
+    next(err);
   }
 });
 
