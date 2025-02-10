@@ -34,6 +34,7 @@ interface PostCardProps {
   showAction?: boolean;
 }
 
+
 const StyledCard = styled(Card)(({ theme }) => ({
   width: "100%",
   maxWidth: 500,
@@ -48,6 +49,7 @@ export const PostCard: React.FC<PostCardProps> = ({
   setRefresh,
   showAction = false,
 }) => {
+
   const { connectedUser } = useContext(UserContext);
   const navigate = useNavigate();
   const accessToken = connectedUser?.accessToken;

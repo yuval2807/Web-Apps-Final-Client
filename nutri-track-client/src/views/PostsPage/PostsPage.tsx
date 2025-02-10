@@ -4,6 +4,7 @@ import { PostsList } from "../../components/Post/PostList";
 import { getAllPosts, PostData } from "../../queries/post";
 import { UserContext } from "../../context/UserContext";
 import { toast } from "react-toastify";
+import { FilterBar } from "./FilterBar";
 
 export const PostsPage: React.FC = () => {
   const [postList, setPostList] = useState<PostData[]>([]);
@@ -13,6 +14,9 @@ export const PostsPage: React.FC = () => {
   const [refresh, setRefresh] = useState(false);
 
   const observerTarget = useRef(null);
+  const [filterPostList, setFilterPostList] = useState<PostData[]>([]);
+  const [userFilter, setUserFilter] = useState<string>("");
+  const [contentTypeFilter, setContentTypeFilter] = useState<string>("");
   const { connectedUser } = useContext(UserContext);
 
   const fetchPosts = async () => {
@@ -31,12 +35,18 @@ export const PostsPage: React.FC = () => {
       if (posts) {
         setLoading(false);
         setPostList((prevPosts) => [...prevPosts, ...posts]);
+        setFilterPostList((prevPosts) => [...prevPosts, ...posts]);
         setHasMore(page < totalPages);
       }
     } catch (error) {
       console.log("error: ", error);
       toast.error(" משהו השתבש!");
     }
+  };
+
+  const onFilter = (user: string, contentType: string) => {
+    setUserFilter(user);
+    setContentTypeFilter(contentType);
   };
 
   useEffect(() => {
@@ -64,13 +74,42 @@ export const PostsPage: React.FC = () => {
     fetchPosts();
   }, [page, refresh]);
 
+  useEffect(() => {
+    let tempPost: PostData[] = postList;
+    if (userFilter) {
+      tempPost = tempPost.filter(
+        (post: PostData) => post?.sender === userFilter
+      );
+    }
+    if (userFilter === "" && contentTypeFilter === "") {
+      setFilterPostList([...postList]);
+      return;
+    }
+    if (contentTypeFilter !== "") {
+      tempPost = tempPost.filter((post: PostData) =>
+        post?.content.toLowerCase().includes(contentTypeFilter.toLowerCase())
+      );
+    }
+    setFilterPostList([...tempPost]);
+  }, [userFilter, contentTypeFilter]);
+
   return (
     <PageLayout>
-      {postList ? (
-        <PostsList postList={postList} setRefresh={setRefresh} />
-      ) : null}
-      {loading && <div>Loading more posts...</div>}
-      <div ref={observerTarget}></div>
+      <div  style={{ display: "flex", flexDirection: "column", width: "95%"}}>
+        
+          <FilterBar
+            setUserFilter={setUserFilter}
+            setContentTypeFilter={setContentTypeFilter}
+            onFilter={onFilter}
+          />
+          {filterPostList ? (
+            <PostsList showLikes={true} postList={filterPostList} />
+          ) : null}
+       
+        {loading && <div>Loading more posts...</div>}
+        <div ref={observerTarget}></div>
+      </div>
+
     </PageLayout>
   );
 };
