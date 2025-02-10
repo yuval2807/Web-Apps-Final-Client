@@ -62,6 +62,7 @@ export const CreatePost: React.FC = () => {
         setImage={setImage}
         setImgFile={setImgFile}
         onSubmit={handlePressCreate}
+        onCancel={() => navigate("/home")}
       />
     </PageLayout>
   );

@@ -65,6 +65,7 @@ export const EditPost: React.FC = () => {
         setImgFile={setImgFile}
         onSubmit={handlePressUpdate}
         isEdit={true}
+        onCancel={() => navigate("/home")}
       />
     </PageLayout>
   );

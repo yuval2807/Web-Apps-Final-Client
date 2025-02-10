@@ -104,9 +104,9 @@ const PostCreationForm: React.FC<NewPostFormProps> = ({
             height: 32,
             bgcolor: "primary.light",
             fontSize: "0.875rem",
-          }}>
-          {connectedUser?.name}
-        </Avatar>
+          }}
+        />
+
         <Typography variant='body2' color='text.secondary'>
           {connectedUser?.name}
         </Typography>
@@ -167,7 +167,7 @@ const PostCreationForm: React.FC<NewPostFormProps> = ({
             variant='contained'
             color='primary'
             onClick={onSubmit}>
-            create post
+            {isEdit ? "edit post" : "create post"}
           </Button>
           <Button
             fullWidth
