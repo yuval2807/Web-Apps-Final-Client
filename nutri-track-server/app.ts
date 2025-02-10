@@ -12,6 +12,7 @@ import dotenv from "dotenv";
 import swaggerUi from "swagger-ui-express";
 import swaggerJsDoc from "swagger-jsdoc";
 import cors from "cors";
+import { errorHandler } from "./src/middleware/errorHandler";
 
 const swaggerOptions = {
   definition: {
@@ -51,6 +52,8 @@ app.use("/ai", aiRoutes);
 app.use("/like", likeRoutes);
 app.use("/public", express.static("public"));
 app.use("/image", imageRoutes);
+
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`lisening at http:/localhost:${port}`);

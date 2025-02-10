@@ -1,3 +1,4 @@
+import { BadRequestError } from "../errors/BadRequestError";
 import { IUser, tUser } from "../models/user";
 import { verifyGoogleToken } from "../utils/googleVerification";
 import {
@@ -64,6 +65,8 @@ export const googleLogin = async (credential: string) => {
 };
 
 export const logout = async (refreshToken: string) => {
+  if (!refreshToken) throw new BadRequestError("Missing Authorization header");
+
   const user = await verifyRefreshToken(refreshToken);
   if (!user) throw new Error("User not found");
 
@@ -74,6 +77,8 @@ export const logout = async (refreshToken: string) => {
 };
 
 export const refresh = async (refreshToken) => {
+  if (!refreshToken) throw new BadRequestError("Missing Authorization header");
+
   const user = await verifyRefreshToken(refreshToken);
   if (!user) throw new Error("User not found");
 
