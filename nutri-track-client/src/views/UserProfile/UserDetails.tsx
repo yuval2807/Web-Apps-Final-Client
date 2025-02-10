@@ -69,7 +69,10 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
 
       setEditedProfile({ ...editedProfile, image: url ? url : "" });
 
-      const updatedUser = await onSave(editedProfile);
+      const updatedUser = await onSave({
+        ...editedProfile,
+        image: url ? url : "",
+      });
 
       if (updatedUser) {
         setProfile(editedProfile);
