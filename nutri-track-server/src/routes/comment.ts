@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 const router = express.Router();
 import {
   getAllComments,
@@ -33,7 +33,7 @@ import {
  *                   type: string
  *           example:
  *              _id: 'hgsfjhskljslkgl2kgldjd'
- *              title: 'example message'
+ *              message: 'example message'
  *              post: 'hbjjgsiayhnnsh'
  *              user: 'adraaggayajala'
  *       CommentsBody:
@@ -50,7 +50,7 @@ import {
  *               user:
  *                   type: string
  *           example:
- *              title: 'example message'
+ *              message: 'example message'
  *              post: 'hbjjgsiayhnnsh'
  *              user: 'adraaggayajala'
  */
@@ -81,16 +81,17 @@ import {
  *           400:
  *              description: Bad request
  */
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", async (req: Request, res: Response, next: NextFunction) => {
   const postId = req.query.postId;
 
   try {
-    if (postId) res.status(200).send(await getCommentsByPostId(postId));
-    else {
+    if (postId) {
+      res.status(200).send(await getCommentsByPostId(postId));
+    } else {
       res.status(200).send(await getAllComments());
     }
   } catch (err) {
-    res.status(400).send(err);
+   next(err)
   }
 });
 
@@ -121,7 +122,7 @@ router.get("/", async (req: Request, res: Response) => {
  *              description: Not Found
  */
 
-router.get("/:id", async (req: Request, res: Response) => {
+router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.id;
 
   try {
@@ -129,7 +130,7 @@ router.get("/:id", async (req: Request, res: Response) => {
     if (!comment) res.status(404).json({ message: "Comment not found" });
     else res.status(200).send(comment);
   } catch (err) {
-    res.status(400).send(err);
+   next(err)
   }
 });
 
@@ -160,12 +161,12 @@ router.get("/:id", async (req: Request, res: Response) => {
  *              description: Not Found
  */
 
-router.post("/", async (req: Request, res: Response) => {
+router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   const comment = req.body;
   try {
     res.status(201).send(await addNewComment(comment));
   } catch (err) {
-    res.status(400).send(err);
+   next(err)
   }
 });
 
@@ -196,7 +197,7 @@ router.post("/", async (req: Request, res: Response) => {
  *              description: Not Found
  */
 
-router.put("/:id", async (req: Request, res: Response) => {
+router.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const comment = req.body;
 
@@ -206,7 +207,7 @@ router.put("/:id", async (req: Request, res: Response) => {
     if (!updatedComment) res.status(404).json({ message: "Comment not found" });
     else res.status(200).send(updatedComment);
   } catch (err) {
-    res.status(400).send(err);
+   next(err)
   }
 });
 
@@ -237,12 +238,12 @@ router.put("/:id", async (req: Request, res: Response) => {
  *              description: Not Found
  */
 
-router.delete("/:id", async (req: Request, res: Response) => {
+router.delete("/:id", async (req: Request, res: Response, next: NextFunction) => {
   const commentId = req.params.id;
   try {
     res.status(200).send(await deleteCommentById(commentId));
   } catch (err) {
-    res.status(400).send(err);
+   next(err)
   }
 });
 

@@ -20,9 +20,7 @@ export const getUserById = async (
   userId: ConnectedUser["id"]
 ): Promise<User> => {
   try {
-    const response = await axiosInstance.get(`${USER_ROUTE}/${userId}`, {
-      headers: { authorization: `Bearer ${refreshToken}` },
-    });
+    const response = await axiosInstance.get(`${USER_ROUTE}/${userId}`);
     return response.data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "getUserById failed");
@@ -37,10 +35,7 @@ export const updateUserById = async (
   try {
     const response = await axiosInstance.put(
       `${USER_ROUTE}/${userId}`,
-      payload,
-      {
-        headers: { authorization: `Bearer ${refreshToken}` },
-      }
+      payload
     );
     return response.data;
   } catch (error: any) {

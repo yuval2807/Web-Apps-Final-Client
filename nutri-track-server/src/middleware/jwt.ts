@@ -1,18 +1,19 @@
 import jwt from "jsonwebtoken";
+import { UnauthorizedError } from "../errors/UnauthorizedError ";
 
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1]; // פורמט: "Bearer <token>"
+  const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
-    return res.status(401).json({ message: "Access token missing" });
+    throw new UnauthorizedError("Missing access token");
   }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
-      return res.status(403).json({ message: "Invalid or expired token" });
+      next(new UnauthorizedError("Invalid access token"));
     }
-    req.user = user; // הוספת פרטי המשתמש לבקשה
+    req.user = user;
     next();
   });
 };

@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import PageLayout from "../../components/Common/PageLayout";
 import NewPostForm from "./PostForm";
-import PostPreview from "./PostPreview";
 import { useContext, useState } from "react";
 import { createPost } from "../../queries/post";
 import { UserContext } from "../../context/UserContext";
@@ -26,11 +25,8 @@ export const CreatePost: React.FC = () => {
         return;
       }
 
-      const url: string | undefined = await uploadImg(
-        imgFile!!,
-        accessToken,
-        setImage
-      );
+      const url: string | undefined = await uploadImg(imgFile!!);
+      setImage(url ? url : image);
 
       const payload = {
         title,
@@ -60,13 +56,14 @@ export const CreatePost: React.FC = () => {
       <NewPostForm
         title={title}
         content={content}
+        image={image}
         setTitle={setTitle}
         setContent={setContent}
         setImage={setImage}
         setImgFile={setImgFile}
         onSubmit={handlePressCreate}
+        onCancel={() => navigate("/home")}
       />
-      <PostPreview title={title} content={content} image={image} />
     </PageLayout>
   );
 };

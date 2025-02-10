@@ -18,7 +18,7 @@ import ToggleButton from "../../components/ToggleButtons";
 import { User } from "../../queries/user";
 
 interface RegistrationFormProps {
-  onSubmit: (data: User) => Promise<void>;
+  onSubmit: (data: User, imageFile?: File) => Promise<void>;
 }
 
 const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
@@ -34,6 +34,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [imgFile, setImgFile] = useState<File>();
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>
@@ -51,7 +52,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
     setLoading(true);
 
     try {
-      await onSubmit(formData);
+      await onSubmit(formData, imgFile);
     } catch (err) {
       setError("Registration failed. Please try again.");
     } finally {
@@ -67,6 +68,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
         ...prev,
         image: newURL,
       }));
+
+      setImgFile(e.target.files[0]);
     }
   };
 

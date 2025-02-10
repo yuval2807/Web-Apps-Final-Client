@@ -6,7 +6,7 @@ interface PageLayoutProps {
 
 const PageLayout: React.FC<PageLayoutProps> = ({children}) => {
 
-  const navWidth = 10;
+  const navWidth = 12;
 
   return (
   <div className='layout' style={{display: "flex", flexDirection: "row-reverse"}}>

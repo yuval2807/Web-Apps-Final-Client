@@ -1,8 +1,11 @@
-import mongoose, { ObjectId } from "mongoose";
+import mongoose from "mongoose";
 import postModel, { IPost } from "../models/post";
 
 export const getAllPostsWithLikes = (skip: number, limit: number) =>
   postModel.aggregate([
+    {
+      $match: {},
+    },
     {
       $lookup: {
         from: "likes",
@@ -10,6 +13,25 @@ export const getAllPostsWithLikes = (skip: number, limit: number) =>
         foreignField: "postId",
         as: "likes",
       },
+    },
+    {
+      $lookup: {
+        from: "comments",
+        localField: "_id",
+        foreignField: "post",
+        as: "comments",
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "sender",
+        foreignField: "_id",
+        as: "senderData",
+      },
+    },
+    {
+      $unwind: "$senderData",
     },
     {
       $project: {
@@ -20,6 +42,12 @@ export const getAllPostsWithLikes = (skip: number, limit: number) =>
         date: 1,
         sender: 1,
         numOfLikes: { $size: "$likes" },
+        numOfComments: { $size: "$comments" },
+        senderData: {
+          _id: "$senderData._id",
+          name: "$senderData.name",
+          image: "$senderData.image",
+        },
       },
     },
     { $skip: skip },
@@ -42,6 +70,25 @@ export const getAllPostsWithLikesBySender = (senderId: string) =>
       },
     },
     {
+      $lookup: {
+        from: "comments",
+        localField: "_id",
+        foreignField: "post",
+        as: "comments",
+      },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "sender",
+        foreignField: "_id",
+        as: "senderData",
+      },
+    },
+    {
+      $unwind: "$senderData",
+    },
+    {
       $project: {
         _id: 1,
         title: 1,
@@ -50,6 +97,12 @@ export const getAllPostsWithLikesBySender = (senderId: string) =>
         date: 1,
         sender: 1,
         numOfLikes: { $size: "$likes" },
+        numOfComments: { $size: "$comments" },
+        senderData: {
+          _id: "$senderData._id",
+          name: "$senderData.name",
+          image: "$senderData.image",
+        },
       },
     },
   ]);

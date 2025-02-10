@@ -11,6 +11,8 @@ export const PostsPage: React.FC = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [refresh, setRefresh] = useState(false);
+
   const observerTarget = useRef(null);
   const [filterPostList, setFilterPostList] = useState<PostData[]>([]);
   const [userFilter, setUserFilter] = useState<string>("");
@@ -29,6 +31,7 @@ export const PostsPage: React.FC = () => {
       }
 
       const { posts, totalPages } = await getAllPosts(accessToken, page);
+
       if (posts) {
         setLoading(false);
         setPostList((prevPosts) => [...prevPosts, ...posts]);
@@ -69,7 +72,7 @@ export const PostsPage: React.FC = () => {
 
   useEffect(() => {
     fetchPosts();
-  }, [page]);
+  }, [page, refresh]);
 
   useEffect(() => {
     let tempPost: PostData[] = postList;
@@ -93,13 +96,7 @@ export const PostsPage: React.FC = () => {
   return (
     <PageLayout>
       <div  style={{ display: "flex", flexDirection: "column", width: "95%"}}>
-        {/* <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-around",
-          }}
-        > */}
+        
           <FilterBar
             setUserFilter={setUserFilter}
             setContentTypeFilter={setContentTypeFilter}
@@ -108,10 +105,11 @@ export const PostsPage: React.FC = () => {
           {filterPostList ? (
             <PostsList showLikes={true} postList={filterPostList} />
           ) : null}
-        {/* </div> */}
+       
         {loading && <div>Loading more posts...</div>}
         <div ref={observerTarget}></div>
       </div>
+
     </PageLayout>
   );
 };

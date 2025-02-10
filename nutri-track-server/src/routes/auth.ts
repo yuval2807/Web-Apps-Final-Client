@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 const router = express.Router();
 import {
   googleLogin,
@@ -128,15 +128,18 @@ import {
  *           400:
  *              description: Bad request
  */
-router.post("/login", async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+router.post(
+  "/login",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password } = req.body;
 
-  try {
-    res.status(200).send(await login(email, password));
-  } catch (err) {
-    res.status(400).send(err);
+    try {
+      res.status(200).send(await login(email, password));
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 /**
  * @swagger
@@ -187,21 +190,19 @@ router.post("/google", async (req, res) => {
  *           400:
  *              description: Bad request
  */
-router.get("/logout", async (req: Request, res: Response) => {
-  const authHeader = req.headers["authorization"];
-  const refreshToken = authHeader && authHeader.split(" ")[1]; // פורמט: "Bearer <token>"
+router.get(
+  "/logout",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const authHeader = req.headers["authorization"];
+    const refreshToken = authHeader && authHeader.split(" ")[1]; // פורמט: "Bearer <token>"
 
-  if (!refreshToken || refreshToken === "null") {
-    res.status(401).send("Refresh token missing");
-    return;
+    try {
+      res.status(200).send(await logout(refreshToken));
+    } catch (err) {
+      next(err);
+    }
   }
-
-  try {
-    res.status(200).send(await logout(refreshToken));
-  } catch (err) {
-    res.status(400).send(err);
-  }
-});
+);
 
 /**
  * @swagger
@@ -222,16 +223,18 @@ router.get("/logout", async (req: Request, res: Response) => {
  *           400:
  *              description: Bad request
  */
-router.get("/refresh", async (req: Request, res: Response) => {
-  const authHeader = req.headers["authorization"];
-  const refreshToken = authHeader && authHeader.split(" ")[1]; // פורמט: "Bearer <token>"
-
-  try {
-    res.status(200).send(await refresh(refreshToken));
-  } catch (err) {
-    res.status(400).send(err);
+router.get(
+  "/refresh",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const authHeader = req.headers["authorization"];
+    const refreshToken = authHeader && authHeader.split(" ")[1]; // פורמט: "Bearer <token>"
+    try {
+      res.status(200).send(await refresh(refreshToken));
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 /**
  * @swagger

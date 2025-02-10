@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Box,
   Typography,
@@ -10,6 +10,7 @@ import {
   Container,
   Grid2 as Grid,
   InputAdornment,
+  CardMedia,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
@@ -20,6 +21,8 @@ import RadioGroupButtons, {
 import PageLayout from "../../components/Common/PageLayout";
 import { UserInfo } from "./types";
 import { toast } from "react-toastify";
+import { uploadImg } from "../../utils/uploadImage";
+import { UserContext } from "../../context/UserContext";
 
 interface UserDetailsProps {
   user: UserInfo;
@@ -30,6 +33,8 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState<UserInfo>(user);
   const [editedProfile, setEditedProfile] = useState<UserInfo>(profile);
+  const [imgFile, setImgFile] = useState<File>();
+  const { connectedUser } = useContext(UserContext);
 
   const genderOptions: Option[] = [
     { label: "male", value: "male" },
@@ -45,6 +50,8 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
         ...prev,
         image: newURL,
       }));
+
+      setImgFile(e.target.files[0]);
     }
   };
 
@@ -55,7 +62,15 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
 
   const handleSave = async () => {
     try {
-      const updatedUser = await onSave(editedProfile);
+      const url: string | undefined = await uploadImg(imgFile!!);
+
+      setEditedProfile({ ...editedProfile, image: url ? url : "" });
+
+      const updatedUser = await onSave({
+        ...editedProfile,
+        image: url ? url : "",
+      });
+
       if (updatedUser) {
         setProfile(editedProfile);
         setIsEditing(false);
@@ -102,6 +117,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
                   type='file'
                   accept='image/*'
                   onChange={handleImageChange}
+                  disabled={!isEditing}
                   style={{ display: "none" }}
                 />
                 <Avatar
