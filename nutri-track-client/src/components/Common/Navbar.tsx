@@ -7,12 +7,15 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
+  ListItemIcon,
+  Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../queries/auth";
 import { mainMenu, secondaryMenu } from "./menuData";
 import { UserContext } from "../../context/UserContext";
 import { toast } from "react-toastify";
+import { NavContext } from "../../context/NavContext";
 
 interface DrawerListProps {
   navWidth: string;
@@ -21,6 +24,17 @@ interface DrawerListProps {
 const DrawerList = () => {
   const navigate = useNavigate();
   const { resetConnectedUser, connectedUser } = useContext(UserContext);
+  const {currentIndex, resetCurrentIndex, updateCurrentIndex} = useContext(NavContext);
+  //const [selectedIndex, setSelectedIndex] = React.useState(0);
+
+  const handleListItemClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    index: number,
+    navigateUrl: string
+  ) => {
+    updateCurrentIndex({selectedIndex: index});
+    navigate(navigateUrl);
+  };
 
   const logoutUser = async () => {
     try {
@@ -35,6 +49,7 @@ const DrawerList = () => {
 
       if (response.status === 200) {
         resetConnectedUser();
+        resetCurrentIndex();
         toast.success("התנתקת בהצלחה!");
         navigate("/login");
       }
@@ -46,13 +61,18 @@ const DrawerList = () => {
 
   return (
     <Box role='presentation'>
+      <Typography style={{color: "white", paddingTop: "3vh", paddingBottom: "3vh", fontSize:"2rem", fontWeight: "bolder"}}>
+        NutriTrack
+      </Typography>
       <List>
         {mainMenu.map((menuItem, index) => (
           <ListItem key={menuItem.title} disablePadding>
-            <ListItemButton onClick={() => navigate(menuItem.navigate)}>
-              {/* <ListItemIcon>
-               TODO: add icon
-              </ListItemIcon> */}
+            <ListItemButton 
+              onClick={(event) => handleListItemClick(event, index, menuItem.navigate)}
+              selected={currentIndex?.selectedIndex ? currentIndex?.selectedIndex === index : index === 0}>
+              <ListItemIcon sx={{minWidth: "2vw"}}>
+                {menuItem.icon}
+              </ListItemIcon>
               <ListItemText
                 primary={menuItem.title}
                 style={{ color: "white" }}
@@ -61,14 +81,14 @@ const DrawerList = () => {
           </ListItem>
         ))}
       </List>
-      <Divider sx={{ backgroundColor: "grey" }} />
+      <Divider sx={{ backgroundColor: "grey", width: "90%", justifySelf: "center" }} />
       <List>
         {secondaryMenu.map((menuItem, index) => (
           <ListItem key={menuItem.title} disablePadding>
             <ListItemButton onClick={logoutUser}>
-              {/* <ListItemIcon>
-               TODO: add icon
-               </ListItemIcon> */}
+              <ListItemIcon sx={{minWidth: "2vw"}}>
+                {menuItem.icon}
+               </ListItemIcon>
               <ListItemText
                 primary={menuItem.title}
                 style={{ color: "white" }}

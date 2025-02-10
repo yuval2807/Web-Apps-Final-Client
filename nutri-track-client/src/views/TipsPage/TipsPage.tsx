@@ -3,7 +3,7 @@ import PageLayout from "../../components/Common/PageLayout";
 import { askQuestion } from "../../queries/ai";
 import { UserContext } from "../../context/UserContext";
 
-const HomePage: React.FC = () => {
+const TipsPage: React.FC = () => {
   const [aiResponse, setAiResponse] = useState<string>("");
   const {connectedUser } = useContext(UserContext);
 
@@ -34,10 +34,10 @@ const HomePage: React.FC = () => {
 
   return (
     <PageLayout>
-          <h1>home page </h1>
+          <h1>tips page </h1>
           <h5>{aiResponse}</h5> 
     </PageLayout>
   );
 };
 
-export default HomePage;
+export default TipsPage;
