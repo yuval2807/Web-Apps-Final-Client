@@ -26,6 +26,7 @@ import { deletePost } from "../../queries/post";
 import { UserContext } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import CommentsDialog from "../Common/Comments/CommentsDialog";
 
 interface PostCardProps {
   post: PostData;
@@ -52,6 +53,7 @@ export const PostCard: React.FC<PostCardProps> = ({
   const accessToken = connectedUser?.accessToken;
   const [isAlreadyLiked, setIsAlreadyLiked] = useState<boolean>(false);
   const [currentPost, setCurrentPost] = useState<PostData>(post);
+  const [openCommentDialog, setOpenCommentDialog] = useState(false);
 
   const onLikeClick = async () => {
     const userId = connectedUser?.id;
@@ -179,7 +181,11 @@ export const PostCard: React.FC<PostCardProps> = ({
 
         <Stack direction='row' spacing={2} alignItems='center'>
           <Stack direction='row' spacing={0.5} alignItems='center'>
-            <ChatBubbleOutlineIcon fontSize='small' color='action' />
+            <IconButton
+              aria-label='show comments'
+              onClick={() => setOpenCommentDialog(true)}>
+              <ChatBubbleOutlineIcon />
+            </IconButton>
             <Typography variant='body2' color='text.secondary'>
               {currentPost.numOfComments || 0}
             </Typography>
@@ -198,6 +204,11 @@ export const PostCard: React.FC<PostCardProps> = ({
           </Stack>
         </Stack>
       </CardActions>
+      <CommentsDialog
+        open={openCommentDialog}
+        onClose={() => setOpenCommentDialog(false)}
+        postId={post._id}
+      />
     </StyledCard>
   );
 };

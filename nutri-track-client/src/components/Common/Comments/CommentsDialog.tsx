@@ -129,7 +129,7 @@ const CommentsDialog: React.FC<CommentsDialogProps> = ({
             variant='contained'
             startIcon={<SendIcon />}
             disabled={!newComment.trim()}>
-            שלח
+            send
           </Button>
         </Box>
       </DialogContent>
