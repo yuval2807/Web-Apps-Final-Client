@@ -1,7 +1,7 @@
-import { Types } from "mongoose";
+import mongoose from "mongoose";
 import postModel, { IPost } from "../models/post";
 
-export const getAllPostsWithLikes = () =>
+export const getAllPostsWithLikes = (skip: number, limit: number) =>
   postModel.aggregate([
     {
       $lookup: {
@@ -22,13 +22,15 @@ export const getAllPostsWithLikes = () =>
         numOfLikes: { $size: "$likes" },
       },
     },
+    { $skip: skip },
+    { $limit: limit },
   ]);
 
-export const getAllPostsWithLikesBySender = (sender) =>
+export const getAllPostsWithLikesBySender = (senderId: string) =>
   postModel.aggregate([
     {
       $match: {
-        sender: Types.ObjectId.createFromHexString(sender),
+        sender: new mongoose.Types.ObjectId(senderId),
       },
     },
     {
@@ -54,9 +56,6 @@ export const getAllPostsWithLikesBySender = (sender) =>
 
 export const getPostById = (id: string) => postModel.findById(id);
 
-export const getPostBySender = (senderId) =>
-  postModel.find({ sender: senderId });
-
 export const addNewPost = (post: IPost) => postModel.create(post);
 
 export const updatePostById = (id: string, { title, content, sender, image }) =>
@@ -66,5 +65,8 @@ export const updatePostById = (id: string, { title, content, sender, image }) =>
     { new: true }
   );
 
-  export const deletePostById = (id: string) =>
-  postModel.findByIdAndDelete(id);
+export const deletePostById = (id: string) => postModel.findByIdAndDelete(id);
+
+export const countTotalRecords = async () => {
+  return await postModel.countDocuments();
+};

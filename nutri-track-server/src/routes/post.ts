@@ -6,6 +6,7 @@ import {
   getAllPostsWithLikes,
   getAllPostsWithLikesBySender,
   deletePostById,
+  countTotalRecords,
 } from "../controllers/post";
 import authenticateToken from "../middleware/jwt";
 
@@ -81,13 +82,23 @@ router.use(authenticateToken);
  *              description: Bad request
  */
 router.get("/", async (req: Request, res: Response) => {
-  const senderId = req.query.senderId;
+  const senderId: string = req.query.senderId?.toString();
+  const page = parseInt(req.query.page?.toString()) || 1;
+  const limit = parseInt(req.query.limit?.toString()) || 10;
+  const skip = (page - 1) * limit;
 
   try {
     if (senderId)
-      res.status(200).send(await getAllPostsWithLikesBySender(senderId));
+      res
+        .status(200)
+        .json({ posts: await getAllPostsWithLikesBySender(senderId) });
     else {
-      res.status(200).send(await getAllPostsWithLikes());
+      const posts = await getAllPostsWithLikes(skip, limit);
+      const total = await countTotalRecords();
+      res.status(200).json({
+        posts,
+        totalPages: Math.ceil(total / limit),
+      });
     }
   } catch (err) {
     res.status(400).send(err);
