@@ -228,7 +228,6 @@ router.get(
   async (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers["authorization"];
     const refreshToken = authHeader && authHeader.split(" ")[1]; // פורמט: "Bearer <token>"
-
     try {
       res.status(200).send(await refresh(refreshToken));
     } catch (err) {

@@ -36,7 +36,9 @@ export const verifyRefreshToken = (refreshToken: string) => {
       refreshToken,
       process.env.JWT_REFRESH_SECRET,
       async (err: any, payload: any) => {
-        if (err) throw new Error(err);
+        if (err) {
+          throw new Error(err);
+        }
 
         const userId = payload._id;
 

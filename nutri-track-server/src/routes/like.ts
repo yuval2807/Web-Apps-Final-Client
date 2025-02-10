@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { addNewLike, getLike, getLikesByPostId, removeLike } from "../controllers/like";
 
 import authenticateToken from "../middleware/jwt";
@@ -92,7 +92,7 @@ router.use(authenticateToken);
  *           404:
  *              description: Not Found
  */
-router.post("/find", async (req: Request, res: Response) => {
+router.post("/find", async (req: Request, res: Response, next: NextFunction) => {
   const like = req.body;
 
   try {
@@ -100,7 +100,7 @@ router.post("/find", async (req: Request, res: Response) => {
     if (!found) res.status(404).json({ message: "Like not found" });
     else res.status(200).send(found);
   } catch (err) {
-    res.status(400).send(err);
+    next(err)
   }
 });
 
@@ -130,7 +130,7 @@ router.post("/find", async (req: Request, res: Response) => {
  *           404:
  *              description: Not Found
  */
-router.get("/find/:post_id", async (req: Request, res: Response) => {
+router.get("/find/:post_id", async (req: Request, res: Response, next: NextFunction) => {
   const postId = req.params.post_id;
 
   try {
@@ -141,8 +141,7 @@ router.get("/find/:post_id", async (req: Request, res: Response) => {
       res.status(200).json({likesCount});
     }
   } catch (err) {
-    console.log("error: ", err)
-    res.status(500).send(err);
+    next(err)
   }
 });
 
@@ -172,13 +171,13 @@ router.get("/find/:post_id", async (req: Request, res: Response) => {
  *              description: Bad request
  */
 
-router.post("/", async (req: Request, res: Response) => {
+router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   const like = req.body;
 
   try {
     res.status(200).send(await addNewLike(like));
   } catch (err) {
-    res.status(400).send(err);
+    next(err)
   }
 });
 
@@ -209,12 +208,12 @@ router.post("/", async (req: Request, res: Response) => {
  *              description: Not Found
  */
 
-router.delete("/:id", async (req: Request, res: Response) => {
+router.delete("/:id", async (req: Request, res: Response, next: NextFunction) => {
   const likeId = req.params.id;
   try {
     res.status(200).send(await removeLike(likeId));
   } catch (err) {
-    res.status(400).send(err);
+    next(err)
   }
 });
 
