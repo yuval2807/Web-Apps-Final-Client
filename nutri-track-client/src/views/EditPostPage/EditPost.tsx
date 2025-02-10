@@ -29,7 +29,7 @@ export const EditPost: React.FC = () => {
         return;
       }
 
-      const url: string | undefined = await uploadImg(imgFile!!, accessToken);
+      const url: string | undefined = await uploadImg(imgFile!!);
       setImage(url ? url : image);
 
       const payload = {

@@ -62,10 +62,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
 
   const handleSave = async () => {
     try {
-      const url: string | undefined = await uploadImg(
-        imgFile!!,
-        connectedUser!!.accessToken
-      );
+      const url: string | undefined = await uploadImg(imgFile!!);
 
       setEditedProfile({ ...editedProfile, image: url ? url : "" });
 

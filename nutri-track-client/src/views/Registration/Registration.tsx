@@ -14,8 +14,12 @@ export const Registration: React.FC = () => {
 
   const handleRegister = async (data: User, imgFile?: File) => {
     try {
+      if (imgFile) {
+        const url: string | undefined = await uploadImg(imgFile!!);
+        data.image = url ?? "";
+      }
+
       const connectedUser = await register(data);
-      if (imgFile) await uploadImg(imgFile!!, connectedUser!!.accessToken);
 
       if (!!connectedUser) {
         updateConnectedUser(connectedUser);
