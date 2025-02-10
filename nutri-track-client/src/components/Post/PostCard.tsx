@@ -6,13 +6,10 @@ import {
   CardContent,
   CardActions,
   IconButton,
-  Stack,
-  styled,
-  Box,
-  Avatar,
 } from "@mui/material";
 import { PostData } from "../../queries/post";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import {
   createLike,
   findOneLike,
@@ -24,27 +21,20 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useContext, useEffect, useState } from "react";
 import { deletePost } from "../../queries/post";
 import { UserContext } from "../../context/UserContext";
+import CommentsDialog from "../Common/Comments/CommentsDialog";
 import { useNavigate } from "react-router-dom";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 
 interface PostCardProps {
   post: PostData;
+  showLikes: boolean;
 }
 
-const StyledCard = styled(Card)(({ theme }) => ({
-  width: "100%",
-  maxWidth: 500,
-  margin: "0 auto",
-  borderRadius: theme.spacing(2),
-  boxShadow: "none",
-  border: `1px solid ${theme.palette.divider}`,
-}));
-
-export const PostCard: React.FC<PostCardProps> = ({ post }) => {
+export const PostCard: React.FC<PostCardProps> = ({ post, showLikes }) => {
   const { connectedUser } = useContext(UserContext);
   const navigate = useNavigate();
   const accessToken = connectedUser?.accessToken;
   const [isAlreadyLiked, setIsAlreadyLiked] = useState<boolean>(false);
+  const [openCommentDialog, setOpenCommentDialog] = useState(false);
   const [currentPost, setCurrentPost] = useState<PostData>(post);
 
   const onLikeClick = async () => {
@@ -122,70 +112,57 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
     initAlreadyLike();
   }, []);
 
-  return (
-    <StyledCard>
+  return !!post ? (
+    <Card sx={{ width: "90%", maxWidth: 500, mx: "auto", mt: 4 }}>
+      <CardHeader
+        title={post.title}
+        subheader={new Date(post.date).toLocaleDateString()}
+      />
+      {post.image && (
+        <CardMedia
+          component='img'
+          height='194'
+          image={post.image}
+          alt='Paella dish'
+        />
+      )}
       <CardContent>
-        <Stack direction='row' alignItems='center' spacing={1} mb={2}>
-          <Avatar sx={{ bgcolor: "primary.light", width: 32, height: 32 }}>
-            {currentPost.senderData.image ?? currentPost.senderData.name}
-          </Avatar>
-          <Typography variant='body2' color='text.secondary'>
-            {currentPost.senderData.name}
-          </Typography>
-        </Stack>
-
-        {currentPost.image && (
-          <CardMedia component='img' height='194' image={currentPost.image} />
-        )}
-
-        <Box mb={1}>
-          <Typography variant='h6' gutterBottom>
-            {currentPost.title}
-          </Typography>
-          <Typography variant='body2' color='text.secondary' paragraph>
-            {currentPost.content}
-          </Typography>
-        </Box>
-
-        <Typography
-          variant='caption'
-          color='text.secondary'
-          sx={{ display: "block", textAlign: "right" }}>
-          {new Date(currentPost.date).toLocaleDateString()}
+        <Typography variant='body2' sx={{ color: "text.secondary" }}>
+          {post.content}
         </Typography>
       </CardContent>
-
-      <CardActions sx={{ justifyContent: "space-between", px: 2, pb: 2 }}>
-        <Stack direction='row' spacing={1}>
-          <IconButton size='small' onClick={onEditClick}>
-            <EditIcon fontSize='small' />
+      {showLikes && (
+        <CardActions disableSpacing>
+          <IconButton
+            aria-label='show comments'
+            onClick={() => setOpenCommentDialog(true)}>
+            <ChatBubbleOutlineIcon />
           </IconButton>
-          <IconButton size='small' onClick={onDeleteClick}>
-            <DeleteIcon fontSize='small' />
+          <IconButton aria-label='like post' onClick={onLikeClick}>
+            <FavoriteIcon color={isAlreadyLiked ? "error" : "inherit"} />
           </IconButton>
-        </Stack>
-
-        <Stack direction='row' spacing={2} alignItems='center'>
-          <Stack direction='row' spacing={0.5} alignItems='center'>
-            <ChatBubbleOutlineIcon fontSize='small' color='action' />
-            <Typography variant='body2' color='text.secondary'>
-              {currentPost.numOfComments || 0}
-            </Typography>
-          </Stack>
-
-          <Stack direction='row' spacing={0.5} alignItems='center'>
-            <IconButton size='small' onClick={onLikeClick}>
-              <FavoriteIcon
-                fontSize='small'
-                color={isAlreadyLiked ? "error" : "action"}
-              />
-            </IconButton>
-            <Typography variant='body2' color='text.secondary'>
-              {currentPost.numOfLikes || 0}
-            </Typography>
-          </Stack>
-        </Stack>
-      </CardActions>
-    </StyledCard>
-  );
+          <Typography variant='body2' sx={{ color: "text.secondary" }}>
+            {currentPost?.numOfLikes
+              ? `${currentPost.numOfLikes} likes`
+              : "No likes yet"}
+          </Typography>
+          {connectedUser?.id === currentPost.sender && (
+            <>
+              <IconButton aria-label='like post' onClick={onEditClick}>
+                <EditIcon />
+              </IconButton>
+              <IconButton aria-label='like post' onClick={onDeleteClick}>
+                <DeleteIcon />
+              </IconButton>
+            </>
+          )}
+        </CardActions>
+      )}
+      <CommentsDialog
+        open={openCommentDialog}
+        onClose={() => setOpenCommentDialog(false)}
+        postId={post._id}
+      />
+    </Card>
+  ) : null;
 };

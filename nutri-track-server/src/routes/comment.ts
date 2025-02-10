@@ -33,7 +33,7 @@ import {
  *                   type: string
  *           example:
  *              _id: 'hgsfjhskljslkgl2kgldjd'
- *              title: 'example message'
+ *              message: 'example message'
  *              post: 'hbjjgsiayhnnsh'
  *              user: 'adraaggayajala'
  *       CommentsBody:
@@ -50,7 +50,7 @@ import {
  *               user:
  *                   type: string
  *           example:
- *              title: 'example message'
+ *              message: 'example message'
  *              post: 'hbjjgsiayhnnsh'
  *              user: 'adraaggayajala'
  */
@@ -85,8 +85,9 @@ router.get("/", async (req: Request, res: Response) => {
   const postId = req.query.postId;
 
   try {
-    if (postId) res.status(200).send(await getCommentsByPostId(postId));
-    else {
+    if (postId) {
+      res.status(200).send(await getCommentsByPostId(postId));
+    } else {
       res.status(200).send(await getAllComments());
     }
   } catch (err) {

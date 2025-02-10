@@ -25,11 +25,8 @@ export const CreatePost: React.FC = () => {
         return;
       }
 
-      const url: string | undefined = await uploadImg(
-        imgFile!!,
-        accessToken,
-        setImage
-      );
+      const url: string | undefined = await uploadImg(imgFile!!);
+      setImage(url ? url : image);
 
       const payload = {
         title,
