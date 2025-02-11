@@ -59,9 +59,9 @@ app.use(express.static("front"));
 
 //app.use(express.static(path.join("nutri-track-server", 'front')));
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join("front", "index.html"));
-});
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'front', 'index.html'));
+  });
 
 const initApp = () => {
   return new Promise<Express>(async (resolve, reject) => {
