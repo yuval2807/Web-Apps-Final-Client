@@ -54,8 +54,7 @@ console.log ("testUser", testUser);
 });
 
 afterAll(() => {
-  console.log("After all tests");
-  mongoose.connection.close();
+\  mongoose.connection.close();
 });
 
 describe("Posts Test", () => {
