@@ -4,9 +4,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "jest --detectOpenHandles --forceExit --runInBand",
-    "start": "tsc && node ./dist/app.js",
-    "dev": "nodemon ./src/app.ts"
+    "prod": "NODE_ENV='production' && cp .env_prod .env && tsc -p tsconfig_prod.json && node ./dist/app.js",
+    "dev": "cp .env_dev .env && nodemon ./src/app.ts",
+    "start": "cp .env_dev .env && tsc && node ./dist/app.js",
+    "test": "cp .env_dev .env && jest --detectOpenHandles --forceExit --runInBand"
   },
   "repository": {
     "type": "git",

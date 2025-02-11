@@ -13,6 +13,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerJsDoc from "swagger-jsdoc";
 import cors from "cors";
 import mongoose from "mongoose";
+const path = require('path');
 
 const swaggerOptions = {
     definition: {
@@ -38,7 +39,7 @@ const swaggerOptions = {
   app.use(cors({ origin: "http://localhost:3000" }));
   
   connectToDatabase();
-  
+ 
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
   
   app.use(bodyParser.json());
@@ -52,6 +53,14 @@ const swaggerOptions = {
   app.use("/like", likeRoutes);
   app.use("/public", express.static("public"));
   app.use("/image", imageRoutes);
+
+  app.use(express.static('front'))
+
+  //app.use(express.static(path.join("nutri-track-server", 'front')));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'front', 'index.html'));
+  });
 
 
     const initApp = () => {
