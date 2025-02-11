@@ -44,25 +44,28 @@ const TipsPage: React.FC = () => {
             <p style={{display: "flex", flexDirection: "row", justifyContent: "space-around", width: "100%"}}>
               <Button
                 variant='outlined'
-                style={{width: "50%"}}
+                style={{width: "45%"}}
                 sx={{ my: 3 }} 
                 onClick={() => fetchAiData(userQuestion)}>
                   Ask your question
               </Button>
               <Button
                 variant='contained'
+                style={{width: "45%"}}
                 sx={{ my: 3 }} 
                 onClick={() => fetchAiData("")}>
                   Click here to generate a tip
               </Button>
             </p>
-            <p style={{textAlign: "start"}}>
-              <p style={{display: "flex", flexDirection:"row"}}>
+            {aiResponse && 
+            <p style={{textAlign: "start", width: "100%"}}>
+              <p style={{display: "flex", flexDirection:"row", alignItems: "center"}}>
                 <TryIcon />
                 <h3>AI Answer:</h3>
               </p>    
               <Typography>{aiResponse}</Typography> 
             </p>
+            }
       </div>
     </PageLayout>
   );
