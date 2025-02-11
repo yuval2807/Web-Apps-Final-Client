@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getErrorInterceptor } from "./queries/responseHandler";
 
-const backendUrl = "http://10.10.246.90:80/";
+const backendUrl = "https://10.10.246.90:443/";
 
 const axiosInstance = axios.create({
   baseURL: backendUrl,
