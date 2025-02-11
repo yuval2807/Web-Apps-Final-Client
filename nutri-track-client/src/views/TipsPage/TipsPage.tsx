@@ -32,7 +32,7 @@ const TipsPage: React.FC = () => {
 
   return (
     <PageLayout>
-      <div style={{ width: "60%", display:"flex", flexDirection: "column", alignItems: "center",alignSelf: "center"}}>
+      <div style={{ width: "60%", display:"flex", flexDirection: "column", alignItems: "center",alignSelf: "center", marginTop: "7vh"}}>
           <TextField
             fullWidth
             multiline
@@ -41,9 +41,10 @@ const TipsPage: React.FC = () => {
             onChange={(e) => setUserQuestion(e.target.value)}
             placeholder='Type your question here'
             variant='outlined'/>
-            <p style={{display: "flex", flexDirection: "row"}}>
+            <p style={{display: "flex", flexDirection: "row", justifyContent: "space-around", width: "100%"}}>
               <Button
                 variant='outlined'
+                style={{width: "50%"}}
                 sx={{ my: 3 }} 
                 onClick={() => fetchAiData(userQuestion)}>
                   Ask your question
@@ -55,10 +56,11 @@ const TipsPage: React.FC = () => {
                   Click here to generate a tip
               </Button>
             </p>
-            <p>
-              <h3>AI Answer:</h3>
-              <br />
-              <TryIcon />
+            <p style={{textAlign: "start"}}>
+              <p style={{display: "flex", flexDirection:"row"}}>
+                <TryIcon />
+                <h3>AI Answer:</h3>
+              </p>    
               <Typography>{aiResponse}</Typography> 
             </p>
       </div>
