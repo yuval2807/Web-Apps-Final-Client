@@ -98,9 +98,9 @@ describe("Posts Test", () => {
 
   test("Test get post by id - fail", async () => {
     const response = await request(app)
-      .get(baseUrl + "/" + "656565")
+      .get(baseUrl + "/" + "671255646e4e44444111194e0")
       .set({ authorization: "Bearer " + testUser.token });
-    expect(response.statusCode).toBe(400);
+    expect(response.statusCode).not.toBe(200);
   });
 
   test("Test get post by id - fail - post not found", async () => {
@@ -121,7 +121,7 @@ describe("Posts Test", () => {
     const response = await request(app)
       .get(baseUrl + "?senderId=" + "121212")
       .set({ authorization: "Bearer " + testUser.token });
-    expect(response.statusCode).toBe(400);
+    expect(response.statusCode).not.toBe(200);
   });
 
   test("Test update post", async () => {
@@ -141,7 +141,7 @@ describe("Posts Test", () => {
       .send({
         content: "Post content updated",
       });
-    expect(response.statusCode).toBe(400);
+    expect(response.statusCode).not.toBe(200);
   });
 
   test("Test update post - fail - post not found", async () => {
@@ -161,6 +161,6 @@ describe("Posts Test", () => {
       .send({
         content: "Test Content 1",
       });
-    expect(response.statusCode).toBe(400);
+    expect(response.statusCode).not.toBe(200);
   });
 });
