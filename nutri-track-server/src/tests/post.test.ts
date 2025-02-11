@@ -49,12 +49,12 @@ beforeAll(async () => {
   const response = await request(app).post("/auth/login").send(testUser);
   testUser.token = response.body.accessToken;
   testUser._id = response.body.id;
-console.log ("testUser", testUser);
+  console.log("testUser", testUser);
   expect(response.statusCode).toBe(200);
 });
 
 afterAll(() => {
-\  mongoose.connection.close();
+  mongoose.connection.close();
 });
 
 describe("Posts Test", () => {
@@ -71,11 +71,11 @@ describe("Posts Test", () => {
       const response = await request(app)
         .post(baseUrl)
         .set({ authorization: "Bearer " + testUser.token })
-        .send({...post, date: new Date(), sender: testUser._id});
+        .send({ ...post, date: new Date(), sender: testUser._id });
       expect(response.statusCode).toBe(200);
       expect(response.body.title).toBe(post.title);
       expect(response.body.content).toBe(post.content);
-     post._id = response.body._id;
+      post._id = response.body._id;
     }
   });
 
