@@ -52,7 +52,6 @@ beforeAll(async () => {
 });
 
 afterAll(() => {
-  console.log("After all tests");
   mongoose.connection.close();
 });
 

@@ -1,5 +1,10 @@
 import express, { NextFunction, Request, Response } from "express";
-import { addNewLike, getLike, getLikesByPostId, removeLike } from "../controllers/like";
+import {
+  addNewLike,
+  getLike,
+  getLikesByPostId,
+  removeLike,
+} from "../controllers/like";
 
 import authenticateToken from "../middleware/jwt";
 
@@ -41,9 +46,9 @@ router.use(authenticateToken);
  *                   type: string
  *                   description: The liking user
  *           example:
- *               postId: '64gj866arc40'
- *               userId: '64gj866arc40'
- * 
+ *                postId: '64gj866arc40'
+ *                userId: '64gj866arc40'
+ *
  *       LikeResponse:
  *           type: object
  *           required:
@@ -59,11 +64,11 @@ router.use(authenticateToken);
  *                   description: The liking user
  *               _id:
  *                  type: string
- *                 description: The like id
+ *                  description: The like id
  *           example:
- *               postId: '64gj866arc40'
- *               userId: '64gj866arc40'
- *               _id: '64gj866arc40'
+ *                 postId: '64gj866arc40'
+ *                 userId: '64gj866arc40'
+ *                 _id: '64gj866arc40'
  */
 
 /**
@@ -92,17 +97,20 @@ router.use(authenticateToken);
  *           404:
  *              description: Not Found
  */
-router.post("/find", async (req: Request, res: Response, next: NextFunction) => {
-  const like = req.body;
+router.post(
+  "/find",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const like = req.body;
 
-  try {
-    const found = await (getLike(like));
-    if (!found) res.status(404).json({ message: "Like not found" });
-    else res.status(200).send(found);
-  } catch (err) {
-    next(err)
+    try {
+      const found = await getLike(like);
+      if (!found) res.status(404).json({ message: "Like not found" });
+      else res.status(200).send(found);
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 /**
  * @swagger
@@ -130,20 +138,23 @@ router.post("/find", async (req: Request, res: Response, next: NextFunction) => 
  *           404:
  *              description: Not Found
  */
-router.get("/find/:post_id", async (req: Request, res: Response, next: NextFunction) => {
-  const postId = req.params.post_id;
+router.get(
+  "/find/:post_id",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const postId = req.params.post_id;
 
-  try {
-    const likesArr = await (getLikesByPostId(postId));
-    if (!likesArr) res.status(404).json({ message: "No likes are found" });
-    else {
-      const likesCount = likesArr.length;
-      res.status(200).json({likesCount});
+    try {
+      const likesArr = await getLikesByPostId(postId);
+      if (!likesArr) res.status(404).json({ message: "No likes are found" });
+      else {
+        const likesCount = likesArr.length;
+        res.status(200).json({ likesCount });
+      }
+    } catch (err) {
+      next(err);
     }
-  } catch (err) {
-    next(err)
   }
-});
+);
 
 /**
  * @swagger
@@ -177,7 +188,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
     res.status(200).send(await addNewLike(like));
   } catch (err) {
-    next(err)
+    next(err);
   }
 });
 
@@ -208,13 +219,16 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
  *              description: Not Found
  */
 
-router.delete("/:id", async (req: Request, res: Response, next: NextFunction) => {
-  const likeId = req.params.id;
-  try {
-    res.status(200).send(await removeLike(likeId));
-  } catch (err) {
-    next(err)
+router.delete(
+  "/:id",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const likeId = req.params.id;
+    try {
+      res.status(200).send(await removeLike(likeId));
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 export default router;

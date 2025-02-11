@@ -14,7 +14,7 @@ import swaggerJsDoc from "swagger-jsdoc";
 import cors from "cors";
 import mongoose from "mongoose";
 import { errorHandler } from "./src/middleware/errorHandler";
-const path = require('path');
+const path = require("path");
 
 const swaggerOptions = {
   definition: {
@@ -34,35 +34,34 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
-  dotenv.config();
-  const app: Express = express();
-  const port = process.env.PORT || 5000;
-  app.use(cors({ origin: "http://localhost:3000" }));
-  
-  connectToDatabase();
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-  
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: true }));
-  
-  app.use("/post", postRoutes);
-  app.use("/comment", commentRoutes);
-  app.use("/user", userRoutes);
-  app.use("/auth", authRoutes);
-  app.use("/ai", aiRoutes);
-  app.use("/like", likeRoutes);
-  app.use("/public", express.static("public"));
-  app.use("/image", imageRoutes);
+dotenv.config();
+const app: Express = express();
+const port = process.env.PORT || 5000;
+app.use(cors({ origin: "http://localhost:3000" }));
+
+connectToDatabase();
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use("/post", postRoutes);
+app.use("/comment", commentRoutes);
+app.use("/user", userRoutes);
+app.use("/auth", authRoutes);
+app.use("/ai", aiRoutes);
+app.use("/like", likeRoutes);
+app.use("/public", express.static("public"));
+app.use("/image", imageRoutes);
 
 app.use(errorHandler);
-  app.use(express.static('front'))
+app.use(express.static("front"));
 
-  //app.use(express.static(path.join("nutri-track-server", 'front')));
+//app.use(express.static(path.join("nutri-track-server", 'front')));
 
-  app.get('*', (req, res) => {
-    res.sendFile(path.join('front', 'index.html'));
-  });
-
+app.get("*", (req, res) => {
+  res.sendFile(path.join("front", "index.html"));
+});
 
 const initApp = () => {
   return new Promise<Express>(async (resolve, reject) => {

@@ -37,11 +37,9 @@ beforeAll(async () => {
   const response = await request(app).post("/auth/login").send(testUser);
   testUser.token = response.body.accessToken;
   testUser._id = response.body.id;
-  console.log("testUser", testUser);
   expect(response.statusCode).toBe(200);
 });
 afterAll(() => {
-  console.log("After all tests");
   mongoose.connection.close();
 });
 
