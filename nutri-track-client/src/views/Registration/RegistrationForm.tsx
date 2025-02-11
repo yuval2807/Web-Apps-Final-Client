@@ -16,6 +16,31 @@ import RadioGroupButtons, {
 } from "../../components/RadioGroup/RadioGroup";
 import ToggleButton from "../../components/ToggleButtons";
 import { User } from "../../queries/user";
+import { z } from "zod";
+
+// Define the Zod schema
+const registrationSchema = z.object({
+  email: z.string().email("Invalid email format"),
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  gender: z.enum(["male", "female", "other"], {
+    errorMap: () => ({ message: "Please select a gender" }),
+  }),
+  fitLevel: z.enum(["Beginner", "Intermediate", "Advanced"], {
+    errorMap: () => ({ message: "Please select a fitness level" }),
+  }),
+  height: z
+    .number()
+    .min(1, "Height must be greater than 0")
+    .max(300, "Height must be less than 300cm"),
+  weight: z
+    .number()
+    .min(1, "Weight must be greater than 0")
+    .max(500, "Weight must be less than 500kg"),
+  image: z.string().optional(),
+});
+
+type RegistrationFormData = z.infer<typeof registrationSchema>;
 
 interface RegistrationFormProps {
   onSubmit: (data: User, imageFile?: File) => Promise<void>;
@@ -32,9 +57,32 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
     weight: 0,
     image: "",
   });
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
   const [imgFile, setImgFile] = useState<File>();
+
+  const validateForm = (): boolean => {
+    try {
+      registrationSchema.parse({
+        ...formData,
+        height: Number(formData.height),
+        weight: Number(formData.weight),
+      });
+      setErrors({});
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const newErrors: { [key: string]: string } = {};
+        error.errors.forEach((err) => {
+          if (err.path) {
+            newErrors[err.path[0]] = err.message;
+          }
+        });
+        setErrors(newErrors);
+      }
+      return false;
+    }
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>
@@ -44,17 +92,24 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
       ...prev,
       [name as string]: value,
     }));
+    // Clear error when field is modified
+    setErrors((prev) => ({ ...prev, [name as string]: "" }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setErrors({});
+
+    if (!validateForm()) {
+      return;
+    }
+
     setLoading(true);
 
     try {
       await onSubmit(formData, imgFile);
     } catch (err) {
-      setError("Registration failed. Please try again.");
+      setErrors({ submit: "Registration failed. Please try again." });
     } finally {
       setLoading(false);
     }
@@ -93,11 +148,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
         </Typography>
         <Box component='form' onSubmit={handleSubmit} sx={{ mt: 2 }}>
           <Box sx={{ display: "flex", justifyContent: "center", mr: 2 }}>
-            <label
-              htmlFor='photo-upload'
-              style={{
-                cursor: "pointer",
-              }}>
+            <label htmlFor='photo-upload' style={{ cursor: "pointer" }}>
               <input
                 id='photo-upload'
                 type='file'
@@ -116,12 +167,13 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
             fullWidth
             margin='normal'
             label='Email'
-            type='email'
             name='email'
             value={formData.email}
             onChange={handleChange}
             required
             autoComplete='email'
+            error={!!errors.email}
+            helperText={errors.email}
           />
           <TextField
             fullWidth
@@ -132,6 +184,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
             value={formData.name}
             onChange={handleChange}
             required
+            error={!!errors.name}
+            helperText={errors.name}
           />
           <TextField
             fullWidth
@@ -142,6 +196,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
             value={formData.password}
             onChange={handleChange}
             required
+            error={!!errors.password}
+            helperText={errors.password}
             slotProps={{ htmlInput: { minLength: 6 } }}
           />
           <RadioGroupButtons
@@ -152,6 +208,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
             value={formData.gender}
             required
             row={true}
+            error={errors.gender}
           />
           <Grid container spacing={2} sx={{ mt: 1 }}>
             <Grid size={6}>
@@ -161,6 +218,9 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
                 value={formData.height}
                 onChange={handleChange}
                 required
+                type='number'
+                error={!!errors.height}
+                helperText={errors.height}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position='end'>cm</InputAdornment>
@@ -175,6 +235,9 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
                 value={formData.weight}
                 onChange={handleChange}
                 required
+                type='number'
+                error={!!errors.weight}
+                helperText={errors.weight}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position='end'>kg</InputAdornment>
@@ -190,10 +253,11 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onSubmit }) => {
             }
             value={formData.fitLevel}
             options={fitLevelOptions}
+            error={errors.fitLevel}
           />
-          {error && (
+          {errors.submit && (
             <Alert severity='error' sx={{ mt: 2 }}>
-              {error}
+              {errors.submit}
             </Alert>
           )}
           <Button
