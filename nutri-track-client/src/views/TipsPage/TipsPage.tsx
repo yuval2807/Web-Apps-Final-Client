@@ -1,8 +1,9 @@
-import {useContext, useEffect, useState } from "react";
+import {useContext, useState } from "react";
 import PageLayout from "../../components/Common/PageLayout";
 import { askQuestion } from "../../queries/ai";
 import { UserContext } from "../../context/UserContext";
-import { Button, Divider, TextField } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
+import TryIcon from '@mui/icons-material/Try';
 
 const TipsPage: React.FC = () => {
   const [userQuestion, setUserQuestion] = useState<string>("");
@@ -29,21 +30,9 @@ const TipsPage: React.FC = () => {
     } 
   };
 
-  // useEffect(() => {
-  //   fetchAiData();
-  // }, []);
-
   return (
     <PageLayout>
-      <div style={{ width: "80%", display:"flex", flexDirection: "column"}}>
-          <Button
-            fullWidth
-            variant='contained'
-            sx={{ my: 3 }} 
-            onClick={() => fetchAiData("")}>
-              Click here to generate a tip
-          </Button>
-          <Divider sx={{ backgroundColor: "gray", width: "90%", justifySelf: "center" }} />
+      <div style={{ width: "60%", display:"flex", flexDirection: "column", alignItems: "center",alignSelf: "center"}}>
           <TextField
             fullWidth
             multiline
@@ -52,14 +41,25 @@ const TipsPage: React.FC = () => {
             onChange={(e) => setUserQuestion(e.target.value)}
             placeholder='Type your question here'
             variant='outlined'/>
-            <Button
-            variant='outlined'
-            sx={{ my: 3 }} 
-            onClick={() => fetchAiData(userQuestion)}>
-              Ask your question
-            </Button>
+            <p style={{display: "flex", flexDirection: "row"}}>
+              <Button
+                variant='outlined'
+                sx={{ my: 3 }} 
+                onClick={() => fetchAiData(userQuestion)}>
+                  Ask your question
+              </Button>
+              <Button
+                variant='contained'
+                sx={{ my: 3 }} 
+                onClick={() => fetchAiData("")}>
+                  Click here to generate a tip
+              </Button>
+            </p>
             <p>
-              <h5>{aiResponse}</h5> 
+              <h3>AI Answer:</h3>
+              <br />
+              <TryIcon />
+              <Typography>{aiResponse}</Typography> 
             </p>
       </div>
     </PageLayout>
