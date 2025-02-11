@@ -16,8 +16,8 @@ const buildApp = async () => {
   });
 } else {
   const prop = {
-    key: fs.readFileSync("../client-key.pem"),
-    cert: fs.readFileSync("../client-cert.pem"),
+    key: fs.readFileSync("./client-key.pem"),
+    cert: fs.readFileSync("./client-cert.pem"),
   }
 
   https.createServer(prop, app).listen(port, () => {

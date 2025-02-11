@@ -7,7 +7,8 @@ dotenv.config();
 
 const router = express.Router();
 
-const base = process.env.DOMAIN_BASE + ":" + process.env.PORT + "/";
+// const base = process.env.DOMAIN_BASE + ":" + process.env.PORT + "/";
+const base = process.env.DOMAIN_BASE + "/";
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "public/");
