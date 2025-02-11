@@ -28,4 +28,3 @@ const buildApp = async () => {
 };
 
 buildApp();
-

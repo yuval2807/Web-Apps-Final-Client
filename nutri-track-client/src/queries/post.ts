@@ -5,9 +5,15 @@ export interface PostData {
   title: string;
   content: string;
   image?: string;
+  date: Date;
   sender: string;
   numOfLikes: number;
-  date: Date;
+  numOfComments: number;
+  senderData: {
+    _id: string;
+    name: string;
+    image?: string;
+  };
 }
 
 interface CreatePostPayloadData {
@@ -32,6 +38,7 @@ export const getAllPosts = async (
   sender?: string
 ): Promise<PostsResponse> => {
   try {
+    console.log(accessToken);
     let url: string = `${POST_ROUTE}/`;
     if (sender) {
       url = url.concat(`?senderId=${sender}`);
@@ -82,15 +89,11 @@ export const updatePost = async (
 };
 
 // Delete post function
-export const deletePost = async (
-  postId: string,
-  accessToken: string
-) => {
+export const deletePost = async (postId: string, accessToken: string) => {
   try {
-    const response = await axiosInstance.delete(
-      `${POST_ROUTE}/${postId}`,
-        { headers: {authorization : `Bearer ${accessToken}`} }
-    );
+    const response = await axiosInstance.delete(`${POST_ROUTE}/${postId}`, {
+      headers: { authorization: `Bearer ${accessToken}` },
+    });
     return response;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || "post deletion failed");

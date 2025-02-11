@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { getAllUsers, getUserById, updateUserById } from "../controllers/user";
 
 import authenticateToken from "../middleware/jwt";
@@ -135,17 +135,20 @@ router.get("/", async (req: Request, res: Response) => {
  *           404:
  *              description: Not Found
  */
-router.get("/:user_id", async (req: Request, res: Response) => {
-  const id = req.params.user_id;
+router.get(
+  "/:user_id",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.user_id;
 
-  try {
-    const user = await getUserById(id);
-    if (!user) res.status(404).json({ message: "User not found" });
-    else res.status(200).send(user);
-  } catch (err) {
-    res.status(400).send(err);
+    try {
+      const user = await getUserById(id);
+      if (!user) res.status(404).json({ message: "User not found" });
+      else res.status(200).send(user);
+    } catch (err) {
+      next(err);
+    }
   }
-});
+);
 
 /**
  * @swagger
@@ -180,7 +183,7 @@ router.get("/:user_id", async (req: Request, res: Response) => {
  *              description: Not Found
  */
 
-router.put("/:id", async (req: Request, res: Response) => {
+router.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const user = req.body;
 
@@ -190,7 +193,7 @@ router.put("/:id", async (req: Request, res: Response) => {
     if (!updatedUser) res.status(404).json({ message: "User not found" });
     else res.status(200).send(updatedUser);
   } catch (err) {
-    res.status(400).send(err);
+    next(err);
   }
 });
 

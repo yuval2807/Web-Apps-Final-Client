@@ -13,6 +13,7 @@ const UserProfile: React.FC = () => {
   const { connectedUser } = useContext(UserContext);
   const [user, setUser] = useState<User | null>(null);
   const [postList, setPostList] = useState<PostData[]>([]);
+  const [refresh, setRefresh] = useState(false);
 
   const fetchUserInfo = async () => {
     if (!connectedUser) return;
@@ -66,15 +67,20 @@ const UserProfile: React.FC = () => {
   useEffect(() => {
     fetchUserInfo();
     fetchUserPosts();
-  }, [connectedUser]);
+  }, [connectedUser, refresh]);
 
   return (
     <PageLayout>
-      <Container maxWidth="md">
+      <Container maxWidth='md'>
         <Box sx={{ p: 3 }}>
           {user ? <UserDetails user={user} onSave={handleUserUpdate} /> : null}
         </Box>
-        <PostsList postList={postList} showLikes={false} direction="row" />
+        <PostsList
+          postList={postList}
+          direction='row'
+          setRefresh={setRefresh}
+          showAction={true}
+        />
       </Container>
     </PageLayout>
   );

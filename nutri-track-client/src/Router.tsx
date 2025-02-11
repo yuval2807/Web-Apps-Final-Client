@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Registration from "./views/Registration";
-import HomePage from "./views/HomePage";
+import TipsPage from "./views/TipsPage";
 import Login from "./views/LoginPage";
 import UserProfile from "./views/UserProfile";
 import CreatePost from "./views/AddPostPage";
@@ -14,7 +14,7 @@ const Router: React.FC = () => {
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Registration />} />
-      <Route path="/home" element={<HomePage />} />
+      <Route path="/tips" element={<TipsPage />} />
       <Route path="/userProfile" element={<UserProfile />} />
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/post" element={<PostsList />} />

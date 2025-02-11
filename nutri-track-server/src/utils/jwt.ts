@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { getUserById, updateUserTokenById } from "../controllers/user";
 import { tUser } from "../models/user";
+import { UnauthorizedError } from "../errors/UnauthorizedError ";
 
 export const updateRefreshToken = async (user, refreshToken: string) => {
   if (refreshToken) user.tokens.push(refreshToken);
@@ -14,10 +15,14 @@ export const generateAccessToken = (userId) =>
   });
 
 export const verifyAccessToken = (token: string) =>
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) {
-      throw new Error("Invalid or expired token");
-    }
+  new Promise((resolve, reject) => {
+    jwt.verify(token, process.env.JWT_SECRET, (error, user) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(user);
+      }
+    });
   });
 
 export const generateRefreshToken = (userId) =>
@@ -31,7 +36,9 @@ export const verifyRefreshToken = (refreshToken: string) => {
       refreshToken,
       process.env.JWT_REFRESH_SECRET,
       async (err: any, payload: any) => {
-        if (err) throw new Error(err);
+        if (err) {
+          throw new Error(err);
+        }
 
         const userId = payload._id;
 
@@ -40,12 +47,12 @@ export const verifyRefreshToken = (refreshToken: string) => {
 
           if (!user.tokens || !user.tokens.includes(refreshToken)) {
             updateRefreshToken(user, null);
-            throw new Error("Invalid or expired token");
+            reject(new UnauthorizedError("Invalid access token"));
           }
 
           resolve(user);
         } catch (err) {
-          new Error("Invalid or expired token");
+          reject(new UnauthorizedError("Invalid access token"));
         }
       }
     );

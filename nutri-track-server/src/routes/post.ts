@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import {
   getPostById,
   addNewPost,
@@ -81,7 +81,7 @@ router.use(authenticateToken);
  *           400:
  *              description: Bad request
  */
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", async (req: Request, res: Response, next: NextFunction  ) => {
   const senderId: string = req.query.senderId?.toString();
   const page = parseInt(req.query.page?.toString()) || 1;
   const limit = parseInt(req.query.limit?.toString()) || 10;
@@ -101,7 +101,7 @@ router.get("/", async (req: Request, res: Response) => {
       });
     }
   } catch (err) {
-    res.status(400).send(err);
+   next(err)
   }
 });
 
@@ -131,7 +131,7 @@ router.get("/", async (req: Request, res: Response) => {
  *           404:
  *              description: Not Found
  */
-router.get("/:post_id", async (req: Request, res: Response) => {
+router.get("/:post_id", async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.post_id;
 
   try {
@@ -139,21 +139,21 @@ router.get("/:post_id", async (req: Request, res: Response) => {
     if (!post) res.status(404).send({ message: "Post not found" });
     else res.status(200).send(post);
   } catch (err) {
-    res.status(400).send(err);
+   next(err)
   }
 });
 
-router.post("/", async (req: Request, res: Response) => {
+router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   const post = req.body;
 
   try {
     res.status(200).send(await addNewPost(post));
   } catch (err) {
-    res.status(400).send(err);
+   next(err)
   }
 });
 
-router.put("/:id", async (req: Request, res: Response) => {
+router.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
   const { id } = req.params;
   const post = req.body;
 
@@ -163,7 +163,7 @@ router.put("/:id", async (req: Request, res: Response) => {
     if (!updatedPost) res.status(404).json({ message: "Post not found" });
     else res.status(200).send(updatedPost);
   } catch (err) {
-    res.status(400).send(err);
+   next(err)
   }
 });
 
@@ -194,12 +194,12 @@ router.put("/:id", async (req: Request, res: Response) => {
  *              description: Not Found
  */
 
-router.delete("/:id", async (req: Request, res: Response) => {
+router.delete("/:id", async (req: Request, res: Response, next: NextFunction) => {
   const postId = req.params.id;
   try {
     res.status(200).send(await deletePostById(postId));
   } catch (err) {
-    res.status(400).send(err);
+   next(err)
   }
 });
 

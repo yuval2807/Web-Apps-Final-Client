@@ -16,7 +16,7 @@ export const Login: React.FC = () => {
       const connectedUser = await login({ email, password });
       if (!!connectedUser) {
         updateConnectedUser(connectedUser);
-        navigate("/home");
+        navigate("/post");
       }
     } catch (err: any) {
       console.error(err.message);
@@ -32,7 +32,7 @@ export const Login: React.FC = () => {
         const connectedUser = await googleLogin(credentialResponse.credential);
         if (connectedUser) {
           updateConnectedUser(connectedUser);
-          navigate("/home");
+          navigate("/post");
         }
       }
     } catch (err: any) {

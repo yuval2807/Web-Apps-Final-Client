@@ -6,12 +6,12 @@ interface PageLayoutProps {
 
 const PageLayout: React.FC<PageLayoutProps> = ({children}) => {
 
-  const navWidth = 10;
+  const navWidth = 12;
 
   return (
   <div className='layout' style={{display: "flex", flexDirection: "row-reverse"}}>
     <NavbarDrawer navWidth={`${navWidth}%`} />
-    <div style={{ width:`${100-navWidth}%`}}>
+    <div style={{ width:`${100-navWidth}%`, display: "flex", justifyContent: "center"}}>
         {children}
     </div>
   </div>);

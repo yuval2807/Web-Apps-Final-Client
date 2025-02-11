@@ -13,25 +13,26 @@ import swaggerUi from "swagger-ui-express";
 import swaggerJsDoc from "swagger-jsdoc";
 import cors from "cors";
 import mongoose from "mongoose";
+import { errorHandler } from "./src/middleware/errorHandler";
 const path = require('path');
 
 const swaggerOptions = {
-    definition: {
-      openapi: "3.0.0",
-      info: {
-        title: "Web dev 2024 api",
-        description: "Blog API Information",
-        version: "1.0.0",
-        contact: {
-          name: "Amazing Developer",
-        },
-        servers: [{ url: "http://localhost:" + process.env.PORT }],
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Web dev 2024 api",
+      description: "Blog API Information",
+      version: "1.0.0",
+      contact: {
+        name: "Amazing Developer",
       },
+      servers: [{ url: "http://localhost:" + process.env.PORT }],
     },
-    apis: ["./src/routes/*.ts"],
-  };
-  
-  const swaggerDocs = swaggerJsDoc(swaggerOptions);
+  },
+  apis: ["./src/routes/*.ts"],
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
   dotenv.config();
   const app: Express = express();
@@ -39,7 +40,6 @@ const swaggerOptions = {
   app.use(cors({ origin: "http://localhost:3000" }));
   
   connectToDatabase();
- 
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
   
   app.use(bodyParser.json());
@@ -54,6 +54,7 @@ const swaggerOptions = {
   app.use("/public", express.static("public"));
   app.use("/image", imageRoutes);
 
+app.use(errorHandler);
   app.use(express.static('front'))
 
   //app.use(express.static(path.join("nutri-track-server", 'front')));
@@ -63,17 +64,15 @@ const swaggerOptions = {
   });
 
 
-    const initApp = () => {
-        return new Promise<Express>(async (resolve, reject) => {
-            if (process.env.DB_CONNECTION == undefined) {
-            reject("DB_CONNECTION is not defined");
-            } else {
-            await mongoose.connect(process.env.DB_CONNECTION);
-            resolve(app);
-            }
-        });
-     };
+const initApp = () => {
+  return new Promise<Express>(async (resolve, reject) => {
+    if (process.env.DB_CONNECTION == undefined) {
+      reject("DB_CONNECTION is not defined");
+    } else {
+      await mongoose.connect(process.env.DB_CONNECTION);
+      resolve(app);
+    }
+  });
+};
 
 export default initApp;
-
-

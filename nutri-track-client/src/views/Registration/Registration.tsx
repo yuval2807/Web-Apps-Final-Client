@@ -6,18 +6,24 @@ import { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
 import { User } from "../../queries/user";
 import { toast } from "react-toastify";
+import { uploadImg } from "../../utils/uploadImage";
 
 export const Registration: React.FC = () => {
   const navigate = useNavigate();
   const { updateConnectedUser } = useContext(UserContext);
 
-  const handleRegister = async (data: User) => {
-    // Add registration logic here
+  const handleRegister = async (data: User, imgFile?: File) => {
     try {
+      if (imgFile) {
+        const url: string | undefined = await uploadImg(imgFile!!);
+        data.image = url ?? "";
+      }
+
       const connectedUser = await register(data);
+
       if (!!connectedUser) {
         updateConnectedUser(connectedUser);
-        navigate("/home");
+        navigate("/post");
       }
     } catch (err: any) {
       console.error(err.message);

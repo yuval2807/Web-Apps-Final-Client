@@ -1,7 +1,6 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PageLayout from "../../components/Common/PageLayout";
 import NewPostForm from "../AddPostPage/PostForm";
-import PostPreview from "../AddPostPage/PostPreview";
 import { useContext, useState } from "react";
 import { updatePost } from "../../queries/post";
 import { UserContext } from "../../context/UserContext";
@@ -29,11 +28,8 @@ export const EditPost: React.FC = () => {
         return;
       }
 
-      const url: string | undefined = await uploadImg(
-        imgFile!!,
-        accessToken,
-        setImage
-      );
+      const url: string | undefined = await uploadImg(imgFile!!);
+      setImage(url ? url : image);
 
       const payload = {
         title,
@@ -56,20 +52,21 @@ export const EditPost: React.FC = () => {
 
   return (
     <PageLayout>
-      <Typography variant="h5" component="h1" gutterBottom align="center">
+      <Typography variant='h5' component='h1' gutterBottom align='center'>
         Edit post
       </Typography>
       <NewPostForm
         title={title}
         content={content}
+        image={image}
         setTitle={setTitle}
         setContent={setContent}
         setImage={setImage}
         setImgFile={setImgFile}
         onSubmit={handlePressUpdate}
         isEdit={true}
+        onCancel={() => navigate("/home")}
       />
-      <PostPreview title={title} content={content} image={image} />
     </PageLayout>
   );
 };
