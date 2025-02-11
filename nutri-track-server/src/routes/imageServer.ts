@@ -7,7 +7,7 @@ dotenv.config();
 
 const router = express.Router();
 
-const base = "http://" + "localhost" + ":" + process.env.PORT + "/"; //TODO domain should change when uploaded to VM
+const base = process.env.DOMAIN_BASE + ":" + process.env.PORT + "/";
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "public/");
