@@ -39,6 +39,9 @@ export const login = async (
 
 export const googleLogin = async (credential: string) => {
   const googleUser = await verifyGoogleToken(credential);
+  if (!googleUser) {
+    return;
+  }
   let user = await getUserByEmail(googleUser.email);
 
   if (!user) {

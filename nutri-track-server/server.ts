@@ -60,7 +60,7 @@ app.use(errorHandler);
   //app.use(express.static(path.join("nutri-track-server", 'front')));
 
   app.get('*', (req, res) => {
-    res.sendFile(path.join('front', 'index.html'));
+    res.sendFile(path.join(__dirname, 'front', 'index.html'));
   });
 
 
