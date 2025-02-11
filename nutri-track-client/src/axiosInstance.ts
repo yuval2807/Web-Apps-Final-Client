@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getErrorInterceptor } from "./queries/responseHandler";
 
-const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://10.10.246.90:80/";
+const backendUrl = "http://10.10.246.90:80/";
 
 const axiosInstance = axios.create({
   baseURL: backendUrl,
@@ -32,7 +32,7 @@ axiosInstance.interceptors.response.use(
 export default axiosInstance;
 
 export const refreshAxiosInstance = axios.create({
-  baseURL: "http://localhost:5000/", // Replace with your Express server's base URL
+  baseURL: backendUrl,
   timeout: 10000, // Optional: Set a timeout for requests
   headers: {
     "Content-Type": "application/json", // Default content type
