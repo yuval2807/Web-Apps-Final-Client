@@ -9,7 +9,7 @@ const TipsPage: React.FC = () => {
   const [aiResponse, setAiResponse] = useState<string>("");
   const {connectedUser } = useContext(UserContext);
 
-  const fetchAiData = async (question: string) => {
+  const fetchAiData = async (userquestion?: string) => {
     try {
       const accessToken = connectedUser?.accessToken;
 
@@ -18,7 +18,7 @@ const TipsPage: React.FC = () => {
         return;
       }
 
-      const aiResponse = await askQuestion({question: question || 'What is the best food for weight loss?'}, accessToken);
+      const aiResponse = await askQuestion({question: userquestion ? userquestion : 'What is the best food for weight loss?'}, accessToken);
 
       if (aiResponse.status === 200) {
         console.log("Query success");
@@ -35,6 +35,7 @@ const TipsPage: React.FC = () => {
 
   return (
     <PageLayout>
+      <div style={{ width: "80%", display:"flex", flexDirection: "column"}}>
           <Button
             fullWidth
             variant='contained'
@@ -42,7 +43,7 @@ const TipsPage: React.FC = () => {
             onClick={() => fetchAiData("")}>
               Click here to generate a tip
           </Button>
-          <Divider sx={{ backgroundColor: "blue", width: "90%", justifySelf: "center" }} />
+          <Divider sx={{ backgroundColor: "gray", width: "90%", justifySelf: "center" }} />
           <TextField
             fullWidth
             multiline
@@ -51,9 +52,16 @@ const TipsPage: React.FC = () => {
             onChange={(e) => setUserQuestion(e.target.value)}
             placeholder='Type your question here'
             variant='outlined'/>
+            <Button
+            variant='outlined'
+            sx={{ my: 3 }} 
+            onClick={() => fetchAiData(userQuestion)}>
+              Ask your question
+            </Button>
             <p>
               <h5>{aiResponse}</h5> 
             </p>
+      </div>
     </PageLayout>
   );
 };
