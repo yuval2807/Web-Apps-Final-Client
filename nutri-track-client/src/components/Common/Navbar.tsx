@@ -61,7 +61,7 @@ const DrawerList = () => {
 
   return (
     <Box role='presentation'>
-      <Typography style={{color: "white", paddingTop: "3vh", paddingBottom: "3vh", fontSize:"2rem", fontWeight: "bolder"}}>
+      <Typography style={{color: "white", paddingTop: "3vh", paddingBottom: "3vh", fontSize:"2vw", fontWeight: "bolder"}}>
         NutriTrack
       </Typography>
       <List>
