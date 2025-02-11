@@ -95,21 +95,17 @@ export const PostsPage: React.FC = () => {
 
   return (
     <PageLayout>
-      <div  style={{ display: "flex", flexDirection: "column", width: "95%"}}>
-        
-          <FilterBar
-            setUserFilter={setUserFilter}
-            setContentTypeFilter={setContentTypeFilter}
-            onFilter={onFilter}
-          />
-          {filterPostList ? (
-            <PostsList showLikes={true} postList={filterPostList} />
-          ) : null}
-       
+      <div style={{ display: "flex", flexDirection: "column", width: "95%" }}>
+        <FilterBar
+          setUserFilter={setUserFilter}
+          setContentTypeFilter={setContentTypeFilter}
+          onFilter={onFilter}
+        />
+        {filterPostList ? <PostsList postList={filterPostList} setRefresh={setRefresh}/> : null}
+
         {loading && <div>Loading more posts...</div>}
         <div ref={observerTarget}></div>
       </div>
-
     </PageLayout>
   );
 };
