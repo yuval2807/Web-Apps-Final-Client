@@ -43,7 +43,7 @@ export const EditPost: React.FC = () => {
 
       if (response.status === 200) {
         console.log("Post updated");
-        navigate("/post");
+        navigate("/");
       }
     } catch (error) {
       console.log("error: ", error);
@@ -65,7 +65,7 @@ export const EditPost: React.FC = () => {
         setImgFile={setImgFile}
         onSubmit={handlePressUpdate}
         isEdit={true}
-        onCancel={() => navigate("/home")}
+        onCancel={() => navigate("/")}
       />
     </div>
   );

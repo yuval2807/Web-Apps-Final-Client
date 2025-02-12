@@ -17,7 +17,7 @@ export const mainMenu: MainMenuItem[] = [
   {
     title: "Home",
     icon: <HomeIcon sx={{color: 'white'}} />,
-    navigate: "/post",
+    navigate: "/",
   },
   {
     title: "Tips",

@@ -39,7 +39,7 @@ export const CreatePost: React.FC = () => {
 
       if (response.status === 200) {
         toast.success("פוסט נוצר בהצלחה!");
-        navigate("/post");
+        navigate("/");
       }
     } catch (error) {
       console.log("error: ", error);

@@ -23,7 +23,7 @@ export const Registration: React.FC = () => {
 
       if (!!connectedUser) {
         updateConnectedUser(connectedUser);
-        navigate("/post");
+        navigate("/");
       }
     } catch (err: any) {
       console.error(err.message);

@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  Navigate,
-  createBrowserRouter,
-  redirect,
-} from "react-router-dom";
+import { Navigate, createBrowserRouter, redirect } from "react-router-dom";
 import Registration from "./views/Registration";
 import TipsPage from "./views/TipsPage";
 import Login from "./views/LoginPage";
@@ -13,7 +9,7 @@ import PostsList from "./views/PostsPage";
 import EditPost from "./views/EditPostPage";
 import PageLayout from "./components/Common/PageLayout";
 
-export  const router = createBrowserRouter([
+export const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
@@ -45,7 +41,7 @@ export  const router = createBrowserRouter([
         element: <TipsPage />,
       },
       {
-        path: "post",
+        index: true,
         element: <PostsList />,
       },
       {
@@ -64,7 +60,6 @@ export  const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <Navigate to='/post' />,
+    element: <Navigate to='/' />,
   },
 ]);
-
