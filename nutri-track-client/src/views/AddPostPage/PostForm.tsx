@@ -9,14 +9,13 @@ import {
   CardMedia,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../../context/UserContext";
 import { z } from "zod";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
-  maxWidth: 500,
+  minWidth: 500,
   margin: "0 auto",
   borderRadius: theme.spacing(2),
 }));
@@ -85,7 +84,6 @@ const PostCreationForm: React.FC<NewPostFormProps> = ({
   }>({});
   const navigate = useNavigate();
   const date = new Date().toDateString();
-  const { connectedUser } = useContext(UserContext);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -97,7 +95,6 @@ const PostCreationForm: React.FC<NewPostFormProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("aaaa");
 
     const validationResult = postSchema.safeParse({ title, content, image });
 
@@ -106,13 +103,11 @@ const PostCreationForm: React.FC<NewPostFormProps> = ({
       setErrors({
         title: fieldErrors.title?._errors[0],
       });
-      console.log("bbbbb");
 
       return;
     }
 
     setErrors({});
-    console.log("sss");
     onSubmit();
   };
 

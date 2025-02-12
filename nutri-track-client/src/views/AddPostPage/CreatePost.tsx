@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import PageLayout from "../../components/Common/PageLayout";
 import NewPostForm from "./PostForm";
 import { useContext, useState } from "react";
 import { createPost } from "../../queries/post";
@@ -40,7 +39,7 @@ export const CreatePost: React.FC = () => {
 
       if (response.status === 200) {
         toast.success("פוסט נוצר בהצלחה!");
-        navigate("/post");
+        navigate("/");
       }
     } catch (error) {
       console.log("error: ", error);
@@ -49,7 +48,7 @@ export const CreatePost: React.FC = () => {
   };
 
   return (
-    <PageLayout>
+    <div style={{ justifyContent: "center", alignContent: "center" }}>
       <Typography variant='h5' component='h1' gutterBottom align='center'>
         New post
       </Typography>
@@ -64,6 +63,6 @@ export const CreatePost: React.FC = () => {
         onSubmit={handlePressCreate}
         onCancel={() => navigate("/home")}
       />
-    </PageLayout>
+    </div>
   );
 };

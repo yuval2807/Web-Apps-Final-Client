@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Box, Container } from "@mui/material";
-import PageLayout from "../../components/Common/PageLayout";
 import { UserContext } from "../../context/UserContext";
 import UserDetails from "./UserDetails";
 import { getUserById, updateUserById, User } from "../../queries/user";
@@ -68,21 +67,19 @@ const UserProfile: React.FC = () => {
     fetchUserInfo();
     fetchUserPosts();
   }, [connectedUser, refresh]);
-
+  console.log(user);
   return (
-    <PageLayout>
-      <Container maxWidth='md'>
-        <Box sx={{ p: 3 }}>
-          {user ? <UserDetails user={user} onSave={handleUserUpdate} /> : null}
-        </Box>
-        <PostsList
-          postList={postList}
-          direction='row'
-          setRefresh={setRefresh}
-          showAction={true}
-        />
-      </Container>
-    </PageLayout>
+    <Container maxWidth='md'>
+      <Box sx={{ p: 3 }}>
+        {user ? <UserDetails user={user} onSave={handleUserUpdate} /> : null}
+      </Box>
+      <PostsList
+        postList={postList}
+        direction='row'
+        setRefresh={setRefresh}
+        showAction={true}
+      />
+    </Container>
   );
 };
 

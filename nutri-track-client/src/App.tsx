@@ -1,6 +1,6 @@
-import { BrowserRouter } from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 import "./App.css";
-import Router from "./Router";
+import { router } from "./Router";
 import { UserProvider } from "./context/UserContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { ToastContainer } from "react-toastify";
@@ -15,10 +15,8 @@ function App() {
         }>
         <UserProvider>
           <NavProvider>
-            <BrowserRouter>
-              <Router />
-              <ToastContainer position='bottom-right' />
-            </BrowserRouter>
+            <RouterProvider router={router} />
+            <ToastContainer position='bottom-right' />
           </NavProvider>
         </UserProvider>
       </GoogleOAuthProvider>

@@ -43,7 +43,7 @@ export const EditPost: React.FC = () => {
 
       if (response.status === 200) {
         console.log("Post updated");
-        navigate("/post");
+        navigate("/");
       }
     } catch (error) {
       console.log("error: ", error);
@@ -51,7 +51,7 @@ export const EditPost: React.FC = () => {
   };
 
   return (
-    <PageLayout>
+    <div>
       <Typography variant='h5' component='h1' gutterBottom align='center'>
         Edit post
       </Typography>
@@ -65,8 +65,8 @@ export const EditPost: React.FC = () => {
         setImgFile={setImgFile}
         onSubmit={handlePressUpdate}
         isEdit={true}
-        onCancel={() => navigate("/home")}
+        onCancel={() => navigate("/")}
       />
-    </PageLayout>
+    </div>
   );
 };
