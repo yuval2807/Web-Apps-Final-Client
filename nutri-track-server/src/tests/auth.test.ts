@@ -71,6 +71,13 @@ describe("Auth Tests", () => {
     testUser._id = response.body._id;
   });
 
+  test("google login", async () => {
+    const response = await request(app)
+      .post(`${baseUrl}/google`)
+      .send(testUser);
+    // expect(response.statusCode).toBe(400);
+  });
+
   test("Add new user with same email - fail", async () => {
     const response = await request(app)
       .post(`${baseUrl}/register`)
@@ -88,15 +95,15 @@ describe("Auth Tests", () => {
     expect(verifiedUser).toHaveProperty("_id");
   });
 
-  //   //   test("verify access token - fail with Invalid access token", async () => {
-  //   //     const verifiedUser = await verifyAccessToken(`${testUser.accessToken}h`);
-  //   //     expect(verifiedUser).toThrow(UnauthorizedError);
-  //   //   });
+  //   test("verify access token - fail with Invalid access token", async () => {
+  //     const verifiedUser = await verifyAccessToken(`${testUser.accessToken}h`);
+  //     expect(verifiedUser).not.toBe(200);
+  //   });
 
-  //   //   test("verify refresh token - fail with Invalid refresh token", async () => {
-  //   //     const verifiedUser = await verifyRefreshToken(`${testUser.refreshToken}h`);
-  //   //     expect(verifiedUser).toThrow(UnauthorizedError);
-  //   //   });
+  //   test("verify refresh token - fail with Invalid refresh token", async () => {
+  //     const verifiedUser = await verifyRefreshToken(`${testUser.refreshToken}h`);
+  //     expect(verifiedUser).not.toBe(200);
+  //   });
 
   test("logout user", async () => {
     const response = await request(app)

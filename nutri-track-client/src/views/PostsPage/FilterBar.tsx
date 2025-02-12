@@ -21,7 +21,7 @@ export const FilterBar: React.FC<FilterBarData> = ({setContentTypeFilter, setUse
     }
 
   return (
-    <Box display="flex" flexDirection="row" width="50%" alignSelf="center" >
+    <Box display="flex" flexDirection="row" width="50%" alignSelf="center" paddingTop={"1rem"} paddingBottom={"1rem"} >
          {/* <TextField  
             margin='normal'
             label='Search by user'

@@ -1,5 +1,15 @@
 import React, { useState } from "react";
 import { Typography, TextField, Button, Alert, Box } from "@mui/material";
+import { z } from "zod";
+
+// Define the Zod schema
+const loginSchema = z.object({
+  email: z.string().email("Invalid email format"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+// Create a type from the schema
+type LoginFormData = z.infer<typeof loginSchema>;
 
 interface LoginFormProps {
   onSubmit: (email: string, password: string) => void;
@@ -8,18 +18,42 @@ interface LoginFormProps {
 const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState(false);
+
+  const validateForm = (): boolean => {
+    try {
+      loginSchema.parse({ email, password });
+      setErrors({});
+      return true;
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const newErrors: { [key: string]: string } = {};
+        error.errors.forEach((err) => {
+          if (err.path) {
+            newErrors[err.path[0]] = err.message;
+          }
+        });
+        setErrors(newErrors);
+      }
+      return false;
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setErrors({});
+
+    if (!validateForm()) {
+      return;
+    }
+
     setLoading(true);
 
     try {
       await onSubmit(email, password);
     } catch (err) {
-      setError("Invalid email or password");
+      setErrors({ submit: "Invalid email or password" });
     } finally {
       setLoading(false);
     }
@@ -35,11 +69,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
           fullWidth
           margin='normal'
           label='Email'
-          type='email'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
           autoComplete='email'
+          error={!!errors.email}
+          helperText={errors.email}
         />
         <TextField
           fullWidth
@@ -49,12 +84,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          inputProps={{ minLength: 6 }}
           autoComplete='current-password'
+          error={!!errors.password}
+          helperText={errors.password}
         />
-        {error && (
+        {errors.submit && (
           <Alert severity='error' sx={{ mt: 2 }}>
-            {error}
+            {errors.submit}
           </Alert>
         )}
         <Button

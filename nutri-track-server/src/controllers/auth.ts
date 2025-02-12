@@ -40,6 +40,9 @@ export const login = async (
 export const googleLogin = async (credential: string) => {
   const googleUser = await verifyGoogleToken(credential);
   let user = await getUserByEmail(googleUser?.email);
+  if (!googleUser) {
+    return;
+  }
 
   if (!user) {
     user = await addNewUser({

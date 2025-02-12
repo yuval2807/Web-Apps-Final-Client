@@ -34,12 +34,10 @@ beforeAll(async () => {
   testUser.accessToken = response.body.accessToken;
   testUser.id = response.body.id;
   testLike.userId = testUser.id;
-  console.log("testUser", testUser);
   expect(response.statusCode).toBe(200);
 });
 
 afterAll(() => {
-  console.log("After all tests");
   mongoose.connection.close();
 });
 
@@ -61,6 +59,15 @@ describe("Like Service Tests", () => {
       .set({ authorization: "Bearer " + testUser.accessToken });
     expect(response.statusCode).toBe(200);
     expect(response.body.likesCount).toBeGreaterThan(0);
+  });
+
+  test("Get like by user and post - 0 likes", async () => {
+    const response = await request(app)
+      .get(`${likeUrl}/find/67aaf3b5212f856618ee970d`)
+      .query(testLike)
+      .set({ authorization: "Bearer " + testUser.accessToken });
+    expect(response.statusCode).toBe(200);
+    expect(response.body.likesCount).toBe(0);
   });
 
   test("Remove like", async () => {

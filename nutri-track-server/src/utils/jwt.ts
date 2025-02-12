@@ -2,6 +2,13 @@ import jwt from "jsonwebtoken";
 import { getUserById, updateUserTokenById } from "../controllers/user";
 import { tUser } from "../models/user";
 import { UnauthorizedError } from "../errors/UnauthorizedError ";
+import { Configuration } from "../config/configuration";
+
+const { JWT_SECRET } = Configuration.getInstance();
+const { JWT_EXPIRES_IN } = Configuration.getInstance();
+
+const options = { expiresIn: 3600};
+
 
 export const updateRefreshToken = async (user, refreshToken: string) => {
   if (refreshToken) user.tokens.push(refreshToken);
@@ -10,9 +17,7 @@ export const updateRefreshToken = async (user, refreshToken: string) => {
 };
 
 export const generateAccessToken = (userId) =>
-  jwt.sign({ _id: userId }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
-  });
+  jwt.sign({ _id: userId }, JWT_SECRET, { expiresIn: 3600});
 
 export const verifyAccessToken = (token: string) =>
   new Promise((resolve, reject) => {
@@ -27,7 +32,7 @@ export const verifyAccessToken = (token: string) =>
 
 export const generateRefreshToken = (userId) =>
   jwt.sign({ _id: userId }, process.env.JWT_REFRESH_SECRET, {
-    expiresIn: process.env.JWT_REFRESH_EXPIRES_IN,
+    expiresIn: 172800,
   });
 
 export const verifyRefreshToken = (refreshToken: string) => {

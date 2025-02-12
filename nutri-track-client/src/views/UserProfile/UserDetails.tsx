@@ -10,7 +10,6 @@ import {
   Container,
   Grid2 as Grid,
   InputAdornment,
-  CardMedia,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
@@ -23,24 +22,38 @@ import { UserInfo } from "./types";
 import { toast } from "react-toastify";
 import { uploadImg } from "../../utils/uploadImage";
 import { UserContext } from "../../context/UserContext";
+import { z } from "zod";
 
 interface UserDetailsProps {
   user: UserInfo;
   onSave: (data: UserInfo) => Promise<UserInfo | undefined>;
 }
 
+const genderOptions: Option[] = [
+  { label: "male", value: "male" },
+  { label: "female", value: "female" },
+  { label: "other", value: "other" },
+];
+
+// Define a validation schema using Zod
+const userSchema = z.object({
+  name: z.string().min(3, "Name must be at least 3 characters long"),
+  gender: z.enum(["male", "female", "other"], {
+    errorMap: () => ({ message: "Invalid gender" }),
+  }),
+  height: z.coerce.number().positive("Height must be a positive number"),
+  weight: z.coerce.number().positive("Weight must be a positive number"),
+  image: z.string().url("Invalid image URL").optional(),
+});
+
 const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState<UserInfo>(user);
   const [editedProfile, setEditedProfile] = useState<UserInfo>(profile);
-  const [imgFile, setImgFile] = useState<File>();
-  const { connectedUser } = useContext(UserContext);
-
-  const genderOptions: Option[] = [
-    { label: "male", value: "male" },
-    { label: "female", value: "female" },
-    { label: "other", value: "other" },
-  ];
+  const [imgFile, setImgFile] = useState<File | null>(null);
+  const [errors, setErrors] = useState<Partial<Record<keyof UserInfo, string>>>(
+    {}
+  );
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -63,7 +76,24 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
   const handleSave = async () => {
     try {
       const url: string | undefined = await uploadImg(imgFile!!);
+      const validationResult = userSchema.safeParse({
+        ...editedProfile,
+        image: url,
+      });
 
+      if (!validationResult.success) {
+        const fieldErrors = validationResult.error.format();
+        setErrors({
+          name: fieldErrors.name?._errors[0],
+          gender: fieldErrors.gender?._errors[0],
+          height: fieldErrors.height?._errors[0],
+          weight: fieldErrors.weight?._errors[0],
+          image: fieldErrors.image?._errors[0],
+        });
+        return;
+      }
+
+      setErrors({});
       setEditedProfile({ ...editedProfile, image: url ? url : "" });
 
       const updatedUser = await onSave({
@@ -85,15 +115,13 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
   const handleCancel = () => {
     setIsEditing(false);
     setEditedProfile(profile);
+    setErrors({});
   };
 
   const handleChange =
     (field: keyof UserInfo) =>
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      setEditedProfile((prev) => ({
-        ...prev,
-        [field]: event.target.value,
-      }));
+      setEditedProfile((prev) => ({ ...prev, [field]: event.target.value }));
     };
 
   return (
@@ -107,11 +135,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
           }}>
           <Box sx={{ display: "flex", alignItems: "center", mb: 4 }}>
             <Box sx={{ display: "flex", justifyContent: "center", mr: 2 }}>
-              <label
-                htmlFor='photo-upload'
-                style={{
-                  cursor: "pointer",
-                }}>
+              <label htmlFor='photo-upload' style={{ cursor: "pointer" }}>
                 <input
                   id='photo-upload'
                   type='file'
@@ -131,13 +155,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
               {profile.email}
             </Typography>
           </Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mb: 3,
-            }}>
+          <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
             {!isEditing ? (
               <IconButton
                 color='primary'
@@ -174,11 +192,13 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
             value={isEditing ? editedProfile.name : profile.name}
             onChange={handleChange("name")}
             disabled={!isEditing}
+            error={!!errors.name}
+            helperText={errors.name}
           />
           <RadioGroupButtons
-            label='gender'
+            label='Gender'
             name='gender'
-            row={true}
+            row
             options={genderOptions}
             value={isEditing ? editedProfile.gender : profile.gender}
             onChange={handleChange("gender")}
@@ -192,6 +212,9 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
                 value={isEditing ? editedProfile.height : profile.height}
                 onChange={handleChange("height")}
                 disabled={!isEditing}
+                error={!!errors.height}
+                helperText={errors.height}
+                type='number'
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position='end'>cm</InputAdornment>
@@ -206,6 +229,9 @@ const UserDetails: React.FC<UserDetailsProps> = ({ user, onSave }) => {
                 value={isEditing ? editedProfile.weight : profile.weight}
                 onChange={handleChange("weight")}
                 disabled={!isEditing}
+                type='number'
+                error={!!errors.weight}
+                helperText={errors.weight}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position='end'>kg</InputAdornment>

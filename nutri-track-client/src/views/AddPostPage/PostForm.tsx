@@ -12,6 +12,7 @@ import { styled } from "@mui/material/styles";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
+import { z } from "zod";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -63,6 +64,10 @@ interface NewPostFormProps {
   isEdit?: boolean;
 }
 
+const postSchema = z.object({
+  title: z.string().min(3, "Title must be at least 3 characters long"),
+});
+
 const PostCreationForm: React.FC<NewPostFormProps> = ({
   title,
   content,
@@ -75,6 +80,9 @@ const PostCreationForm: React.FC<NewPostFormProps> = ({
   onCancel,
   isEdit = false,
 }) => {
+  const [errors, setErrors] = useState<{
+    title?: string;
+  }>({});
   const navigate = useNavigate();
   const date = new Date().toDateString();
 
@@ -86,7 +94,7 @@ const PostCreationForm: React.FC<NewPostFormProps> = ({
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     const validationResult = postSchema.safeParse({ title, content, image });
@@ -106,21 +114,6 @@ const PostCreationForm: React.FC<NewPostFormProps> = ({
 
   return (
     <StyledPaper elevation={1}>
-      <Box sx={{ mb: 3, display: "flex", alignItems: "center", gap: 1 }}>
-        <Avatar
-          sx={{
-            width: 32,
-            height: 32,
-            bgcolor: "primary.light",
-            fontSize: "0.875rem",
-          }}
-        />
-
-        <Typography variant='body2' color='text.secondary'>
-          {connectedUser?.name}
-        </Typography>
-      </Box>
-
       <Stack spacing={1}>
         <Box>
           <TextField
@@ -130,6 +123,8 @@ const PostCreationForm: React.FC<NewPostFormProps> = ({
             placeholder='Post Title'
             variant='outlined'
             size='small'
+            error={!!errors.title}
+            helperText={errors.title}
           />
           <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 0.5 }}>
             <Typography variant='caption' color='text.secondary'>
@@ -175,15 +170,15 @@ const PostCreationForm: React.FC<NewPostFormProps> = ({
             fullWidth
             variant='contained'
             color='primary'
-            onClick={onSubmit}>
-            {isEdit ? "edit post" : "create post"}
+            onClick={handleSubmit}>
+            {isEdit ? "Edit Post" : "Create Post"}
           </Button>
           <Button
             fullWidth
             variant='contained'
             color='primary'
             onClick={onCancel}>
-            cancel
+            Cancel
           </Button>
         </Stack>
       </Stack>
