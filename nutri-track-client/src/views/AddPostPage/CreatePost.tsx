@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import PageLayout from "../../components/Common/PageLayout";
 import NewPostForm from "./PostForm";
 import { useContext, useState } from "react";
 import { createPost } from "../../queries/post";

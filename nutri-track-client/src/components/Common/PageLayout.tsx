@@ -11,16 +11,14 @@ const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
   return (
     <div
       className='layout'
-      style={{ display: "flex", flexDirection: "row-reverse",height: "100%", }}>
+      style={{ display: "flex", flexDirection: "row-reverse", height: "100%" }}>
       <NavbarDrawer navWidth={`${navWidth}%`} />
       <div
         style={{
           width: `${100 - navWidth}%`,
-          // height: "100%",
-          // display: "flex",
+          display: "flex",
           justifyContent: "center",
         }}>
-        {children}
         <Outlet />
       </div>
     </div>

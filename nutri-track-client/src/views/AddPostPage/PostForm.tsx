@@ -9,14 +9,13 @@ import {
   CardMedia,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../../context/UserContext";
 import { z } from "zod";
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
-  maxWidth: 500,
+  minWidth: 500,
   margin: "0 auto",
   borderRadius: theme.spacing(2),
 }));

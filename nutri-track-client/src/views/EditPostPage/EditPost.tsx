@@ -51,7 +51,7 @@ export const EditPost: React.FC = () => {
   };
 
   return (
-    <PageLayout>
+    <div>
       <Typography variant='h5' component='h1' gutterBottom align='center'>
         Edit post
       </Typography>
@@ -67,6 +67,6 @@ export const EditPost: React.FC = () => {
         isEdit={true}
         onCancel={() => navigate("/home")}
       />
-    </PageLayout>
+    </div>
   );
 };

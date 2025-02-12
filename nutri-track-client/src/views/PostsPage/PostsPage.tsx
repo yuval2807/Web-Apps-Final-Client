@@ -1,4 +1,3 @@
-import PageLayout from "../../components/Common/PageLayout";
 import { useContext, useEffect, useRef, useState } from "react";
 import { PostsList } from "../../components/Post/PostList";
 import { getAllPosts, PostData } from "../../queries/post";
@@ -94,18 +93,18 @@ export const PostsPage: React.FC = () => {
   }, [userFilter, contentTypeFilter]);
 
   return (
-    <PageLayout>
-      <div style={{ display: "flex", flexDirection: "column", width: "95%" }}>
-        <FilterBar
-          setUserFilter={setUserFilter}
-          setContentTypeFilter={setContentTypeFilter}
-          onFilter={onFilter}
-        />
-        {filterPostList ? <PostsList postList={filterPostList} setRefresh={setRefresh}/> : null}
+    <div style={{ display: "flex", flexDirection: "column", width: "95%" }}>
+      <FilterBar
+        setUserFilter={setUserFilter}
+        setContentTypeFilter={setContentTypeFilter}
+        onFilter={onFilter}
+      />
+      {filterPostList ? (
+        <PostsList postList={filterPostList} setRefresh={setRefresh} />
+      ) : null}
 
-        {loading && <div>Loading more posts...</div>}
-        <div ref={observerTarget}></div>
-      </div>
-    </PageLayout>
+      {loading && <div>Loading more posts...</div>}
+      <div ref={observerTarget}></div>
+    </div>
   );
 };
