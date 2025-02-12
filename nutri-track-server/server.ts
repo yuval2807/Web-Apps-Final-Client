@@ -14,7 +14,10 @@ import swaggerJsDoc from "swagger-jsdoc";
 import cors from "cors";
 import mongoose from "mongoose";
 import { errorHandler } from "./src/middleware/errorHandler";
-const path = require("path");
+import path from "path"
+
+dotenv.config();
+
 
 const swaggerOptions = {
   definition: {
@@ -34,7 +37,6 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
-dotenv.config();
 const app: Express = express();
 const port = process.env.PORT || 5000;
 app.use(cors({ origin: "http://localhost:3000" }));
