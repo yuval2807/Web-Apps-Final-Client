@@ -49,7 +49,7 @@ export const CreatePost: React.FC = () => {
   };
 
   return (
-    <PageLayout>
+    <div style={{ justifyContent: "center", alignContent: "center" }}>
       <Typography variant='h5' component='h1' gutterBottom align='center'>
         New post
       </Typography>
@@ -64,6 +64,6 @@ export const CreatePost: React.FC = () => {
         onSubmit={handlePressCreate}
         onCancel={() => navigate("/home")}
       />
-    </PageLayout>
+    </div>
   );
 };

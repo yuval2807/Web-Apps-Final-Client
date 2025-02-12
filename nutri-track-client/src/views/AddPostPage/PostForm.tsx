@@ -77,7 +77,6 @@ const PostCreationForm: React.FC<NewPostFormProps> = ({
 }) => {
   const navigate = useNavigate();
   const date = new Date().toDateString();
-  const { connectedUser } = useContext(UserContext);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -90,9 +89,19 @@ const PostCreationForm: React.FC<NewPostFormProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    try {
-      onSubmit();
-    } catch (err) {}
+    const validationResult = postSchema.safeParse({ title, content, image });
+
+    if (!validationResult.success) {
+      const fieldErrors = validationResult.error.format();
+      setErrors({
+        title: fieldErrors.title?._errors[0],
+      });
+
+      return;
+    }
+
+    setErrors({});
+    onSubmit();
   };
 
   return (

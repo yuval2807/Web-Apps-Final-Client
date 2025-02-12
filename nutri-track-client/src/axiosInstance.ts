@@ -1,7 +1,8 @@
 import axios from "axios";
 import { getErrorInterceptor } from "./queries/responseHandler";
 
-const backendUrl = "https://node90.cs.colman.ac.il/";
+// const backendUrl = "https://node90.cs.colman.ac.il/";
+const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
 const axiosInstance = axios.create({
   baseURL: backendUrl,
